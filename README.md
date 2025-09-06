@@ -2,11 +2,12 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Features
 
-- **Multi-Model Chat**: Chat with various AI models from OpenAI, Google, Anthropic, and Grok
+- **Multi-Model Chat**: Chat with AI version of me
 - **Responsive Design**: Works on desktop and mobile devices
 - **Dark Mode**: Toggle between light and dark themes
-- **Supabase Integration**: User authentication and vector database for context retrieval
+- **Supabase Integration**: RAG
 - **Markdown Support**: Format messages with markdown syntax
+- **Woodpecker**: Deployed on Oracle Cloud using Woodpecker CI/CD
 
 ## Getting Started
 
@@ -19,7 +20,7 @@ cp .env.local.example .env.local
 ```
 
 Required API keys:
-- `OPENAI_API_KEY`: For OpenAI models (GPT-4o, GPT-4, GPT-3.5)
+- `OPENAI_API_KEY`: For OpenAI models
 - `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`: For Supabase integration
 
 Optional API keys (depending on which models you want to use):
@@ -45,11 +46,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## How to Use
 
-1. Select an AI model from the dropdown menu
-2. Type your message in the input field
-3. Press "Send" or hit Enter to send your message
-4. View the AI's response in the chat window
-5. Use the "Clear chat" option to start a new conversation
+1. Type your message in the input field
+2. Press "Send" or hit Enter to send your message
+3. View the AI's response in the chat window
+4. Use the "Clear chat" option to start a new conversation
 
 ## Learn More
 

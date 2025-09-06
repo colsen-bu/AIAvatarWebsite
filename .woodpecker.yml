@@ -1,0 +1,99 @@
+variables:
+  - &app_name "colsenai-website"
+  - &docker_image "colsenai-website:latest"
+
+when:
+  - event: [push, pull_request]
+    branch: [main, master]
+
+steps:
+  # Test and build stage
+  test:
+    image: node:18-alpine
+    commands:
+      - npm ci
+      - npm run lint
+      - npm run build
+    when:
+      event: [push, pull_request]
+
+  # Build Docker image
+  build-image:
+    image: plugins/docker
+    settings:
+      repo: *app_name
+      tags:
+        - latest
+        - ${CI_COMMIT_SHA:0:8}
+      dockerfile: Dockerfile
+      context: .
+      # Use these if pushing to a registry
+      # registry: your-registry.com
+      # username:
+      #   from_secret: docker_username
+      # password:
+      #   from_secret: docker_password
+    when:
+      event: push
+      branch: [main, master]
+
+  # Deploy to server
+  deploy:
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: deploy_host
+      username:
+        from_secret: deploy_username
+      key:
+        from_secret: deploy_ssh_key
+      port: 22
+      script:
+        - cd /path/to/your/deployment/directory
+        - git pull origin main
+        - docker compose down
+        - docker compose build --no-cache
+        - docker compose up -d
+        - docker system prune -f
+    when:
+      event: push
+      branch: [main, master]
+
+  # Health check after deployment
+  health-check:
+    image: alpine/curl
+    commands:
+      - sleep 30
+      # Check via your domain through NPM
+      - curl -f https://chrisolsen.work/api/health || echo "Domain check failed, trying direct container access..."
+      # Fallback to direct container check if domain fails
+      - docker exec colsenai-website wget --no-verbose --tries=1 --spider http://localhost:3001/api/health || exit 1
+    when:
+      event: push
+      branch: [main, master]
+    depends_on:
+      - deploy
+
+  # Notify on success/failure (optional)
+  notify:
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack_webhook
+      channel: deployments
+      template: >
+        {{#success build.status}}
+          ✅ Deployment successful for {{repo.name}}
+          Branch: {{build.branch}}
+          Commit: {{build.commit}}
+        {{else}}
+          ❌ Deployment failed for {{repo.name}}
+          Branch: {{build.branch}}
+          Commit: {{build.commit}}
+        {{/success}}
+    when:
+      event: push
+      branch: [main, master]
+      status: [success, failure]
+    depends_on:
+      - health-check
