@@ -41,6 +41,15 @@
   --ring: #333333;
 }
 
+/* Theme transition optimization */
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: none !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+
 /* DNA Background Pattern */
 .dna-background {
   position: fixed;

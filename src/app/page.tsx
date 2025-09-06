@@ -353,8 +353,8 @@ export default function Home() {
         {memoizedDNALetters}
       </div>
 
-      {/* Attribution Link */}
-      <div className="fixed top-2 left-4 z-50">
+      {/* Attribution Link - Desktop only */}
+      <div className="fixed top-2 left-4 z-50 hidden md:block">
         <a
           href="https://github.com/justinpbarnett/website"
           target="_blank"
@@ -376,6 +376,7 @@ export default function Home() {
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
                 className="md:hidden p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
                 aria-label="Menu"
+                aria-expanded={showMobileMenu}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -385,11 +386,19 @@ export default function Home() {
                   stroke="currentColor"
                   className="w-6 h-6"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
+                  {showMobileMenu ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                    />
+                  )}
                 </svg>
               </button>
 
@@ -443,47 +452,86 @@ export default function Home() {
         {showMobileMenu && (
           <div
             ref={mobileMenuRef}
-            className="md:hidden absolute top-full left-0 right-0 border-t dark:border-gray-800"
+            className="md:hidden absolute top-full left-0 right-0 bg-white/95 dark:bg-black/95 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 shadow-xl z-40"
           >
-            <div className="max-w-5xl mx-auto w-full px-8 py-4">
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-3">
+            <div className="max-w-5xl mx-auto w-full px-8 py-6">
+              {/* Close button */}
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                  aria-label="Close menu"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div className="flex flex-col gap-6">
+                {/* Navigation Links */}
+                <div className="flex flex-col gap-4">
                   <a
                     href="/resume"
-                    className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
+                    className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors text-lg font-medium py-2"
+                    onClick={() => setShowMobileMenu(false)}
                   >
                     résumé
                   </a>
                   <a
                     href="/projects"
-                    className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
+                    className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors text-lg font-medium py-2"
+                    onClick={() => setShowMobileMenu(false)}
                   >
                     projects
                   </a>
                 </div>
 
                 {/* Split button for model selector and clear chat */}
-                <div className="flex mt-2">
-                  <div className="w-48 border-r-0 rounded-r-none">
-                    <div className="px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-800 rounded-md rounded-r-none bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400 select-none w-full">
+                <div className="flex border-t border-gray-200 dark:border-gray-800 pt-6">
+                  <div className="flex-1 border-r-0 rounded-r-none">
+                    <div className="px-4 py-3 text-sm border border-gray-200 dark:border-gray-800 rounded-md rounded-r-none bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400 select-none w-full font-medium">
                       {DEFAULT_MODEL.split(":")[1]}
                     </div>
                   </div>
                   <button
                     onClick={() => {
                       setShowMobileMenu(false);
-                      clearChatHistory();
+                      // Clear chat functionality would go here
                     }}
                     className={cn(
-                      "px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-800 rounded-md rounded-l-none border-l-0",
+                      "px-4 py-3 text-sm border border-gray-200 dark:border-gray-800 rounded-md rounded-l-none border-l-0 font-medium",
                       messages.length > 0
-                        ? "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
+                        ? "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all"
                         : "text-gray-400 dark:text-gray-600 cursor-not-allowed"
                     )}
-                    disabled={messages.length === 0 || isLoading}
+                    disabled={messages.length === 0}
                   >
                     Clear
                   </button>
+                </div>
+
+                {/* Attribution Link - Mobile only */}
+                <div className="border-t border-gray-200 dark:border-gray-800 pt-4">
+                  <a
+                    href="https://github.com/justinpbarnett/website"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400 transition-colors opacity-70 hover:opacity-100"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    Based on Justin Barnett's work
+                  </a>
                 </div>
               </div>
             </div>
@@ -515,7 +563,7 @@ export default function Home() {
               Christopher Olsen
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300">
-              I'm a full-stack developer
+              I'm a full-stack scientist
               <br />
               specializing in Biotech, Web Dev, and Therapeutics Research.
             </p>

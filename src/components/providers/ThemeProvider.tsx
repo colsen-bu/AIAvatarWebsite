@@ -40,15 +40,25 @@ export default function ThemeProvider({
     
     setTheme(initialTheme);
     
-    // Apply theme
-    if (initialTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
+    // Apply theme immediately without triggering re-render
+    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
 
     // Listen for system theme changes
     const listener = (e: MediaQueryListEvent) => {
       if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light');
+        const newTheme = e.matches ? 'dark' : 'light';
+        setTheme(newTheme);
+        document.documentElement.classList.toggle('dark', newTheme === 'dark');
+        // Use requestIdleCallback for non-critical localStorage write
+        if (window.requestIdleCallback) {
+          window.requestIdleCallback(() => {
+            localStorage.setItem('theme', newTheme);
+          });
+        } else {
+          setTimeout(() => {
+            localStorage.setItem('theme', newTheme);
+          }, 0);
+        }
       }
     };
     mediaQuery.addEventListener('change', listener);
@@ -56,19 +66,35 @@ export default function ThemeProvider({
     return () => mediaQuery.removeEventListener('change', listener);
   }, []);
 
-  useEffect(() => {
-    if (mounted) {
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-      localStorage.setItem('theme', theme);
-    }
-  }, [theme, mounted]);
-
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    
+    // Temporarily disable transitions for instant theme change
+    document.documentElement.classList.add('theme-transitioning');
+    
+    // Update DOM immediately for instant visual feedback
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    
+    // Re-enable transitions after a brief delay
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        document.documentElement.classList.remove('theme-transitioning');
+      }, 50);
+    });
+    
+    // Update state
+    setTheme(newTheme);
+    
+    // Defer localStorage write to avoid blocking the transition
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(() => {
+        localStorage.setItem('theme', newTheme);
+      });
+    } else {
+      setTimeout(() => {
+        localStorage.setItem('theme', newTheme);
+      }, 0);
+    }
   };
 
   // Prevent flash of incorrect theme
