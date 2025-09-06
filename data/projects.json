@@ -24,12 +24,13 @@
     "id": "2",
     "name": "Assay Plate Layout Tool",
     "slug": "assay-plate-layout",
-    "description": "An interactive web tool that allows researchers to design experimental layouts for multi-well plates, visualize sample distribution, and export layouts for automation.",
+    "description": "A Next.js web application hosted on Vercel that allows researchers to design experimental layouts for multi-well plates, visualize sample distribution, and export layouts for automation.",
     "technologies": [
-      "Python",
-      "Plotly Dash",
-      "Pandas",
-      "NumPy"
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Vercel"
     ],
     "features": [
       "Design experimental layouts for multi-well plates",
@@ -44,11 +45,13 @@
     "id": "3",
     "name": "Timeline App",
     "slug": "timeline-app",
-    "description": "A web application for visualizing and interacting with scientific project timelines and milestones. Useful for tracking research progress, deadlines, and key events.",
+    "description": "A Next.js web application hosted on Vercel for visualizing and interacting with scientific project timelines and milestones. Useful for tracking research progress, deadlines, and key events.",
     "technologies": [
-      "Python",
-      "Plotly Dash",
-      "Pandas"
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Vercel"
     ],
     "features": [
       "Interactive visualization of project timelines",
