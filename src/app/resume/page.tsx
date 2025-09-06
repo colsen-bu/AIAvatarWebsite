@@ -2,6 +2,34 @@ import { cn } from '@/lib/utils';
 import type { Resume, Profile, Skill, Work, Education } from '@/types/resume';
 import resumeData from '../../../data/resume.json';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Resume - Christopher Olsen | Cell & Biochemical Assay Scientist",
+  description: "Christopher Olsen (Chris Olsen) resume - 6+ years experience as Cell & Biochemical Assay Scientist. Expertise in assay development, Python programming, bench automation, and therapeutics research.",
+  keywords: [
+    "Christopher Olsen resume",
+    "Chris Olsen CV",
+    "Cell Assay Scientist resume",
+    "Biochemical Assay Scientist",
+    "Boston University alumnus",
+    "Python developer resume",
+    "Biotech scientist CV",
+    "Assay development specialist"
+  ],
+  openGraph: {
+    title: "Resume - Christopher Olsen | Cell & Biochemical Assay Scientist",
+    description: "View Christopher Olsen's professional resume showcasing 6+ years of experience in cell and biochemical assay development, Python programming, and biotech research.",
+    url: "https://chrisolsen.work/resume"
+  },
+  twitter: {
+    title: "Resume - Christopher Olsen | Cell & Biochemical Assay Scientist", 
+    description: "View Christopher Olsen's professional resume showcasing expertise in cell assays, biotech research, and Python development."
+  },
+  alternates: {
+    canonical: "https://chrisolsen.work/resume"
+  }
+};
 
 // Type assertion to ensure TypeScript recognizes our custom structure
 const typedResumeData = resumeData as unknown as Resume;

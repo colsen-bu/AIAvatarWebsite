@@ -1,0 +1,31 @@
+{
+  "name": "Christopher Olsen - Cell & Biochemical Assay Scientist Portfolio",
+  "short_name": "Chris Olsen",
+  "description": "Interactive AI-powered portfolio of Christopher Olsen (Chris Olsen), Cell & Biochemical Assay Scientist with 6+ years experience in biotech research and Python development.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "categories": ["portfolio", "science", "biotech", "education"],
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

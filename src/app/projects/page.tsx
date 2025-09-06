@@ -1,6 +1,34 @@
 import type { Project } from '@/types/projects';
 import projects from '../../../data/projects.json';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Projects - Christopher Olsen | Biotech & Software Development Portfolio",
+  description: "Christopher Olsen (Chris Olsen) projects portfolio showcasing biotech research, Python development, assay automation, and software engineering achievements.",
+  keywords: [
+    "Christopher Olsen projects",
+    "Chris Olsen portfolio",
+    "biotech projects",
+    "Python projects",
+    "assay development projects",
+    "laboratory automation",
+    "scientific software",
+    "research projects"
+  ],
+  openGraph: {
+    title: "Projects - Christopher Olsen | Biotech & Software Development Portfolio",
+    description: "Explore Christopher Olsen's diverse portfolio of biotech research, Python development, and laboratory automation projects.",
+    url: "https://chrisolsen.work/projects"
+  },
+  twitter: {
+    title: "Projects - Christopher Olsen | Biotech & Software Development Portfolio",
+    description: "Explore Christopher Olsen's diverse portfolio of biotech research, Python development, and laboratory automation projects."
+  },
+  alternates: {
+    canonical: "https://chrisolsen.work/projects"
+  }
+};
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

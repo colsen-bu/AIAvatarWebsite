@@ -10,6 +10,60 @@ import remarkGfm from "remark-gfm";
 import type { FormEvent } from "react";
 import type { ComponentPropsWithoutRef } from "react";
 import type { Message } from "ai";
+import { useEffect as useMetaEffect } from "react";
+
+// Since this is a client component, we'll set metadata via useEffect
+function usePageMetadata() {
+  useMetaEffect(() => {
+    // Update page title and description for SEO
+    document.title = "Christopher Olsen - Cell & Biochemical Assay Scientist | Interactive AI Portfolio";
+    
+    // Update meta description
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 
+        'Christopher Olsen (Chris Olsen) - Interactive AI-powered portfolio of a Cell & Biochemical Assay Scientist. Chat with AI to learn about my 6+ years of biotech research, Python development, and therapeutics work.'
+      );
+    }
+
+    // Add structured data for better search understanding
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Christopher Olsen Portfolio",
+      "description": "Interactive AI-powered portfolio showcasing Christopher Olsen's expertise in cell assays, biotech research, and Python development",
+      "author": {
+        "@type": "Person",
+        "name": "Christopher Olsen",
+        "alternateName": "Chris Olsen"
+      },
+      "mainEntity": {
+        "@type": "Person",
+        "name": "Christopher Olsen",
+        "jobTitle": "Cell & Biochemical Assay Scientist",
+        "knowsAbout": ["Cell Assay Development", "Python Programming", "Biotech Research"]
+      }
+    };
+
+    // Add or update structured data script
+    let structuredDataScript = document.querySelector('#structured-data-home') as HTMLScriptElement;
+    if (!structuredDataScript) {
+      structuredDataScript = document.createElement('script') as HTMLScriptElement;
+      structuredDataScript.id = 'structured-data-home';
+      structuredDataScript.type = 'application/ld+json';
+      document.head.appendChild(structuredDataScript);
+    }
+    structuredDataScript.textContent = JSON.stringify(structuredData);
+
+    return () => {
+      // Cleanup structured data on unmount
+      const script = document.querySelector('#structured-data-home');
+      if (script) {
+        script.remove();
+      }
+    };
+  }, []);
+}
 
 const initialSuggestions = [
   "Where did you go to school?",
@@ -18,6 +72,9 @@ const initialSuggestions = [
 ];
 
 export default function Home() {
+  // Use page metadata hook for SEO
+  usePageMetadata();
+  
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [usedSuggestions] = useState(new Set<string>());
@@ -561,12 +618,16 @@ export default function Home() {
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
               Christopher Olsen
+              <span className="sr-only">(Chris Olsen) - Cell & Biochemical Assay Scientist</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300">
               I'm a full-stack scientist
               <br />
               specializing in Biotech, Web Dev, and Therapeutics Research.
             </p>
+            <div className="sr-only">
+              <p>Christopher Olsen, also known as Chris Olsen, is a Cell & Biochemical Assay Scientist with over 6 years of experience in assay development, Python programming, bench automation, and primary cell culture. Alumni of Boston University, specializing in therapeutics research and biotech innovation.</p>
+            </div>
           </div>
         </div>
       </header>

@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Allow all search engines to access all content
+Allow: /projects
+Allow: /resume
+Allow: /api/health
+
+# Block API routes that shouldn't be indexed
+Disallow: /api/chat
+
+# Sitemap location
+Sitemap: https://chrisolsen.work/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
