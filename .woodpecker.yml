@@ -48,13 +48,27 @@ steps:
       key:
         from_secret: deploy_ssh_key
       port: 22
+      envs:
+        - SUPABASE_URL
+        - SUPABASE_ANON_KEY
+        - OPENAI_API_KEY
       script:
         - cd /path/to/your/deployment/directory
         - git pull origin main
+        - export SUPABASE_URL="$SUPABASE_URL"
+        - export SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"
+        - export OPENAI_API_KEY="$OPENAI_API_KEY"
         - docker compose down
         - docker compose build --no-cache
         - docker compose up -d
         - docker system prune -f
+    environment:
+      SUPABASE_URL:
+        from_secret: supabase_url
+      SUPABASE_ANON_KEY:
+        from_secret: supabase_anon_key
+      OPENAI_API_KEY:
+        from_secret: openai_api_key
     when:
       event: push
       branch: [main, master]
