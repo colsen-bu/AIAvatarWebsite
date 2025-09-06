@@ -43,17 +43,6 @@ function isRateLimited(ip: string): { limited: boolean; message?: string } {
   return { limited: false };
 }
 
-// Create OpenAI client for embeddings
-const openaiClient = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
-
-// Create Supabase client
-const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 interface ContentMatch {
   id: string;
   content: string;
@@ -97,6 +86,17 @@ export async function POST(req: Request) {
         }
       );
     }
+    
+    // Create OpenAI client for embeddings (initialized at runtime)
+    const openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY!,
+    });
+    
+    // Create Supabase client (initialized at runtime)
+    const supabase = createClient<Database>(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_ANON_KEY!
+    );
     
     const lastMessage = messages[messages.length - 1];
 
