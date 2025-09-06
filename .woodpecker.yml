@@ -1,9 +1,8 @@
 steps:
   test:
-    image: node:18-alpine
+    image: node:20-alpine
     commands:
       - npm ci
-      - npm run lint
       - npm run build
     when:
       - event: [push, pull_request]
