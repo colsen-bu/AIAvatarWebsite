@@ -1,81 +1,62 @@
 [
   {
     "id": "1",
-    "name": "This Website",
-    "slug": "website",
-    "description": "Personal portfolio website with AI-powered chat interface",
+    "name": "Dose Response Analysis Tool",
+    "slug": "dose-response-analysis",
+    "description": "A web application built with Plotly Dash that enables scientists to upload and visualize dose-response data, calculate pharmacological parameters, and generate publication-quality plots.",
     "technologies": [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Tailwind CSS",
-      "Supabase",
-      "OpenAI"
+      "Python",
+      "Plotly Dash",
+      "Pandas",
+      "NumPy",
+      "SciPy"
     ],
     "features": [
-      "AI chat assistant",
-      "Dark mode support",
-      "Responsive design",
-      "Project showcase"
+      "Upload and visualize dose-response data",
+      "Calculate EC50, IC50, and other parameters",
+      "Generate publication-quality plots",
+      "Manually tweak curve fitting parameters"
     ],
-    "github_url": "https://github.com/justinpbarnett/website",
-    "live_url": "https://justinpbarnett.com"
+    "github_url": "",
+    "live_url": "https://www.doseresponse.mcvcllmhgb.com"
   },
   {
     "id": "2",
-    "name": "nwsltr ai",
-    "slug": "nwsltrai",
-    "description": "An AI-powered newsletter builder that captures your writing style from previous newsletters and uses it to generate your next newsletter. It employs an agentic workflow that conducts internet research, analyzes previous newsletters, and matches your writing tone. The application features a drag-and-drop editor for reorganizing content and adding pictures or additional text, with each text block enhanced by embedded AI capabilities.",
+    "name": "Assay Plate Layout Tool",
+    "slug": "assay-plate-layout",
+    "description": "An interactive web tool that allows researchers to design experimental layouts for multi-well plates, visualize sample distribution, and export layouts for automation.",
     "technologies": [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Tailwind CSS",
-      "Supabase",
-      "OpenAI"
+      "Python",
+      "Plotly Dash",
+      "Pandas",
+      "NumPy"
     ],
     "features": [
-      "AI-powered newsletter generation",
-      "Captures writing style from past newsletters",
-      "Internet research capability",
-      "Matches writing tone of voice",
-      "Drag-and-drop content editor",
-      "Add pictures or extra content",
-      "AI-enhanced text blocks"
+      "Design experimental layouts for multi-well plates",
+      "Visualize sample distribution and replicates",
+      "Export layouts to CSV",
+      "Direct export to liquid handling robots"
     ],
     "github_url": "",
-    "live_url": "https://nwsltr.ai"
+    "live_url": "https://www.plate.mcvcllmhgb.com"
   },
   {
     "id": "3",
-    "name": "VR Creator Club",
-    "slug": "vrcreatorclub",
-    "description": "A comprehensive VR course with a community of over 1,600 members. It includes a 70+ hour curriculum with 220+ lessons, teaching Unity game engine fundamentals through to advanced multiplayer development techniques. The active community is supported by weekly Q&A calls.",
-    "technologies": ["Unity", "C#", "OBS"],
+    "name": "Timeline App",
+    "slug": "timeline-app",
+    "description": "A web application for visualizing and interacting with scientific project timelines and milestones. Useful for tracking research progress, deadlines, and key events.",
+    "technologies": [
+      "Python",
+      "Plotly Dash",
+      "Pandas"
+    ],
     "features": [
-      "70+ hour course duration",
-      "220+ detailed lessons",
-      "Covers Unity basics to advanced multiplayer",
-      "Community of over 1,600 members",
-      "Weekly Q&A calls"
+      "Interactive visualization of project timelines",
+      "Highlight milestones and deadlines",
+      "Track research progress",
+      "Customizable timeline views"
     ],
     "github_url": "",
-    "live_url": "https://skool.com/vrcreatorclub"
-  },
-  {
-    "id": "4",
-    "name": "VR County Fair",
-    "slug": "vrcountyfair",
-    "description": "A VR project built with Unity to demonstrate various VR game development techniques. It includes interactive games like ring toss, shooting balloons, and a strongman hammer game, complemented by user interface elements and a prize exchange system.",
-    "technologies": ["Unity", "C#", "XR Interaction Toolkit", "OpenXR"],
-    "features": [
-      "Ring toss game",
-      "Shooting balloons game",
-      "Strongman hammer game",
-      "User interface elements",
-      "Prize exchange system"
-    ],
-    "github_url": "",
-    "live_url": "https://skool.com/vrcreatorclub"
+    "live_url": "https://timeline.mcvcllmhgb.com"
   }
 ]

@@ -1,334 +1,191 @@
 {
   "basics": {
-    "name": "Justin Barnett",
-    "label": "Senior Software Developer",
-    "email": "barnett.justin@gmail.com",
-    "phone": "(770) 318-5334",
-    "summary": "Experienced software developer and XR leader specializing in virtual and augmented reality technologies.",
+    "name": "Christopher Olsen",
+    "label": "Cell & Biochemical Assay Scientist",
+    "email": "colsen@mcvcllmhgb.com",
+    "phone": "617-922-9615",
+    "summary": "Cell and biochemical assay Scientist with 6 years of experience in assay development and screening. Versatile skillset with hands-on expertise in bench automation, Python coding, and primary cell culture in a fast-paced biotech environment. Pursuing exciting therapeutics research opportunities that align with my expertise and aim to bring innovative solutions to complex biological challenges.",
     "profiles": [
       {
         "network": "LinkedIn",
-        "url": "https://linkedin.com/in/justin-p-barnett"
+        "url": "https://linkedin.com/in/colsen-bu"
       },
       {
         "network": "GitHub",
-        "url": "https://github.com/justinpbarnett"
+        "url": "https://github.com/colsen-bu"
       },
       {
-        "network": "X",
-        "url": "https://x.com/justinpbarnett"
-      },
-      {
-        "network": "YouTube",
-        "url": "https://youtube.com/JustinPBarnett"
+        "network": "RTD Portfolio",
+        "url": "https://colsen.mcvcllmhgb.com"
       }
     ]
   },
   "skills": [
     {
-      "name": "XR Development",
+      "name": "Cell & Molecular Biology",
       "keywords": [
-        "Virtual Reality (VR)",
-        "Augmented Reality (AR)",
-        "Unity",
-        "Game Development",
-        "Multiplayer Development",
-        "Physics"
+        "Cell Culture",
+        "Primary Cell Culture",
+        "Hematopoietic Differentiation",
+        "hiPSC Culture",
+        "Protein Purification",
+        "Immunohistochemistry",
+        "CRISPR"
       ]
     },
     {
-      "name": "Programming",
+      "name": "Assay Development & Screening",
       "keywords": [
-        "C#",
+        "ELISA",
+        "MSD",
+        "alphaLISA",
+        "TR-FRET",
+        "qPCR",
+        "ddPCR",
+        "RT-qPCR",
+        "NanoString",
+        "Western Blot",
+        "WES/JESS",
+        "Flow Cytometry",
+        "Incucyte Imaging"
+      ]
+    },
+    {
+      "name": "Automation & Lab Informatics",
+      "keywords": [
+        "Biomek i7",
+        "Tecan",
+        "Echo",
+        "Formulatrix Mantis",
+        "FAST",
+        "Integra",
+        "Agilent Bravo",
+        "Hamilton",
+        "Automation Workflow Design",
+        "Assay Informatics Dashboards"
+      ]
+    },
+    {
+      "name": "Programming & Data Analysis",
+      "keywords": [
+        "Python",
+        "R",
+        "Julia",
         "SQL",
-        "JavaScript",
-        "TypeScript",
-        ".NET Core",
-        "ASP.NET"
+        "Pandas",
+        "NumPy",
+        "GraphPad Prism",
+        "FlowJo",
+        "Benchling"
       ]
     },
     {
-      "name": "Web Development",
+      "name": "Animal Models",
       "keywords": [
-        "Next.js",
-        "Angular",
-        "React.js",
-        "Supabase",
-        "Firebase",
-        "Stripe"
-      ]
-    },
-    {
-      "name": "AI & Modern Tech",
-      "keywords": [
-        "AI Software Development",
-        "LangChain",
-        "Rapid Prototyping",
-        "Software Development"
-      ]
-    },
-    {
-      "name": "Leadership",
-      "keywords": [
-        "Technical Project Leadership",
-        "Team Management",
-        "Team Building",
-        "Recruiting",
-        "Project Management"
-      ]
-    },
-    {
-      "name": "Client & Communication",
-      "keywords": [
-        "Public Speaking",
-        "Education",
-        "Client Relations",
-        "Technology Evangelism",
-        "Industry Trends"
+        "Rodent Colony Management",
+        "Mouse Dosing (IP, Tail Vein)",
+        "Tissue Extraction",
+        "Spectrophotometric Assays",
+        "NAFLD Profiling"
       ]
     }
   ],
   "fullTimeWork": [
     {
-      "company": "thinAiR",
-      "position": "Senior Software Developer",
-      "startDate": "2023-10",
-      "endDate": "2025-06",
-      "location": "Remote",
-      "summary": "Lead development teams delivering cutting-edge XR solutions, managing full project lifecycles from concept to deployment.",
+      "company": "Cellarity",
+      "position": "Research Associate II, in vitro Pharmacology",
+      "startDate": "2022-06",
+      "endDate": "2023-11",
+      "location": "Boston, MA",
+      "summary": "Developed and executed assays for small molecule screening in hematology and myeloid lineages. Built informatics dashboards and standardized methodologies for consistent assay evaluation.",
       "highlights": [
-        "Technical Project Leadership",
-        "Virtual Reality (VR)",
-        "Augmented Reality (AR)",
-        "Unity",
-        "Recruiting"
+        "Developed cell culture assays for hematology disease area and myeloid cell lineages",
+        "Built assay informatics dashboards for multiple readouts",
+        "Served as point person for troubleshooting automation instruments",
+        "Standardized dose-response curve fitting and western blot procedures"
       ]
     },
     {
-      "company": "Foundry - Spatial Computing",
-      "position": "CTO",
-      "startDate": "2022-08",
-      "endDate": "2024-01",
-      "location": "Remote",
-      "summary": "Founded startup focused on multiplayer VR simplification. Raised $250K+ in funding. Delivered projects for Dell, Credit Agricole, and Big Rock Creative.",
+      "company": "Boston University, The Tolan Lab",
+      "position": "Undergraduate Research Associate",
+      "startDate": "2020-09",
+      "endDate": "2022-05",
+      "location": "Boston, MA",
+      "summary": "Conducted research on hereditary fructose intolerance and potential metabolic therapies. Awarded corporate sponsorship for summer project targeting diabetes therapeutics.",
       "highlights": [
-        "Virtual Reality (VR)",
-        "Team Management",
-        "Software Development",
-        "Rapid Prototyping",
-        "Team Building"
-      ]
-    },
-    {
-      "company": "Improving",
-      "position": "Software Developer",
-      "startDate": "2019-05",
-      "endDate": "2023-01",
-      "location": "Alpharetta, GA",
-      "summary": "Progressed from intern to Consultant, delivering diverse client projects with Angular, ASP.NET, Azure Functions, and SQL across e-commerce, government, and self-service portals.",
-      "highlights": [
-        "ASP.NET",
-        "SQL",
-        "C#",
-        "Angular",
-        ".NET Core",
-        "JavaScript"
-      ]
-    },
-    {
-      "company": "Smith Douglas Homes",
-      "position": "Assistant Superintendent",
-      "startDate": "2016-11",
-      "endDate": "2018-12",
-      "location": "Woodstock, GA",
-      "summary": "Managed construction of 20+ residential homes simultaneously. Oversaw trade schedules, payroll, quality inspections, and homeowner orientations.",
-      "highlights": [
-        "Project Management",
-        "Quality Control",
-        "Client Relations",
-        "Team Coordination",
-        "Budget Management"
-      ]
-    },
-    {
-      "company": "Nautix Lifeguards & Maintenance, LLC.",
-      "position": "Pool Manager",
-      "startDate": "2013-06",
-      "endDate": "2015-09",
-      "location": "Woodstock, GA",
-      "summary": "Supervised lifeguard team and maintained pool facilities for multiple community swimming pools.",
-      "highlights": [
-        "Team Management",
-        "Safety Protocols",
-        "Customer Service",
-        "Staff Training",
-        "Facility Maintenance"
-      ]
-    },
-    {
-      "company": "UPS",
-      "position": "Sales Associate",
-      "startDate": "2014-02",
-      "endDate": "2015-03",
-      "location": "Kennesaw, Georgia",
-      "summary": "Delivered exceptional customer service and drove sales in a fast-paced shipping environment.",
-      "highlights": [
-        "Customer Service",
-        "Sales",
-        "Logistics",
-        "Problem Solving",
-        "Time Management"
+        "Awarded NEB sponsorship for KHK inhibition project",
+        "Performed cell culture and recombinant protein purification",
+        "Managed rodent colony for efficacy testing of KHK inhibitors",
+        "Implemented spectrophotometric assays and western blotting for NAFLD profiling"
       ]
     }
   ],
   "contractWork": [
     {
-      "company": "Twisted Barrel VR",
-      "position": "Senior Software Developer",
-      "startDate": "2024-05",
-      "endDate": "2024-12",
-      "location": "Remote",
-      "summary": "Built multiplayer authentication system and implemented core gameplay features for VR shooting experience.",
+      "company": "Blueprint Medicines",
+      "position": "Contract Research Associate Scientist, Biology",
+      "startDate": "2024-08",
+      "endDate": "2024-11",
+      "location": "Boston, MA",
+      "summary": "Supported preclinical oncology programs with small molecule testing, assay development, and automation workflows.",
       "highlights": [
-        "Unity",
-        "C#",
-        "Multiplayer Development",
-        "Virtual Reality (VR)",
-        "Game Development"
+        "Expanded small molecule testing across multiple assays and immortal cell lines",
+        "Established automation protocols for immunoblot sample processing",
+        "Increased Flow Cytometry throughput by 500% via plate-based workflows",
+        "Implemented automation workflows with Biomek i7, Tecan, and Echo"
       ]
     },
     {
-      "company": "mpressed.ai",
-      "position": "Senior Software Developer",
-      "startDate": "2023-04",
-      "endDate": "2023-10",
-      "location": "Remote",
-      "summary": "Built AI-powered newsletter platform with drag-and-drop editor using Next.js, Supabase, Langchain, and Stripe.",
+      "company": "Symbrosia Inc.",
+      "position": "Remote Research Intern",
+      "startDate": "2020-06",
+      "endDate": "2020-08",
+      "location": "Kailua Kona, HI",
+      "summary": "Researched bromoform-producing seaweed and contributed recommendations for selective breeding programs.",
       "highlights": [
-        "Next.js",
-        "AI Software Development",
-        "Supabase",
-        "LangChain",
-        "Stripe"
-      ]
-    },
-    {
-      "company": "Red Team Interactive",
-      "position": "Senior Software Developer",
-      "startDate": "2023-10",
-      "endDate": "2023-12",
-      "location": "Remote",
-      "summary": "Rebuilt physics-based player controller for Sail VR and implemented key gameplay features.",
-      "highlights": [
-        "Unity",
-        "C#",
-        "Virtual Reality (VR)",
-        "Physics",
-        "Game Development"
-      ]
-    },
-    {
-      "company": "XR Terra",
-      "position": "Lead Instructor",
-      "startDate": "2021-06",
-      "endDate": "2022-02",
-      "location": "Remote",
-      "summary": "Led intensive 8-week VR development bootcamps, transforming beginners into skilled Unity/C# developers.",
-      "highlights": [
-        "Virtual Reality (VR)",
-        "Unity",
-        "C#",
-        "Education",
-        "Game Development"
+        "Conducted background research on Asparagopsis Taxiformis",
+        "Contributed to successful selective breeding grant proposal"
       ]
     }
   ],
   "sideProjects": [
     {
-      "company": "VR Creators",
-      "position": "Founder",
-      "startDate": "2021-09",
+      "company": "Colsen Tools",
+      "position": "Independent Developer",
+      "startDate": "2021-01",
       "endDate": "Present",
-      "location": "Canton, GA",
-      "summary": "Founder of VR Creators, helping tech professionals transition from corporate jobs to fulfilling VR careers.",
+      "location": "Cambridge, MA",
+      "summary": "Built open-source and custom biotech data tools for scientists, including dose-response analysis, assay plate design, and project timeline visualization.",
       "highlights": [
-        "Virtual Reality (VR)",
-        "Coaching",
-        "Team Management",
-        "Marketing",
-        "Sales"
-      ]
-    },
-    {
-      "company": "YouTube",
-      "position": "Educator",
-      "startDate": "2020-04",
-      "endDate": "Present",
-      "location": "Remote",
-      "summary": "Creator of VR development tutorials with 3M+ views, teaching Unity and C# fundamentals to aspiring XR developers.",
-      "highlights": [
-        "Virtual Reality (VR)",
-        "Unity",
-        "C#",
-        "Education",
-        "Public Speaking"
-      ]
-    },
-    {
-      "company": "Self-employed",
-      "position": "Portrait Photographer",
-      "startDate": "2016-08",
-      "endDate": "2018-08",
-      "location": "Atlanta, GA",
-      "summary": "Delivered professional photography and videography services for major clients including Delta Airlines, Atlanta Braves, and various organizations. Specialized in portraits, events, and promotional content for web, advertising, and social media.",
-      "highlights": [
-        "Photography",
-        "Videography",
-        "Client Relations",
-        "Creative Direction",
-        "Event Management"
-      ]
-    }
-  ],
-  "speakingEngagements": [
-    {
-      "company": "Web3 ATL",
-      "position": "Guest Speaker",
-      "startDate": "2023-11",
-      "endDate": "2023-11",
-      "location": "Atlanta, GA",
-      "summary": "Panelist speaker for the talk, \"Are We at the Inflection Point for XR to Go Mainstream?\"",
-      "highlights": [
-        "Public Speaking",
-        "Virtual Reality (VR)",
-        "Industry Trends",
-        "Technology Evangelism",
-        "XR Adoption"
-      ]
-    },
-    {
-      "company": "AWE",
-      "position": "Guest Speaker",
-      "startDate": "2023-03",
-      "endDate": "2023-03",
-      "location": "San Jose, CA",
-      "summary": "Panelist speaker for the talk, \"The Case for Custom: Jump Ship from Walled-Garden Multiplayer-VR, Build Your Own App, and Do Your Own Thing\"",
-      "highlights": [
-        "Public Speaking",
-        "Virtual Reality (VR)",
-        "Multiplayer Development",
-        "Independent Development",
-        "Technology Strategy"
+        "Dose Response Analysis Tool",
+        "Assay Plate Layout Tool",
+        "Timeline App"
       ]
     }
   ],
   "education": [
     {
-      "institution": "Kennesaw State University",
-      "area": "Software Engineering",
-      "studyType": "Bachelor of Science",
-      "startDate": "2014-09",
-      "endDate": "2020-05"
+      "institution": "Boston University",
+      "area": "Biochemistry & Molecular Biology",
+      "studyType": "Bachelor of Arts",
+      "startDate": "2018-09",
+      "endDate": "2022-05",
+      "location": "Boston, MA"
+    }
+  ],
+  "activities_interests": [
+    {
+      "name": "Agganis Arena",
+      "role": "Supervisor, Ice Crew Operations",
+      "startDate": "2019-10",
+      "endDate": "2021-04",
+      "summary": "Oversaw ice crew operations during BU Men’s Hockey Games for two seasons."
+    },
+    {
+      "name": "Biotech Tools",
+      "role": "Independent Builder",
+      "summary": "Built high-impact biotech tools for scientists.",
+      "url": "https://colsen.mcvcllmhgb.com"
     }
   ]
 }

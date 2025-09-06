@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from 'next/font/google';
 import "./globals.css";
-import SupabaseProvider from '@/components/providers/SupabaseProvider';
 import ThemeProvider from '@/components/providers/ThemeProvider';
 import { Analytics } from "@vercel/analytics/react";
 
@@ -12,9 +11,9 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Justin P Barnett",
+  title: "Christopher Olsen",
   description: "Interactive portfolio with AI-powered chat",
-  metadataBase: new URL('https://justinpbarnett.com'),
+  metadataBase: new URL('https://christopherolsen.com'),
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -38,16 +37,16 @@ export const metadata: Metadata = {
     ]
   },
   openGraph: {
-    title: "Justin P Barnett",
+    title: "Christopher Olsen",
     description: "Interactive portfolio with AI-powered chat",
     type: "website",
-    siteName: "Justin P Barnett"
+    siteName: "Christopher Olsen"
   },
   twitter: {
     card: "summary_large_image",
-    title: "Justin P Barnett",
+    title: "Christopher Olsen",
     description: "Interactive portfolio with AI-powered chat",
-    creator: "@justinpbarnett"
+    creator: "@christopherolsen"
   }
 };
 
@@ -60,12 +59,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={mono.variable}>
       <body className={`${mono.className} antialiased`} suppressHydrationWarning>
         <ThemeProvider>
-          <SupabaseProvider>
-            <main className="min-h-screen">
-              {children}
-              <Analytics />
-            </main>
-          </SupabaseProvider>
+          <main className="min-h-screen">
+            {children}
+            <Analytics />
+          </main>
         </ThemeProvider>
       </body>
     </html>

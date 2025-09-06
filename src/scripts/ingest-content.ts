@@ -29,6 +29,13 @@ function validateEnv() {
     console.error('Required variables are listed in .env.example\n');
     process.exit(1);
   }
+
+  // Extra: validate Supabase URL format
+  const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  if (!/^https:\/\//.test(supaUrl)) {
+    console.warn(`\nWarning: NEXT_PUBLIC_SUPABASE_URL should start with https:// (got: ${supaUrl}).`);
+    console.warn('Copy the Project URL from Supabase > Project Settings > API (not the database host).');
+  }
 }
 
 // Validate environment variables before proceeding
@@ -52,6 +59,29 @@ interface ContentItem {
   type: string;
 }
 
+// Simple retry helper for transient network errors
+async function withRetry<T = any>(fn: () => Promise<T>, label: string, attempts = 3, baseDelayMs = 500): Promise<T> {
+  let lastErr: any;
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      return await fn();
+    } catch (err: any) {
+      lastErr = err;
+      const isFetchFailed = typeof err?.message === 'string' && err.message.includes('fetch failed');
+      const code = (err as any)?.code || (err as any)?.cause?.code;
+      const transient = isFetchFailed || ['ECONNRESET', 'ETIMEDOUT', 'EAI_AGAIN'].includes(code as string);
+      console.warn(`[${label}] attempt ${i}/${attempts} failed${code ? ` (code: ${code})` : ''}: ${err?.message || err}`);
+      if (i < attempts && transient) {
+        const delay = baseDelayMs * Math.pow(2, i - 1);
+        await new Promise(r => setTimeout(r, delay));
+        continue;
+      }
+      break;
+    }
+  }
+  throw lastErr;
+}
+
 // Generate a consistent hash for content tracking
 function generateContentHash(content: ContentItem): string {
   const contentString = `${content.source}:${content.type}:${content.content}`;
@@ -59,10 +89,10 @@ function generateContentHash(content: ContentItem): string {
 }
 
 async function getEmbedding(text: string) {
-  const response = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
-    input: text,
-  });
+  const response = await withRetry(
+    () => openai.embeddings.create({ model: 'text-embedding-3-small', input: text }),
+    'openai.embeddings.create'
+  );
   return response.data[0].embedding;
 }
 
@@ -71,11 +101,15 @@ async function processContent(content: ContentItem, options: IngestOptions) {
     const contentHash = generateContentHash(content);
     
     // Check if content already exists
-    const { data: existing } = await supabase
-      .from('content_vectors')
-      .select('id')
-      .eq('metadata->content_hash', contentHash)
-      .maybeSingle();
+    const existingResp = await withRetry(
+      async () => await supabase
+        .from('content_vectors')
+        .select('id')
+        .eq('metadata->content_hash', contentHash)
+        .maybeSingle(),
+      'supabase.select(maybeSingle)'
+    );
+    const existing = (existingResp as any).data as { id: string } | null;
 
     const embedding = await getEmbedding(content.content);
     const enrichedMetadata = {
@@ -86,34 +120,50 @@ async function processContent(content: ContentItem, options: IngestOptions) {
 
     if (existing && options.updateExisting) {
       // Update existing content
-      const { error } = await supabase
-        .from('content_vectors')
-        .update({
-          content: content.content,
-          embedding,
-          metadata: enrichedMetadata,
-        })
-        .eq('id', existing.id);
+      const updateResp = await withRetry(
+        async () => await supabase
+          .from('content_vectors')
+          .update({
+            content: content.content,
+            embedding,
+            metadata: enrichedMetadata,
+          })
+          .eq('id', existing.id),
+        'supabase.update(content_vectors)'
+      );
+      const { error } = (updateResp as any);
 
       if (error) throw error;
       console.log(`Updated existing content: ${content.source} (${content.type})`);
     } else if (!existing) {
       // Insert new content
-      const { error } = await supabase.from('content_vectors').insert({
-        content: content.content,
-        embedding,
-        metadata: enrichedMetadata,
-        source: content.source,
-        type: content.type,
-      });
+      const insertResp = await withRetry(
+        async () => await supabase.from('content_vectors').insert({
+          content: content.content,
+          embedding,
+          metadata: enrichedMetadata,
+          source: content.source,
+          type: content.type,
+        }),
+        'supabase.insert(content_vectors)'
+      );
+      const { error } = (insertResp as any);
 
       if (error) throw error;
       console.log(`Added new content: ${content.source} (${content.type})`);
     } else {
       console.log(`Skipped existing content: ${content.source} (${content.type})`);
     }
-  } catch (error) {
-    console.error(`Error processing ${content.source}:`, error);
+  } catch (error: any) {
+    const msg = error?.message || String(error);
+    const code = (error as any)?.code || (error as any)?.cause?.code;
+    const details = (error as any)?.details || (error as any)?.stack || '';
+    console.error(`Error processing ${content.source}:`, {
+      message: msg,
+      code: code || '',
+      details: typeof details === 'string' ? details.split('\n').slice(0, 3).join('\n') : details,
+      hint: 'Verify NEXT_PUBLIC_SUPABASE_URL (must be https URL from Supabase API settings) and OPENAI_API_KEY. Also ensure table exists (run: npm run setup-supabase).',
+    });
   }
 }
 
@@ -162,7 +212,7 @@ async function processJSONResume(filePath: string, options: IngestOptions) {
   
   // Add a comprehensive personal summary
   const personalSummary = `
-    Justin P Barnett is a ${resume.basics?.label}. 
+    Christopher Olsen is a ${resume.basics?.label}. 
     ${resume.basics?.summary}
   `.trim();
 
@@ -170,13 +220,13 @@ async function processJSONResume(filePath: string, options: IngestOptions) {
   const sections = {
     personal: personalSummary,
     skills: resume.skills?.map((s: any) => 
-      `Justin has expertise in ${s.name}, specifically with: ${s.keywords?.join(', ')}`
+      `Christopher has expertise in ${s.name}, specifically with: ${s.keywords?.join(', ')}`
     ).join('. '),
     work: resume.work?.map((w: any) => 
-      `Justin worked as a ${w.position} at ${w.company} from ${w.startDate} to ${w.endDate}. ${w.summary}`
+      `Christopher worked as a ${w.position} at ${w.company} from ${w.startDate} to ${w.endDate}. ${w.summary}`
     ).join('\n\n'),
     education: resume.education?.map((e: any) =>
-      `Justin studied ${e.area} at ${e.institution}, earning a ${e.studyType} (${e.startDate} - ${e.endDate})`
+      `Christopher studied ${e.area} at ${e.institution}, earning a ${e.studyType} (${e.startDate} - ${e.endDate})`
     ).join('\n\n'),
   };
 
@@ -187,7 +237,7 @@ async function processJSONResume(filePath: string, options: IngestOptions) {
         metadata: {
           section,
           isPersonal: true,
-          subject: "Justin P Barnett",
+          subject: "Christopher Olsen",
           contentType: "personal_info",
           source_type: "resume",
         },
@@ -204,7 +254,7 @@ async function processProjects(options: IngestOptions) {
   
   for (const project of projects) {
     const content = `
-      Justin P Barnett developed this project:
+  Christopher Olsen developed this project:
       Project: ${project.name}
       Description: ${project.description}
       Technologies Used: ${project.technologies.join(', ')}
@@ -218,7 +268,7 @@ async function processProjects(options: IngestOptions) {
       metadata: {
         projectId: project.id,
         isPersonal: true,
-        subject: "Justin P Barnett",
+  subject: "Christopher Olsen",
         contentType: "project",
         source_type: "portfolio",
       },
