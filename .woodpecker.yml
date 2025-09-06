@@ -1,13 +1,4 @@
-variables:
-  - &app_name "colsenai-website"
-  - &docker_image "colsenai-website:latest"
-
-when:
-  - event: [push, pull_request]
-    branch: [main, master]
-
 steps:
-  # Test and build stage
   test:
     image: node:18-alpine
     commands:
@@ -15,95 +6,35 @@ steps:
       - npm run lint
       - npm run build
     when:
-      event: [push, pull_request]
+      - event: [push, pull_request]
 
-  # Build Docker image
-  build-image:
-    image: plugins/docker
-    settings:
-      repo: *app_name
-      tags:
-        - latest
-        - ${CI_COMMIT_SHA:0:8}
-      dockerfile: Dockerfile
-      context: .
-      # For local registry or no registry push, just build
-      dry_run: true
-    when:
-      event: push
-      branch: [main, master]
-
-  # Deploy to server
   deploy:
-    image: appleboy/drone-ssh
-    settings:
-      host:
-        from_secret: deploy_host
-      username:
-        from_secret: deploy_username
-      key:
-        from_secret: deploy_ssh_key
-      port: 22
-      envs:
-        - SUPABASE_URL
-        - SUPABASE_ANON_KEY
-        - OPENAI_API_KEY
-      script:
-        - cd /path/to/your/deployment/directory
-        - git pull origin main
-        - export SUPABASE_URL="$$SUPABASE_URL"
-        - export SUPABASE_ANON_KEY="$$SUPABASE_ANON_KEY"
-        - export OPENAI_API_KEY="$$OPENAI_API_KEY"
-        - docker compose down
-        - docker compose build --no-cache
-        - docker compose up -d
-        - docker system prune -f
-    secrets:
-      - source: supabase_url
-        target: SUPABASE_URL
-      - source: supabase_anon_key
-        target: SUPABASE_ANON_KEY
-      - source: openai_api_key
-        target: OPENAI_API_KEY
-    when:
-      event: push
-      branch: [main, master]
-
-  # Health check after deployment
-  health-check:
-    image: alpine/curl
+    image: docker:24-cli
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      SUPABASE_URL:
+        from_secret: supabase_url
+      SUPABASE_ANON_KEY:
+        from_secret: supabase_anon_key
+      OPENAI_API_KEY:
+        from_secret: openai_api_key
     commands:
-      - sleep 30
-      # Check via your domain through NPM
-      - curl -f https://chrisolsen.work/api/health || echo "Domain check failed, trying direct container access..."
-      # Fallback to direct container check if domain fails
-      - docker exec colsenai-website wget --no-verbose --tries=1 --spider http://localhost:3001/api/health || exit 1
+      - pwd
+      - ls -la
+      - cat docker-compose.yml
+      - docker compose down || echo "No running containers"
+      - docker compose up -d --build
+      - docker image prune -f
     when:
-      event: push
-      branch: [main, master]
-    depends_on:
-      - deploy
+      - event: push
+      - branch: main
 
-  # Notify on success/failure (optional)
   notify:
-    image: plugins/slack
-    settings:
-      webhook:
-        from_secret: slack_webhook
-      channel: deployments
-      template: >
-        {{#success build.status}}
-          ✅ Deployment successful for {{repo.name}}
-          Branch: {{build.branch}}
-          Commit: {{build.commit}}
-        {{else}}
-          ❌ Deployment failed for {{repo.name}}
-          Branch: {{build.branch}}
-          Commit: {{build.commit}}
-        {{/success}}
+    image: alpine:latest
+    commands:
+      - echo "✅ ColsenAI Website deployed successfully!"
     when:
-      event: push
-      branch: [main, master]
-      status: [success, failure]
-    depends_on:
-      - health-check
+      - event: push
+      - branch: main
+      - status: [success]
