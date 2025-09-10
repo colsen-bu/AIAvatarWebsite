@@ -92,6 +92,20 @@
   ],
   "fullTimeWork": [
     {
+      "company": "Blueprint Medicines",
+      "position": "Contract Research Associate Scientist, Biology",
+      "startDate": "2024-08",
+      "endDate": "2024-11",
+      "location": "Boston, MA",
+      "summary": "Supported preclinical oncology programs with small molecule testing, assay development, and automation workflows.",
+      "highlights": [
+        "Expanded small molecule testing across multiple assays and immortal cell lines",
+        "Established automation protocols for immunoblot sample processing",
+        "Increased Flow Cytometry throughput by 500% via plate-based workflows",
+        "Implemented automation workflows with Biomek i7, Tecan, and Echo"
+      ]
+    },
+    {
       "company": "Cellarity",
       "position": "Research Associate II, in vitro Pharmacology",
       "startDate": "2022-06",
@@ -117,22 +131,6 @@
         "Performed cell culture and recombinant protein purification",
         "Managed rodent colony for efficacy testing of KHK inhibitors",
         "Implemented spectrophotometric assays and western blotting for NAFLD profiling"
-      ]
-    }
-  ],
-  "contractWork": [
-    {
-      "company": "Blueprint Medicines",
-      "position": "Contract Research Associate Scientist, Biology",
-      "startDate": "2024-08",
-      "endDate": "2024-11",
-      "location": "Boston, MA",
-      "summary": "Supported preclinical oncology programs with small molecule testing, assay development, and automation workflows.",
-      "highlights": [
-        "Expanded small molecule testing across multiple assays and immortal cell lines",
-        "Established automation protocols for immunoblot sample processing",
-        "Increased Flow Cytometry throughput by 500% via plate-based workflows",
-        "Implemented automation workflows with Biomek i7, Tecan, and Echo"
       ]
     },
     {

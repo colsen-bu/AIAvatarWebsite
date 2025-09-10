@@ -36,8 +36,7 @@ export interface Resume {
     profiles: Profile[];
   };
   skills: Skill[];
-  fullTimeWork: Work[];
-  contractWork: Work[];
+  fullTimeWork: Work[]; // unified professional experience (formerly fullTimeWork + contractWork)
   sideProjects: Work[];
   speakingEngagements: Work[];
   education: Education[];

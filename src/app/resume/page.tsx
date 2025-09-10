@@ -100,6 +100,10 @@ function WorkExperienceSection({
 }
 
 export default function ResumePage() {
+  // Combine full-time and contract work into unified professional experience (sorted by most recent start date)
+  const combinedProfessionalExperience = [...(typedResumeData.fullTimeWork || [])]
+    .sort((a, b) => (b.startDate.localeCompare(a.startDate)));
+
   return (
     <div className="min-h-screen py-16 px-8">
       <div className="max-w-5xl mx-auto">
@@ -175,16 +179,10 @@ export default function ResumePage() {
           </div>
         </Section>
 
-        {/* Full-Time Experience */}
+        {/* Professional Experience (Full-Time + Contract) */}
         <WorkExperienceSection 
-          title="Full-Time Experience" 
-          jobs={typedResumeData.fullTimeWork} 
-        />
-
-        {/* Contract Work */}
-        <WorkExperienceSection 
-          title="Contract Work" 
-          jobs={typedResumeData.contractWork} 
+          title="Professional Experience" 
+          jobs={combinedProfessionalExperience} 
         />
 
         {/* Side Projects */}

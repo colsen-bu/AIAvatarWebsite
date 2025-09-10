@@ -35,6 +35,9 @@ ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Install curl for reliable health checks (busybox wget lacks full feature set)
+RUN apk add --no-cache curl
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
@@ -57,9 +60,10 @@ ENV PORT=3001
 ENV HOSTNAME="0.0.0.0"
 
 
-# Healthcheck for Next.js app on port 3001
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:3001/ || exit 1
+# Healthcheck for Next.js app on port 3001 hitting explicit /api/health endpoint
+# Using curl (-f fail on HTTP errors, -s silent, -S show errors)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -fsS http://localhost:3001/api/health > /dev/null || exit 1
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
