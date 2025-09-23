@@ -473,6 +473,12 @@ export default function Home() {
                 >
                   projects
                 </a>
+                <a
+                  href="/contact"
+                  className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
+                >
+                  contact
+                </a>
               </div>
             </div>
 
@@ -551,6 +557,13 @@ export default function Home() {
                     onClick={() => setShowMobileMenu(false)}
                   >
                     projects
+                  </a>
+                  <a
+                    href="/contact"
+                    className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors text-lg font-medium py-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    contact
                   </a>
                 </div>
 

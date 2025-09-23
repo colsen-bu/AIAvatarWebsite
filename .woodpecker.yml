@@ -18,6 +18,12 @@ steps:
         from_secret: supabase_anon_key
       OPENAI_API_KEY:
         from_secret: openai_api_key
+      RESEND_API_KEY:
+        from_secret: resend_api_key
+      FROM_EMAIL:
+        from_secret: from_email
+      CONTACT_EMAIL:
+        from_secret: contact_email
     commands:
       - pwd
       - ls -la
