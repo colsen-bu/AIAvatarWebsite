@@ -3,7 +3,7 @@ import path from 'path';
 import OpenAI from 'openai';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
-import { chromaClient, COLLECTION_NAME } from '../lib/chroma';
+import { getChromaClient, COLLECTION_NAME } from '../lib/chroma';
 
 // Load environment variables from .env.local first, then fall back to .env
 const envPath = fs.existsSync('.env.local') ? '.env.local' : '.env';
@@ -83,6 +83,7 @@ async function getEmbedding(text: string) {
 async function processContent(content: ContentItem, options: IngestOptions) {
   try {
     const contentHash = generateContentHash(content);
+    const chromaClient = getChromaClient();
     const collection = await chromaClient.getOrCreateCollection({ name: COLLECTION_NAME });
 
     const embedding = await getEmbedding(content.content);
@@ -239,6 +240,7 @@ async function ingestContent(options: IngestOptions = { clean: false, updateExis
     if (options.clean) {
       console.log('Cleaning existing vector database...');
       try {
+        const chromaClient = getChromaClient();
         await chromaClient.deleteCollection({ name: COLLECTION_NAME });
         console.log('Vector database cleaned successfully');
       } catch (e) {
@@ -247,6 +249,7 @@ async function ingestContent(options: IngestOptions = { clean: false, updateExis
     }
 
     // Ensure collection exists
+    const chromaClient = getChromaClient();
     await chromaClient.getOrCreateCollection({ name: COLLECTION_NAME });
 
     // Process resume

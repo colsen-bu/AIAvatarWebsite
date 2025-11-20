@@ -6,6 +6,17 @@ const nextConfig = {
     // Disable ESLint during builds for now
     ignoreDuringBuilds: true,
   },
+  // Exclude chromadb from webpack bundling in the browser
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Don't bundle chromadb on client side
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'chromadb': false,
+      };
+    }
+    return config;
+  },
   // SEO optimizations
   trailingSlash: false,
   poweredByHeader: false,

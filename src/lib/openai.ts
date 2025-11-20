@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { chromaClient, COLLECTION_NAME } from './chroma';
+import { getChromaClient, COLLECTION_NAME } from './chroma';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -15,6 +15,7 @@ export async function getEmbedding(text: string) {
 }
 
 export async function searchVectors(embedding: number[], threshold = 0.7, count = 5) {
+  const chromaClient = getChromaClient();
   const collection = await chromaClient.getCollection({ name: COLLECTION_NAME });
   const results = await collection.query({
     queryEmbeddings: [embedding],

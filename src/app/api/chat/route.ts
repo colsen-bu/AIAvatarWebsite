@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { streamText } from 'ai';
-import { chromaClient, COLLECTION_NAME } from '@/lib/chroma';
+import { getChromaClient, COLLECTION_NAME } from '@/lib/chroma';
 
 // Rate limiting configuration
 const RATE_LIMIT = {
@@ -102,6 +102,7 @@ export async function POST(req: Request) {
     // Search for relevant content in the vector store
     let matches: ContentMatch[] = [];
     try {
+      const chromaClient = getChromaClient();
       const collection = await chromaClient.getCollection({ name: COLLECTION_NAME });
       const results = await collection.query({
         queryEmbeddings: [embedding.data[0].embedding],
