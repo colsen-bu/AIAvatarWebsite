@@ -1,10 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
-import type { Database } from '../lib/database.types';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
+import { chromaClient, COLLECTION_NAME } from '../lib/chroma';
 
 // Load environment variables from .env.local first, then fall back to .env
 const envPath = fs.existsSync('.env.local') ? '.env.local' : '.env';
@@ -14,8 +13,6 @@ dotenv.config({ path: envPath });
 function validateEnv() {
   const required = {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   };
 
   const missing = Object.entries(required)
@@ -29,13 +26,6 @@ function validateEnv() {
     console.error('Required variables are listed in .env.example\n');
     process.exit(1);
   }
-
-  // Extra: validate Supabase URL format
-  const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  if (!/^https:\/\//.test(supaUrl)) {
-    console.warn(`\nWarning: NEXT_PUBLIC_SUPABASE_URL should start with https:// (got: ${supaUrl}).`);
-    console.warn('Copy the Project URL from Supabase > Project Settings > API (not the database host).');
-  }
 }
 
 // Validate environment variables before proceeding
@@ -45,12 +35,6 @@ validateEnv();
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-// Initialize Supabase
-const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface ContentItem {
   content: string;
@@ -99,70 +83,34 @@ async function getEmbedding(text: string) {
 async function processContent(content: ContentItem, options: IngestOptions) {
   try {
     const contentHash = generateContentHash(content);
-    
-    // Check if content already exists
-    const existingResp = await withRetry(
-      async () => await supabase
-        .from('content_vectors')
-        .select('id')
-        .eq('metadata->content_hash', contentHash)
-        .maybeSingle(),
-      'supabase.select(maybeSingle)'
-    );
-    const existing = (existingResp as any).data as { id: string } | null;
+    const collection = await chromaClient.getOrCreateCollection({ name: COLLECTION_NAME });
 
     const embedding = await getEmbedding(content.content);
     const enrichedMetadata = {
       ...content.metadata,
       content_hash: contentHash,
       last_updated: new Date().toISOString(),
+      source: content.source,
+      type: content.type,
     };
 
-    if (existing && options.updateExisting) {
-      // Update existing content
-      const updateResp = await withRetry(
-        async () => await supabase
-          .from('content_vectors')
-          .update({
-            content: content.content,
-            embedding,
-            metadata: enrichedMetadata,
-          })
-          .eq('id', existing.id),
-        'supabase.update(content_vectors)'
-      );
-      const { error } = (updateResp as any);
+    // Upsert content
+    await withRetry(
+      async () => await collection.upsert({
+        ids: [contentHash],
+        embeddings: [embedding],
+        metadatas: [enrichedMetadata],
+        documents: [content.content],
+      }),
+      'chroma.collection.upsert'
+    );
 
-      if (error) throw error;
-      console.log(`Updated existing content: ${content.source} (${content.type})`);
-    } else if (!existing) {
-      // Insert new content
-      const insertResp = await withRetry(
-        async () => await supabase.from('content_vectors').insert({
-          content: content.content,
-          embedding,
-          metadata: enrichedMetadata,
-          source: content.source,
-          type: content.type,
-        }),
-        'supabase.insert(content_vectors)'
-      );
-      const { error } = (insertResp as any);
-
-      if (error) throw error;
-      console.log(`Added new content: ${content.source} (${content.type})`);
-    } else {
-      console.log(`Skipped existing content: ${content.source} (${content.type})`);
-    }
+    console.log(`Processed content: ${content.source} (${content.type})`);
   } catch (error: any) {
     const msg = error?.message || String(error);
-    const code = (error as any)?.code || (error as any)?.cause?.code;
-    const details = (error as any)?.details || (error as any)?.stack || '';
     console.error(`Error processing ${content.source}:`, {
       message: msg,
-      code: code || '',
-      details: typeof details === 'string' ? details.split('\n').slice(0, 3).join('\n') : details,
-      hint: 'Verify NEXT_PUBLIC_SUPABASE_URL (must be https URL from Supabase API settings) and OPENAI_API_KEY. Also ensure table exists (run: npm run setup-supabase).',
+      hint: 'Ensure ChromaDB is running (docker-compose up -d chromadb).',
     });
   }
 }
@@ -290,13 +238,16 @@ async function ingestContent(options: IngestOptions = { clean: false, updateExis
 
     if (options.clean) {
       console.log('Cleaning existing vector database...');
-      const { error } = await supabase
-        .from('content_vectors')
-        .delete()
-        .not('id', 'is', null); // Delete all records
-      if (error) throw error;
-      console.log('Vector database cleaned successfully');
+      try {
+        await chromaClient.deleteCollection({ name: COLLECTION_NAME });
+        console.log('Vector database cleaned successfully');
+      } catch (e) {
+        console.log('Collection does not exist, skipping clean.');
+      }
     }
+
+    // Ensure collection exists
+    await chromaClient.getOrCreateCollection({ name: COLLECTION_NAME });
 
     // Process resume
     if (fs.existsSync('data/resume.json')) {

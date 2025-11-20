@@ -12,10 +12,6 @@ steps:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      SUPABASE_URL:
-        from_secret: supabase_url
-      SUPABASE_ANON_KEY:
-        from_secret: supabase_anon_key
       OPENAI_API_KEY:
         from_secret: openai_api_key
       RESEND_API_KEY:
@@ -31,6 +27,10 @@ steps:
       - docker compose down || echo "No running containers"
       - docker compose up -d --build
       - docker image prune -f
+      - echo "Waiting for services to start..."
+      - sleep 10
+      - echo "Running content ingestion..."
+      - docker exec colsenai-website npm run ingest-content
     when:
       - event: push
       - branch: main

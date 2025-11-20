@@ -577,7 +577,7 @@ export default function Home() {
                   <button
                     onClick={() => {
                       setShowMobileMenu(false);
-                      // Clear chat functionality would go here
+                      clearChatHistory();
                     }}
                     className={cn(
                       "px-4 py-3 text-sm border border-gray-200 dark:border-gray-800 rounded-md rounded-l-none border-l-0 font-medium",

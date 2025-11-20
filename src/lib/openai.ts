@@ -1,15 +1,9 @@
 import OpenAI from 'openai';
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from './database.types';
+import { chromaClient, COLLECTION_NAME } from './chroma';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export async function getEmbedding(text: string) {
   const response = await openai.embeddings.create({
@@ -21,13 +15,21 @@ export async function getEmbedding(text: string) {
 }
 
 export async function searchVectors(embedding: number[], threshold = 0.7, count = 5) {
-  const { data: matches, error } = await supabase.rpc('match_content_vectors', {
-    query_embedding: embedding,
-    match_threshold: threshold,
-    match_count: count,
+  const collection = await chromaClient.getCollection({ name: COLLECTION_NAME });
+  const results = await collection.query({
+    queryEmbeddings: [embedding],
+    nResults: count,
   });
 
-  if (error) throw error;
+  // Transform Chroma results to match the expected format
+  // Chroma returns arrays of arrays (one for each query)
+  const matches = results.ids[0]?.map((id, index) => ({
+    id,
+    content: results.documents[0]?.[index] ?? '',
+    metadata: results.metadatas[0]?.[index] ?? {},
+    similarity: 1 - (results.distances?.[0]?.[index] ?? 0), // Approximation if using cosine distance
+  })) ?? [];
+
   return matches;
 }
 

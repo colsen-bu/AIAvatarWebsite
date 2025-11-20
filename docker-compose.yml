@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     build:
@@ -12,9 +10,8 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3001
-      - NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}
-      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - CHROMA_DB_URL=http://chromadb:8000
     networks:
       - npm-shared
     healthcheck:
@@ -29,6 +26,22 @@ services:
       - "npm.host=chrisolsen.work"
       - "npm.port=3001"
 
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: colsenai-chromadb
+    volumes:
+      - chroma-data:/chroma/chroma
+    ports:
+      - "8000:8000"
+    environment:
+      - IS_PERSISTENT=TRUE
+    networks:
+      - npm-shared
+
+volumes:
+  chroma-data:
+
 networks:
   npm-shared:
     external: true
+    name: npm-shared

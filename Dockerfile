@@ -43,6 +43,12 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 
+# Copy data and scripts for ingestion
+COPY --from=builder /app/data ./data
+COPY --from=builder /app/src/scripts ./src/scripts
+COPY --from=builder /app/src/lib ./src/lib
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+
 # Set the correct permission for prerender cache
 RUN mkdir .next
 RUN chown nextjs:nodejs .next

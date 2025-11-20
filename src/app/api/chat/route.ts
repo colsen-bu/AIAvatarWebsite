@@ -1,8 +1,7 @@
 import OpenAI from 'openai';
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from '@/lib/database.types';
 import { createOpenAI } from '@ai-sdk/openai';
 import { streamText } from 'ai';
+import { chromaClient, COLLECTION_NAME } from '@/lib/chroma';
 
 // Rate limiting configuration
 const RATE_LIMIT = {
@@ -92,12 +91,6 @@ export async function POST(req: Request) {
       apiKey: process.env.OPENAI_API_KEY!,
     });
     
-    // Create Supabase client (initialized at runtime)
-    const supabase = createClient<Database>(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-    
     const lastMessage = messages[messages.length - 1];
 
     // Get embeddings for the last message
@@ -106,26 +99,37 @@ export async function POST(req: Request) {
       input: lastMessage.content,
     });
 
-    // Search for relevant content in the vector store (limit results to keep prompt concise)
-    const { data: matches, error: searchError } = await supabase.rpc('match_content_vectors', {
-      query_embedding: embedding.data[0].embedding,
-      match_threshold: 0.2,
-      match_count: 8,
-    });
+    // Search for relevant content in the vector store
+    let matches: ContentMatch[] = [];
+    try {
+      const collection = await chromaClient.getCollection({ name: COLLECTION_NAME });
+      const results = await collection.query({
+        queryEmbeddings: [embedding.data[0].embedding],
+        nResults: 8,
+      });
 
-    if (searchError) {
-      console.error('Vector search error:', searchError);
-      return new Response(
-        JSON.stringify({ error: 'Failed to search knowledge base' }), 
-        { 
-          status: 500,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      );
+      if (results.ids.length > 0) {
+        matches = results.ids[0].map((id, index) => ({
+          id,
+          content: results.documents[0][index] || '',
+          metadata: results.metadatas[0][index],
+          source: (results.metadatas[0][index] as any)?.source || '',
+          type: (results.metadatas[0][index] as any)?.type || '',
+          similarity: 0, // Chroma doesn't return similarity in the same way, but we can ignore it for now or calculate from distance
+        }));
+      }
+      
+      console.log(`[RAG] Found ${matches.length} relevant context chunks for query`);
+      if (matches.length > 0) {
+        console.log(`[RAG] Sources: ${matches.map(m => m.source).join(', ')}`);
+      }
+    } catch (error) {
+      console.error('Vector search error:', error);
+      // Continue without context if search fails
     }
 
     // Format relevant content for context (cap individual snippet length to avoid context overflow)
-    const relevantContent = (matches as ContentMatch[] || [])
+    const relevantContent = matches
       .map((match) => {
         const snippet = (match.content || '').slice(0, 800);
         return `[${match.type}] ${snippet}${match.source ? ` (Source: ${match.source})` : ''}`;

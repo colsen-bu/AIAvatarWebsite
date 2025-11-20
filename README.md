@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **Multi-Model Chat**: Chat with AI version of me
 - **Responsive Design**: Works on desktop and mobile devices
 - **Dark Mode**: Toggle between light and dark themes
-- **Supabase Integration**: RAG
+- **ChromaDB Integration**: Self-hosted RAG
 - **Markdown Support**: Format messages with markdown syntax
 - **Woodpecker**: Deployed on Oracle Cloud using Woodpecker CI/CD
 
@@ -21,7 +21,6 @@ cp .env.local.example .env.local
 
 Required API keys:
 - `OPENAI_API_KEY`: For OpenAI models
-- `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`: For Supabase integration
 
 Optional API keys (depending on which models you want to use):
 - `ANTHROPIC_API_KEY`: For Anthropic models (Claude)
