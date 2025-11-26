@@ -24,6 +24,10 @@ steps:
       - pwd
       - ls -la
       - cat docker-compose.yml
+      - export OPENAI_API_KEY=$OPENAI_API_KEY
+      - export RESEND_API_KEY=$resend_api_key
+      - export FROM_EMAIL=$from_email
+      - export CONTACT_EMAIL=$contact_email
       - docker compose down || echo "No running containers"
       - docker compose up -d --build
       - docker image prune -f

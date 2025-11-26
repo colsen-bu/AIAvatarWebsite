@@ -47,6 +47,16 @@ export default function FeedbackPage() {
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
 
+    // Validate required field
+    if (!formData.overallImpression) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Please provide an overall impression rating.'
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const response = await fetch('/api/feedback', {
         method: 'POST',
@@ -190,7 +200,7 @@ export default function FeedbackPage() {
 
               <div>
                 <label htmlFor="date" className={labelClasses}>
-                  Date of Meeting
+                  Date of Meeting <span className="text-gray-400">(optional)</span>
                 </label>
                 <input
                   type="date"
@@ -205,7 +215,7 @@ export default function FeedbackPage() {
 
             <div>
               <label htmlFor="meetingType" className={labelClasses}>
-                Type of Interaction
+                Type of Interaction <span className="text-gray-400">(optional)</span>
               </label>
               <select
                 id="meetingType"
@@ -233,13 +243,14 @@ export default function FeedbackPage() {
 
             <div>
               <label htmlFor="overallImpression" className={labelClasses}>
-                Overall Impression
+                Overall Impression <span className="text-red-500">*</span>
               </label>
               <select
                 id="overallImpression"
                 name="overallImpression"
                 value={formData.overallImpression}
                 onChange={handleChange}
+                required
                 className={inputClasses}
               >
                 <option value="">Select rating...</option>
@@ -252,7 +263,7 @@ export default function FeedbackPage() {
 
             <div>
               <label htmlFor="strengths" className={labelClasses}>
-                What were my strengths?
+                What were my strengths? <span className="text-gray-400">(optional)</span>
               </label>
               <textarea
                 id="strengths"
@@ -267,7 +278,7 @@ export default function FeedbackPage() {
 
             <div>
               <label htmlFor="areasForImprovement" className={labelClasses}>
-                Areas for Improvement
+                Areas for Improvement <span className="text-gray-400">(optional)</span>
               </label>
               <textarea
                 id="areasForImprovement"
@@ -282,7 +293,7 @@ export default function FeedbackPage() {
 
             <div>
               <label htmlFor="additionalComments" className={labelClasses}>
-                Additional Comments
+                Additional Comments <span className="text-gray-400">(optional)</span>
               </label>
               <textarea
                 id="additionalComments"
@@ -297,7 +308,7 @@ export default function FeedbackPage() {
 
             <div>
               <label htmlFor="wouldRecommend" className={labelClasses}>
-                Would you recommend me to a colleague?
+                Would you recommend me to a colleague? <span className="text-gray-400">(optional)</span>
               </label>
               <select
                 id="wouldRecommend"
