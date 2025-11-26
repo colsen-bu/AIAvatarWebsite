@@ -12,9 +12,9 @@ services:
       - PORT=3001
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - CHROMA_DB_URL=http://chromadb:8000
-      - RESEND_API_KEY=${resend_api_key}
-      - FROM_EMAIL=${from_email}
-      - CONTACT_EMAIL=${contact_email}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - FROM_EMAIL=${FROM_EMAIL}
+      - CONTACT_EMAIL=${CONTACT_EMAIL}
     networks:
       - npm-shared
     healthcheck:
