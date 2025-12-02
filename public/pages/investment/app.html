@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chris Olsen Vanguard Roth IRA Overview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#FDFBF8; color:#384252; }
+    .chart-container { position:relative; width:100%; max-width:900px; margin:auto; height:420px; }
+  </style>
+</head>
+<body class="antialiased">
+  <div class="container mx-auto p-6 md:p-10 max-w-6xl">
+    <header class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-bold text-slate-800 mb-2">Chris Olsen Vanguard Roth IRA Overview</h1>
+      <p class="text-lg text-slate-600">Portfolio allocations by fund and weighted average expense ratio</p>
+    </header>
+
+    <main class="space-y-8">
+      <section class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+        <h2 class="text-2xl font-semibold text-slate-800 mb-4 text-center md:text-left">Portfolio Allocation (by fund)</h2>
+        <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
+          <div class="chart-container flex-1">
+            <canvas id="allocationChart"></canvas>
+          </div>
+          <div id="customLegend" class="flex-shrink-0 w-full md:w-48 mt-4 md:mt-0"></div>
+        </div>
+      </section>
+
+      <section class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+        <header class="text-center mb-4">
+          <h2 class="text-2xl font-semibold text-slate-800 mb-2">Weighted Average Expense Ratio</h2>
+        </header>
+        <div class="flex justify-center items-baseline gap-3">
+          <div id="waerValue" class="text-5xl font-extrabold text-indigo-600">--%</div>
+        </div>
+      </section>
+
+      <footer class="text-center mt-8 text-slate-500">
+        <small>&copy; 2025 Roth IRA Analysis</small>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // === Embedded CSV (comma separated) ===
+    const csvData = `Account Number,Investment Name,Symbol,Shares,Share Price,Total Percent,Expense Ratio
+414141414,VANGUARD TOTAL BOND MARKET ETF,BND,1.018,74.32,0.255,0.03
+414141414,VANGUARD MID CAP ETF,VO,1.009,293.46,0.999,0.04
+414141414,VANGUARD SMALL CAP ETF,VB,1.007,254.96,0.866,0.05
+414141414,VANGUARD TOTAL INTL BOND INDEX ETF,BNDX,1.012,49.38,0.169,0.07
+414141414,VANGUARD SMALL CAP GROWTH ETF,VBK,10.3454,298.7,10.425,0.07
+414141414,VANGUARD GROWTH ETF,VUG,14.4163,481.86,23.434,0.04
+414141414,VANGUARD MID CAP VALUE ETF,VOE,5.059,174.15,2.972,0.07
+414141414,VANGUARD FTSE EMERGING MARKETS ETF,VWO,48.138,54.52,8.854,0.08
+414141414,ISHARES RUSSELL 2000 ETF,IWM,1.341,242.49,1.097,0.19
+414141414,VANGUARD RUSSELL 2000 INDEX FD ETF SHARES,VTWO,26.9211,98.03,8.903,0.1
+414141414,VANGUARD TOTAL INTL STOCK INDEX ETF,VXUS,52.5068,73.97,13.102,0.07
+414141414,VANGUARD S&P 500 INDEX ETF,VOO,9.6536,614.57,20.014,0.03
+414141414,VANGUARD FEDERAL MONEY MARKET INVESTOR CL,VMFXX,2641.23,1,8.91,0.11`;
+
+    // Parse CSV
+    Papa.parse(csvData, {
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        const rows = results.data.filter(r => r["Investment Name"]);
+        const labels = rows.map(r => r["Symbol"]);
+        const percents = rows.map(r => Number(r["Total Percent"]));
+        const expenses = rows.map(r => Number(r["Expense Ratio"]));
+
+        // Fund classification → color mapping
+        function fundColor(symbol) {
+          const colors = {
+            VOO: '#3B82F6', VUG: '#2563EB',
+            VO: '#8B5CF6', VOE: '#7C3AED', VB: '#A855F7', VBK: '#9333EA', VTWO: '#C084FC', IWM: '#6D28D9',
+            VXUS: '#10B981', VWO: '#22C55E',
+            BND: '#F59E0B', BNDX: '#D97706',
+            VMFXX: '#6B7280'
+          };
+          return colors[symbol] || '#9CA3AF';
+        }
+
+        const combined = labels.map((label, i) => ({ label, percent: percents[i], expense: expenses[i] }));
+        combined.sort((a, b) => b.percent - a.percent);
+
+        const sortedLabels = combined.map(d => d.label);
+        const sortedPercents = combined.map(d => d.percent);
+        const sortedExpenses = combined.map(d => d.expense);
+
+        const ctx = document.getElementById('allocationChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: sortedLabels,
+            datasets: [{
+              label: 'Allocation (%)',
+              data: sortedPercents,
+              backgroundColor: sortedLabels.map(sym => fundColor(sym)),
+              borderRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: { callback: (v) => v + '%' },
+                title: { display: true, text: 'Percent of Portfolio' }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function(ctx) { return `Allocation: ${ctx.parsed.y.toFixed(2)}%`; },
+                  afterBody: function(ctx) {
+                    const i = ctx[0].dataIndex;
+                    const exp = sortedExpenses[i];
+                    return `Expense Ratio: ${exp.toFixed(2)}%`;
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        const legend = document.getElementById("customLegend");
+        legend.innerHTML = `
+          <div class="flex flex-col gap-4 text-sm text-slate-600 md:pl-6 md:border-l md:border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Asset Classes</h3>
+            <div class="flex items-center"><span class="w-4 h-4 rounded-sm inline-block mr-3" style="background:#3B82F6"></span>Large Cap</div>
+            <div class="flex items-center"><span class="w-4 h-4 rounded-sm inline-block mr-3" style="background:#8B5CF6"></span>Mid/Small Cap</div>
+            <div class="flex items-center"><span class="w-4 h-4 rounded-sm inline-block mr-3" style="background:#10B981"></span>International Equity</div>
+            <div class="flex items-center"><span class="w-4 h-4 rounded-sm inline-block mr-3" style="background:#F59E0B"></span>Bonds</div>
+            <div class="flex items-center"><span class="w-4 h-4 rounded-sm inline-block mr-3" style="background:#6B7280"></span>Money Market</div>
+          </div>
+        `;
+
+        let waerFraction = 0;
+        for (let i = 0; i < rows.length; i++) {
+          const pct = percents[i];
+          const expPercent = expenses[i];
+          waerFraction += (pct / 100) * (expPercent / 100);
+        }
+        const waerPercent = waerFraction * 100;
+        const waerBps = waerFraction * 10000;
+
+        document.getElementById('waerValue').textContent = waerPercent.toFixed(4) + '%';
+      }
+    });
+  </script>
+</body>
+</html>

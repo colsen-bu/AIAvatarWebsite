@@ -15,6 +15,7 @@ services:
       - RESEND_API_KEY=${RESEND_API_KEY}
       - FROM_EMAIL=${FROM_EMAIL}
       - CONTACT_EMAIL=${CONTACT_EMAIL}
+      - PAGES_PASSWORD=${PAGES_PASSWORD}
     networks:
       - npm-shared
     healthcheck:
