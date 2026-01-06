@@ -1,0 +1,11 @@
+[
+  {
+    "id": "1",
+    "slug": "GSK",
+    "title": "Demo Presentation",
+    "description": "Interactive Quarto + Reveal.js presentation demonstrating data visualization capabilities",
+    "icon": "📊",
+    "date": "2026-01-01",
+    "tags": ["quarto", "reveal.js", "data-viz"]
+  }
+]

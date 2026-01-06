@@ -1,0 +1,9 @@
+# Placeholder for presentations directory
+# Copy built Quarto presentation artifacts here
+# Example structure:
+#   presentations/
+#     merck-demo/
+#       index.html
+#       merck_files/
+#         libs/
+#         ...

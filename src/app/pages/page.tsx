@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import presentations from '../../../data/presentations.json';
+import type { Presentation } from '../../types/presentations';
 
 interface Page {
   name: string;
@@ -117,6 +119,58 @@ export default function PagesLandingPage() {
             </Link>
           ))}
         </div>
+
+        {/* Presentations Section */}
+        {(presentations as Presentation[]).length > 0 && (
+          <>
+            <h2 className="text-2xl font-bold text-white mt-12 mb-6">
+              🎯 Presentations
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(presentations as Presentation[]).map((pres) => (
+                <Link
+                  key={pres.slug}
+                  href={`/pages/presentations/${pres.slug}`}
+                  className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                >
+                  {/* Preview placeholder for presentations */}
+                  <div className="relative w-full h-48 overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center">
+                    <span className="text-6xl">{pres.icon}</span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="p-5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">{pres.icon}</span>
+                      <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        {pres.title}
+                      </h2>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                      {pres.description}
+                    </p>
+                    {pres.tags && pres.tags.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {pres.tags.map(tag => (
+                          <span
+                            key={tag}
+                            className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 text-xs rounded-full"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="mt-3 text-indigo-600 dark:text-indigo-400 text-sm font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      View Presentation →
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* Footer */}
         <div className="mt-12 text-center text-white/60 text-sm">
