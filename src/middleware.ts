@@ -7,6 +7,14 @@ const COOKIE_NAME = 'pages_auth';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Skip authentication for static assets in presentation directories
+  // (reveal.js presentation files, CSS, JS, fonts, HTML, etc.)
+  // This allows presentations to load fully within the authenticated iframe
+  if (pathname.includes('/index_files/') || 
+      (pathname.includes('/presentations/') && pathname.endsWith('.html'))) {
+    return NextResponse.next();
+  }
+
   // Only protect /pages routes (but not /pages/login)
   if (pathname.startsWith('/pages') && !pathname.startsWith('/pages/login')) {
     const token = request.cookies.get(COOKIE_NAME);
