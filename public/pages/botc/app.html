@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood on the Clocktower - Storyteller Grimoire</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            margin: 0;
+        }
+
+        .scroll-container {
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .scroll-container {
+                padding: 20px;
+            }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            overflow: visible;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .subtitle {
+                margin-bottom: 30px;
+                font-size: 14px;
+            }
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ff6b6b;
+            flex-wrap: wrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (min-width: 768px) {
+            .tabs {
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+        }
+
+        .tab {
+            padding: 10px 12px;
+            background: #2a2a3e;
+            border: none;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s;
+            white-space: nowrap;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .tab {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+
+        .tab:hover {
+            background: #3a3a4e;
+        }
+
+        .tab.active {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            background: #2a2a3e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .section {
+                padding: 25px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+            }
+        }
+
+        .section h2 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: #4ecdc4;
+            margin: 15px 0 10px 0;
+            font-size: 1.1em;
+        }
+
+        button {
+            padding: 12px 16px;
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.3s;
+            min-height: 44px;
+        }
+
+        @media (min-width: 768px) {
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        button:hover {
+            background: #ff5252;
+        }
+
+        button.secondary {
+            background: #4ecdc4;
+        }
+
+        button.secondary:hover {
+            background: #45b8b0;
+        }
+
+        button.small {
+            padding: 8px 12px;
+            font-size: 11px;
+            min-height: 38px;
+        }
+
+        @media (min-width: 768px) {
+            button.small {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        input, select, textarea {
+            padding: 12px;
+            background: #1a1a2e;
+            border: 1px solid #444;
+            color: #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            min-height: 44px;
+        }
+
+        @media (min-width: 768px) {
+            input, select, textarea {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 500px) {
+            .grid-3 {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+            }
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .alert-info {
+            background: #3498db22;
+            border-left: 4px solid #3498db;
+            color: #3498db;
+        }
+
+        .alert-warning {
+            background: #f39c1222;
+            border-left: 4px solid #f39c12;
+            color: #f39c12;
+        }
+
+        .alert-error {
+            background: #e7452222;
+            border-left: 4px solid #e74522;
+            color: #ff6b6b;
+        }
+
+        .alert-success {
+            background: #27ae6022;
+            border-left: 4px solid #27ae60;
+            color: #4ecdc4;
+        }
+
+        .player-card {
+            background: #1a1a2e;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #4ecdc4;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .player-card {
+                padding: 15px;
+            }
+        }
+
+        .player-card.townsfolk { border-left-color: #4ecdc4; }
+        .player-card.outsider { border-left-color: #95e1d3; }
+        .player-card.minion { border-left-color: #ff9f43; }
+        .player-card.demon { border-left-color: #ee5a6f; }
+
+        .player-card h3 {
+            margin: 0 0 8px 0;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .player-card .role {
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+
+        .player-card .ability {
+            font-size: 12px;
+            color: #aaa;
+            font-style: italic;
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 6px;
+        }
+
+        .badge.poison { background: #9b59b6; color: white; }
+        .badge.drunk { background: #e67e22; color: white; }
+        .badge.dead { background: #555; color: white; }
+        .badge.protected { background: #27ae60; color: white; }
+
+        .night-order-item {
+            background: #1a1a2e;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 4px solid #4ecdc4;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            min-height: 44px;
+        }
+
+        @media (min-width: 768px) {
+            .night-order-item {
+                padding: 15px;
+                margin-bottom: 10px;
+            }
+        }
+
+        .night-order-item.completed {
+            opacity: 0.4;
+        }
+
+        .night-order-item h4 {
+            color: #fff;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .night-order-item p {
+            font-size: 13px;
+            color: #ccc;
+            margin: 3px 0;
+        }
+
+        .night-order-item .prompt {
+            background: #ff6b6b22;
+            padding: 8px;
+            margin-top: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #ff9f43;
+        }
+
+        .token-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 500px) {
+            .token-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 10px;
+            }
+        }
+
+        .token-item {
+            background: #1a1a2e;
+            padding: 12px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            min-height: 44px;
+        }
+
+        .token-toggle {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #4ecdc4;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .token-item {
+                padding: 8px 12px;
+            }
+            .token-toggle {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        .token-toggle.active {
+            background: #4ecdc4;
+        }
+
+        .bluff-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .bluff-list li {
+            background: #1a1a2e;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 3px solid #ee5a6f;
+            font-size: 14px;
+        }
+
+        .setup-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        @media (min-width: 768px) {
+            .setup-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+                margin: 20px 0;
+            }
+        }
+
+        .setup-box {
+            background: #1a1a2e;
+            padding: 15px 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .setup-box {
+                padding: 20px;
+            }
+        }
+
+        .setup-box .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+
+        @media (min-width: 768px) {
+            .setup-box .number {
+                font-size: 32px;
+            }
+        }
+
+        .setup-box .label {
+            font-size: 10px;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        @media (min-width: 768px) {
+            .setup-box .label {
+                font-size: 12px;
+            }
+        }
+
+        .grimoire-view {
+            position: relative;
+            width: 100%;
+            min-height: 300px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            padding: 20px 0;
+        }
+
+        @media (min-width: 500px) {
+            .grimoire-view {
+                min-height: 400px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .grimoire-view {
+                min-height: 500px;
+            }
+        }
+
+        .grimoire-circle {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 500px) {
+            .grimoire-circle {
+                width: 400px;
+                height: 400px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .grimoire-circle {
+                width: 500px;
+                height: 500px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grimoire-circle {
+                width: 600px;
+                height: 600px;
+            }
+        }
+
+        .grimoire-token {
+            background: #1a1a2e;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            text-align: center;
+            padding: 4px;
+            border: 3px solid #4ecdc4;
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            user-select: none;
+        }
+
+        @media (min-width: 500px) {
+            .grimoire-token {
+                width: 70px;
+                height: 70px;
+                font-size: 9px;
+                padding: 6px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .grimoire-token {
+                width: 80px;
+                height: 80px;
+                font-size: 11px;
+                padding: 8px;
+            }
+        }
+
+        .grimoire-token.dead {
+            opacity: 0.5;
+        }
+
+        .grimoire-token.dragging {
+            opacity: 0.4;
+            transform: scale(0.9);
+            z-index: 1000;
+        }
+
+        .grimoire-token.drag-over {
+            transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.8);
+            z-index: 999;
+        }
+
+        .grimoire-token .name {
+            font-weight: bold;
+            margin-bottom: 3px;
+            word-break: break-word;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .grimoire-token .role {
+            font-size: 9px;
+            color: #4ecdc4;
+        }
+
+        .grimoire-token .badge {
+            position: relative;
+            display: block;
+            margin: 2px auto 0;
+            font-size: 7px;
+            padding: 1px 4px;
+        }
+
+        @media (min-width: 768px) {
+            .grimoire-token .role {
+                font-size: 9px;
+            }
+            .grimoire-token .badge {
+                font-size: 8px;
+                padding: 2px 5px;
+            }
+        }
+
+        textarea.notes {
+            width: 100%;
+            min-height: 80px;
+            margin-top: 10px;
+            resize: vertical;
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 767px) {
+            .player-setup-row {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+
+            .player-setup-row input,
+            .player-setup-row select {
+                width: 100% !important;
+            }
+
+            .player-setup-row button {
+                width: 100%;
+            }
+
+            .badge {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
+
+            .alert {
+                font-size: 12px;
+                padding: 10px 12px;
+            }
+
+            .grimoire-view {
+                gap: 8px;
+            }
+
+            .night-order-item h4 {
+                font-size: 13px;
+            }
+
+            .night-order-item p {
+                font-size: 11px;
+            }
+
+            .night-order-item .prompt {
+                font-size: 11px;
+                padding: 6px;
+            }
+        }
+
+        /* Prevent zoom on input focus on iOS */
+        @supports (-webkit-touch-callout: none) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-container">
+        <div class="container">
+        <h1>🕐 Blood on the Clocktower</h1>
+        <p class="subtitle">Storyteller's Grimoire</p>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('setup')">⚙️ Setup</button>
+            <button class="tab" onclick="switchTab('grimoire')">📖 Grimoire</button>
+            <button class="tab" onclick="switchTab('night')">🌙 Night Order</button>
+            <button class="tab" onclick="switchTab('bluffs')">🎭 Demon Bluffs</button>
+            <button class="tab" onclick="switchTab('reminders')">📝 Reminders</button>
+            <button class="tab" onclick="switchTab('tools')">🎲 Tools</button>
+        </div>
+
+        <!-- Setup Tab -->
+        <div id="setup" class="tab-content active">
+            <div class="section">
+                <h2>📋 Game Setup</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Select Edition:</label>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <label style="cursor: pointer;">
+                            <input type="radio" name="edition" value="TB" checked onchange="changeEdition()"> 
+                            <span style="margin-left: 5px;">Trouble Brewing</span>
+                        </label>
+                        <label style="cursor: pointer;">
+                            <input type="radio" name="edition" value="BMR" onchange="changeEdition()"> 
+                            <span style="margin-left: 5px;">Bad Moon Rising</span>
+                        </label>
+                        <label style="cursor: pointer;">
+                            <input type="radio" name="edition" value="SV" onchange="changeEdition()"> 
+                            <span style="margin-left: 5px;">Sects & Violets</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Number of Players:</label>
+                    <input type="number" id="playerCount" value="7" min="5" max="15" onchange="updateSetupRequirements()" style="width: 100px;">
+                    <button class="secondary small" style="margin-left: 10px;" onclick="quickFillPlayers()">Quick Fill Players</button>
+                </div>
+
+                <div id="setupRequirements"></div>
+            </div>
+
+            <div class="section">
+                <h2>👥 Assign Roles</h2>
+                <div id="playerSetup"></div>
+                <button onclick="addPlayerRow()" style="margin-top: 10px;">+ Add Player</button>
+                <button class="secondary" onclick="validateSetup()" style="margin-left: 10px;">✓ Validate Setup</button>
+                <button onclick="clearAllPlayers()" style="margin-left: 10px; background: #e74522;">Clear All</button>
+            </div>
+
+            <div id="setupValidation"></div>
+        </div>
+
+        <!-- Grimoire Tab -->
+        <div id="grimoire" class="tab-content">
+            <div class="section">
+                <h2>📖 The Grimoire</h2>
+                <p style="color: #aaa; margin-bottom: 10px;">Drag to arrange seating order. Click players to manage their status.</p>
+                <div class="grimoire-view" id="grimoireView"></div>
+            </div>
+
+            <div class="section" id="selectedPlayerDetails" style="display: none;">
+                <h2>Player Details</h2>
+                <div id="playerDetailsContent"></div>
+            </div>
+        </div>
+
+        <!-- Night Order Tab -->
+        <div id="night" class="tab-content">
+            <div class="section">
+                <h2>🌙 First Night</h2>
+                <button onclick="resetNight('first')" class="secondary small">Reset</button>
+                <div id="firstNightOrder" style="margin-top: 15px;"></div>
+            </div>
+
+            <div class="section">
+                <h2>🌙 Other Nights</h2>
+                <button onclick="resetNight('other')" class="secondary small">Reset</button>
+                <div id="otherNightOrder" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <!-- Bluffs Tab -->
+        <div id="bluffs" class="tab-content">
+            <div class="section">
+                <h2>🎭 Demon Bluffs</h2>
+                <p style="color: #aaa; margin-bottom: 15px;">The Demon receives 3 character bluffs that are NOT in play</p>
+                
+                <button onclick="generateBluffs()" class="secondary">🔄 Generate New Bluffs</button>
+                
+                <div id="bluffsContent" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+
+        <!-- Reminders Tab -->
+        <div id="reminders" class="tab-content">
+            <div class="section">
+                <h2>📝 Reminder Tokens & Notes</h2>
+                <div id="remindersContent"></div>
+            </div>
+        </div>
+
+        <!-- Tools Tab -->
+        <div id="tools" class="tab-content">
+            <div class="section">
+                <h2>🎲 Dice Roller</h2>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <button class="secondary" onclick="rollDice(2)">Coin Flip (D2)</button>
+                    <button class="secondary" onclick="rollDice(6)">D6</button>
+                    <button class="secondary" onclick="rollDice(10)">D10</button>
+                    <button class="secondary" onclick="rollDice(20)">D20</button>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="number" id="customDice" value="100" min="2" style="width: 80px;">
+                        <button class="secondary" onclick="rollCustomDice()">Roll Custom</button>
+                    </div>
+                </div>
+                <div id="diceResult" style="background: #1a1a2e; padding: 30px; border-radius: 8px; text-align: center;"></div>
+                <div id="diceHistory" style="margin-top: 15px;"></div>
+            </div>
+
+            <div class="section">
+                <h2>📚 Quick Reference</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>🟣 Poisoned</h3>
+                        <p style="font-size: 13px; color: #ccc;">Ability doesn't work. Gets false info. Player doesn't know.</p>
+                    </div>
+                    <div>
+                        <h3>🟠 Drunk</h3>
+                        <p style="font-size: 13px; color: #ccc;">Same as poisoned. The Drunk thinks they're a Townsfolk.</p>
+                    </div>
+                    <div>
+                        <h3>🟢 Protected</h3>
+                        <p style="font-size: 13px; color: #ccc;">Cannot die tonight from Demon attack.</p>
+                    </div>
+                    <div>
+                        <h3>⚡ Used Ability</h3>
+                        <p style="font-size: 13px; color: #ccc;">Track once-per-game abilities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const PLAYER_COUNTS = {
+            5:  { townsfolk: 3, outsiders: 0, minions: 1, demons: 1 },
+            6:  { townsfolk: 3, outsiders: 1, minions: 1, demons: 1 },
+            7:  { townsfolk: 5, outsiders: 0, minions: 1, demons: 1 },
+            8:  { townsfolk: 5, outsiders: 1, minions: 1, demons: 1 },
+            9:  { townsfolk: 5, outsiders: 2, minions: 1, demons: 1 },
+            10: { townsfolk: 7, outsiders: 0, minions: 2, demons: 1 },
+            11: { townsfolk: 7, outsiders: 1, minions: 2, demons: 1 },
+            12: { townsfolk: 7, outsiders: 2, minions: 2, demons: 1 },
+            13: { townsfolk: 9, outsiders: 0, minions: 3, demons: 1 },
+            14: { townsfolk: 9, outsiders: 1, minions: 3, demons: 1 },
+            15: { townsfolk: 9, outsiders: 2, minions: 3, demons: 1 }
+        };
+
+        const characters = {
+            // TROUBLE BREWING
+            "Washerwoman": { team: "townsfolk", edition: "TB", firstNight: 23, otherNights: 0, ability: "You start knowing that 1 of 2 players is a particular Townsfolk.", prompt: "Point to 2 players (one with TOWNSFOLK reminder, one with WRONG). Show the Townsfolk character token." },
+            "Librarian": { team: "townsfolk", edition: "TB", firstNight: 24, otherNights: 0, ability: "You start knowing that 1 of 2 players is a particular Outsider. (Or that zero are in play.)", prompt: "Point to 2 players (one with OUTSIDER reminder, one with WRONG). Show the Outsider character token (or show 0 fingers if no Outsiders)." },
+            "Investigator": { team: "townsfolk", edition: "TB", firstNight: 25, otherNights: 0, ability: "You start knowing that 1 of 2 players is a particular Minion.", prompt: "Point to 2 players (one with MINION reminder, one with WRONG). Show the Minion character token." },
+            "Chef": { team: "townsfolk", edition: "TB", firstNight: 26, otherNights: 0, ability: "You start knowing how many pairs of evil players there are.", prompt: "Show number of fingers for pairs of evil neighbors." },
+            "Empath": { team: "townsfolk", edition: "TB", firstNight: 27, otherNights: 54, ability: "Each night, you learn how many of your 2 alive neighbours are evil.", prompt: "Show fingers for number of evil alive neighbors (0, 1, or 2)." },
+            "Fortune Teller": { team: "townsfolk", edition: "TB", firstNight: 28, otherNights: 55, ability: "Each night, choose 2 players: you learn if either is a Demon. There is a good player that registers as a Demon to you.", prompt: "Point to 2 players. Nod or shake head if either is the Demon (remember red herring)." },
+            "Undertaker": { team: "townsfolk", edition: "TB", firstNight: 0, otherNights: 56, ability: "Each night*, you learn which character died by execution today.", prompt: "Show the character token of who was executed today." },
+            "Monk": { team: "townsfolk", edition: "TB", firstNight: 0, otherNights: 12, ability: "Each night*, choose a player (not yourself): they are safe from the Demon tonight.", prompt: "Point to a player to protect (mark with Protected reminder)." },
+            "Ravenkeeper": { team: "townsfolk", edition: "TB", firstNight: 0, otherNights: 0, ability: "If you die at night, you are woken to choose a player: you learn their character.", prompt: "If killed at night, wake them. Point to any player, show that player's character." },
+            "Virgin": { team: "townsfolk", edition: "TB", firstNight: 0, otherNights: 0, ability: "The 1st time you are nominated, if the nominator is a Townsfolk, they are executed immediately.", prompt: "Day ability. If Virgin nominated by Townsfolk, execute nominator immediately." },
+            "Slayer": { team: "townsfolk", edition: "TB", firstNight: 0, otherNights: 0, ability: "Once per game, during the day, publicly choose a player: if they are the Demon, they die.", prompt: "Day ability. If they choose the Demon, Demon dies." },
+            "Soldier": { team: "townsfolk", edition: "TB", firstNight: 0, otherNights: 0, ability: "You are safe from the Demon.", prompt: "Passive. Demon cannot kill the Soldier." },
+            "Mayor": { team: "townsfolk", edition: "TB", firstNight: 0, otherNights: 0, ability: "If only 3 players live & no execution occurs, your team wins. If you die at night, another player might die instead.", prompt: "If 3 alive and no execution, good wins. If Mayor dies at night, can bounce to another player." },
+            
+            "Butler": { team: "outsider", edition: "TB", firstNight: 29, otherNights: 57, ability: "Each night, choose a player (not yourself): tomorrow, you may only vote if they are voting too.", prompt: "Point to a player. Tomorrow Butler may only vote when that player votes." },
+            "Drunk": { team: "outsider", edition: "TB", firstNight: 0, otherNights: 0, ability: "You do not know you are the Drunk. You think you are a Townsfolk character, but you are not.", prompt: "Is setup. Give false info. They think they are a Townsfolk but they're the Drunk." },
+            "Recluse": { team: "outsider", edition: "TB", firstNight: 0, otherNights: 0, ability: "You might register as evil & as a Minion or Demon, even if dead.", prompt: "Can register as evil/Minion/Demon at Storyteller's discretion." },
+            "Saint": { team: "outsider", edition: "TB", firstNight: 0, otherNights: 0, ability: "If you die by execution, your team loses.", prompt: "If executed, evil wins immediately." },
+            
+            "Poisoner": { team: "minion", edition: "TB", firstNight: 17, otherNights: 7, ability: "Each night, choose a player: they are poisoned tonight and tomorrow day.", prompt: "Point to a player. Mark poisoned until dusk tomorrow." },
+            "Spy": { team: "minion", edition: "TB", firstNight: 20, otherNights: 64, ability: "Each night, you see the Grimoire. You might register as good & as a Townsfolk or Outsider, even if dead.", prompt: "Show the Spy the entire Grimoire. Can register as good." },
+            "Scarlet Woman": { team: "minion", edition: "TB", firstNight: 0, otherNights: 19, ability: "If there are 5 or more players alive & the Demon dies, you become the Demon.", prompt: "If 5+ alive and Demon dies, Scarlet Woman becomes the Demon." },
+            "Baron": { team: "minion", edition: "TB", firstNight: 0, otherNights: 0, ability: "There are extra Outsiders in play. [+2 Outsiders]", prompt: "Setup only. Add 2 Outsiders, remove 2 Townsfolk." },
+            
+            "Imp": { team: "demon", edition: "TB", firstNight: 0, otherNights: 24, ability: "Each night*, choose a player: they die. If you kill yourself this way, a Minion becomes the Imp.", prompt: "Point to a player to kill. If Imp kills self, random Minion becomes Imp." },
+            
+            // BAD MOON RISING
+            "Grandmother": { team: "townsfolk", edition: "BMR", firstNight: 30, otherNights: 50, ability: "You start knowing a good player & their character. If the Demon kills them, you die too.", prompt: "Show a good player and their character. If Demon kills them, Grandmother dies." },
+            "Sailor": { team: "townsfolk", edition: "BMR", firstNight: 11, otherNights: 4, ability: "Each night, choose an alive player: either you or they are drunk until dusk. You cannot die.", prompt: "Point to player. Choose one to be drunk until dusk. Sailor cannot die." },
+            "Chambermaid": { team: "townsfolk", edition: "BMR", firstNight: 31, otherNights: 58, ability: "Each night, choose 2 alive players (not yourself): you learn how many woke tonight due to their ability.", prompt: "Point to 2 players. Show fingers for how many woke tonight." },
+            "Exorcist": { team: "townsfolk", edition: "BMR", firstNight: 0, otherNights: 13, ability: "Each night*, choose a player (different to previous night): the Demon, if chosen, learns who you are then does not wake tonight.", prompt: "Point to player. If Demon, show Demon the Exorcist, Demon doesn't wake." },
+            "Innkeeper": { team: "townsfolk", edition: "BMR", firstNight: 0, otherNights: 10, ability: "Each night*, choose 2 players: they cannot die tonight, but 1 is drunk until dusk.", prompt: "Point to 2 players. Both protected, one drunk until dusk." },
+            "Gambler": { team: "townsfolk", edition: "BMR", firstNight: 0, otherNights: 11, ability: "Each night*, choose a player & guess their character: if you guess wrong, you die.", prompt: "Point to player, player gives character token. If wrong, Gambler dies." },
+            "Gossip": { team: "townsfolk", edition: "BMR", firstNight: 0, otherNights: 43, ability: "Each day, you may make a public statement. Tonight, if it was true, a player dies.", prompt: "If their public statement today was true, a player dies." },
+            "Courtier": { team: "townsfolk", edition: "BMR", firstNight: 10, otherNights: 0, ability: "Once per game, at night, choose a character: they are drunk for 3 nights & 3 days.", prompt: "Show character tokens, point to one. That character drunk for 3 nights/days." },
+            "Professor": { team: "townsfolk", edition: "BMR", firstNight: 0, otherNights: 39, ability: "Once per game, at night*, choose a dead player: if they are a Townsfolk, they are resurrected.", prompt: "Point to dead player. If Townsfolk, they come back to life." },
+            "Minstrel": { team: "townsfolk", edition: "BMR", firstNight: 0, otherNights: 0, ability: "When a Minion dies by execution, all other players (except Travellers) are drunk until dusk tomorrow.", prompt: "If Minion executed, all except Travellers drunk until dusk tomorrow." },
+            "Tea Lady": { team: "townsfolk", edition: "BMR", firstNight: 0, otherNights: 0, ability: "If both your alive neighbours are good, they cannot die.", prompt: "If both alive neighbors are good, they're protected." },
+            "Pacifist": { team: "townsfolk", edition: "BMR", firstNight: 0, otherNights: 0, ability: "Executed good players might not die.", prompt: "Good players executed might not die (your choice)." },
+            "Fool": { team: "townsfolk", edition: "BMR", firstNight: 0, otherNights: 0, ability: "The first time you die, you do not.", prompt: "First death, Fool doesn't die." },
+            
+            "Goon": { team: "outsider", edition: "BMR", firstNight: 0, otherNights: 0, ability: "Each night, the 1st player to choose you with their ability is drunk until dusk. You become their alignment.", prompt: "First player to target Goon is drunk. Goon becomes that alignment." },
+            "Lunatic": { team: "outsider", edition: "BMR", firstNight: 13, otherNights: 3, ability: "You think you are a Demon, but you are not. The Demon knows who you are & who you choose at night.", prompt: "Show fake Demon info. Tell real Demon who Lunatic is and their choices." },
+            "Tinker": { team: "outsider", edition: "BMR", firstNight: 0, otherNights: 48, ability: "You might die at any time.", prompt: "Can die at any time (Storyteller choice for balance)." },
+            "Moonchild": { team: "outsider", edition: "BMR", firstNight: 0, otherNights: 49, ability: "When you learn that you died, publicly choose 1 alive player. Tonight, if it was a good player, they die.", prompt: "When dies, publicly chooses player. If good, that player dies tonight." },
+            
+            "Godfather": { team: "minion", edition: "BMR", firstNight: 18, otherNights: 38, ability: "You start knowing which Outsiders are in play. If 1 died today, choose a player tonight: they die. [-1 or +1 Outsider]", prompt: "Show Outsiders in play. If Outsider died today, point to player to kill." },
+            "Devils Advocate": { team: "minion", edition: "BMR", firstNight: 19, otherNights: 6, ability: "Each night, choose a living player (different to previous night): if executed tomorrow, they do not die.", prompt: "Point to player. If executed tomorrow, they survive." },
+            "Assassin": { team: "minion", edition: "BMR", firstNight: 0, otherNights: 29, ability: "Once per game, at night*, choose a player: they die, even if for some reason they could not.", prompt: "Once per game. Point to player, they die (bypasses protection)." },
+            "Mastermind": { team: "minion", edition: "BMR", firstNight: 0, otherNights: 0, ability: "If the Demon dies by execution (ending the game), play for 1 more day. If a player is then executed, their team loses.", prompt: "If Demon executed, continue 1 more day. Next execution determines winner." },
+            
+            "Zombuul": { team: "demon", edition: "BMR", firstNight: 0, otherNights: 28, ability: "Each night*, if no-one died today, choose a player: they die. The 1st time you die, you live but register as dead.", prompt: "If no death today, point to player. First death, lives but appears dead." },
+            "Pukka": { team: "demon", edition: "BMR", firstNight: 22, otherNights: 26, ability: "Each night, choose a player: they are poisoned. The previously poisoned player dies then becomes healthy.", prompt: "Point to player to poison. Previous poisoned player dies and becomes healthy." },
+            "Shabaloth": { team: "demon", edition: "BMR", firstNight: 0, otherNights: 25, ability: "Each night*, choose 2 players: they die. A dead player you chose last night might be regurgitated.", prompt: "Point to 2 players to kill. Previous victim might come back to life." },
+            "Po": { team: "demon", edition: "BMR", firstNight: 0, otherNights: 27, ability: "Each night*, you may choose a player: they die. If your last choice was no-one, choose 3 players tonight.", prompt: "Point to 1 player (or none). If chose none last night, must kill 3 tonight." },
+            
+            // SECTS & VIOLETS
+            "Clockmaker": { team: "townsfolk", edition: "SV", firstNight: 32, otherNights: 0, ability: "You start knowing how many steps from the Demon to its nearest Minion.", prompt: "Show fingers for steps between Demon and nearest Minion." },
+            "Dreamer": { team: "townsfolk", edition: "SV", firstNight: 33, otherNights: 59, ability: "Each night, choose a player (not yourself or Travellers): you learn 1 good & 1 evil character, 1 of which is correct.", prompt: "Point to player. Show 1 good and 1 evil character, one is correct." },
+            "Snake Charmer": { team: "townsfolk", edition: "SV", firstNight: 34, otherNights: 17, ability: "Each night, choose an alive player: a chosen Demon swaps characters & alignments with you & is then poisoned.", prompt: "Point to player. If Demon, swap roles and poison the ex-Demon." },
+            "Mathematician": { team: "townsfolk", edition: "SV", firstNight: 35, otherNights: 60, ability: "Each night, you learn how many players' abilities worked abnormally (since dawn) due to another character's ability.", prompt: "Show fingers for number of abilities malfunctioning due to other characters." },
+            "Flowergirl": { team: "townsfolk", edition: "SV", firstNight: 36, otherNights: 61, ability: "Each night*, you learn if a Demon voted today.", prompt: "Nod or shake head if Demon voted today." },
+            "Town Crier": { team: "townsfolk", edition: "SV", firstNight: 37, otherNights: 62, ability: "Each night*, you learn if a Minion nominated today.", prompt: "Nod or shake head if Minion nominated today." },
+            "Oracle": { team: "townsfolk", edition: "SV", firstNight: 0, otherNights: 63, ability: "Each night*, you learn how many dead players are evil.", prompt: "Show fingers for number of dead evil players." },
+            "Savant": { team: "townsfolk", edition: "SV", firstNight: 0, otherNights: 0, ability: "Each day, you may visit the Storyteller to learn 2 things in private: 1 is true & 1 is false.", prompt: "During day, tell them 1 true and 1 false piece of info." },
+            "Seamstress": { team: "townsfolk", edition: "SV", firstNight: 38, otherNights: 65, ability: "Once per game, at night, choose 2 players (not yourself): you learn if they are the same alignment.", prompt: "Point to 2 players. Nod or shake if same alignment." },
+            "Philosopher": { team: "townsfolk", edition: "SV", firstNight: 2, otherNights: 0, ability: "Once per game, at night, choose a good character: gain that ability. If this character is in play, they are drunk.", prompt: "Show all good characters, point to one. Gain ability, original drunk." },
+            "Artist": { team: "townsfolk", edition: "SV", firstNight: 0, otherNights: 0, ability: "Once per game, during the day, privately ask the Storyteller any yes/no question.", prompt: "During day, answer their yes/no question honestly." },
+            "Juggler": { team: "townsfolk", edition: "SV", firstNight: 0, otherNights: 66, ability: "On your 1st day, publicly guess up to 5 players' characters. That night, you learn how many you got correct.", prompt: "First night after day 1 guesses: show fingers for correct guesses." },
+            "Sage": { team: "townsfolk", edition: "SV", firstNight: 0, otherNights: 0, ability: "If the Demon kills you, you learn that it is 1 of 2 players.", prompt: "If killed by Demon, wake and show 2 players (one is Demon)." },
+            
+            "Mutant": { team: "outsider", edition: "SV", firstNight: 0, otherNights: 0, ability: "If you are mad about being an Outsider, you might be executed.", prompt: "If not acting mad about being Outsider, can be executed." },
+            "Sweetheart": { team: "outsider", edition: "SV", firstNight: 0, otherNights: 0, ability: "When you die, 1 player is drunk from now on.", prompt: "When dies, choose a player to be drunk for rest of game." },
+            "Barber": { team: "outsider", edition: "SV", firstNight: 0, otherNights: 14, ability: "If you died today or tonight, the Demon may choose 2 players (not another Demon) to swap characters.", prompt: "If Barber died, wake Demon to swap 2 players' characters." },
+            "Klutz": { team: "outsider", edition: "SV", firstNight: 0, otherNights: 0, ability: "When you learn that you died, publicly choose 1 alive player: if they are evil, your team loses.", prompt: "When dies, publicly chooses player. If evil, good loses." },
+            
+            "Evil Twin": { team: "minion", edition: "SV", firstNight: 21, otherNights: 0, ability: "You & an opposing player know each other. If the good player is executed, evil wins. Good cannot win if you both live.", prompt: "Show Evil Twin and their good twin to each other. If good twin executed, evil wins." },
+            "Witch": { team: "minion", edition: "SV", firstNight: 0, otherNights: 16, ability: "Each night, choose a player: if they nominate tomorrow, they die. If just 3 players live, you lose this ability.", prompt: "Point to player. If they nominate tomorrow, they die (unless 3 alive)." },
+            "Cerenovus": { team: "minion", edition: "SV", firstNight: 0, otherNights: 8, ability: "Each night, choose a player & a good character: they are mad they are this character tomorrow, or might be executed.", prompt: "Point to player and show character. They must act mad as that character." },
+            "Pit-Hag": { team: "minion", edition: "SV", firstNight: 0, otherNights: 15, ability: "Each night*, choose a player & a character they become (if not-in-play). If a Demon is made, deaths tonight are arbitrary.", prompt: "Point to player and character. They become that character (if not in play)." },
+            
+            "Fang Gu": { team: "demon", edition: "SV", firstNight: 0, otherNights: 31, ability: "Each night*, choose a player: they die. The 1st Outsider this kills becomes an evil Fang Gu & you die instead. [+1 Outsider]", prompt: "Point to player. If Outsider, they become evil Fang Gu and you die." },
+            "Vigormortis": { team: "demon", edition: "SV", firstNight: 0, otherNights: 32, ability: "Each night*, choose a player: they die. Minions you kill keep their ability & poison 1 Townsfolk neighbour. [-1 Outsider]", prompt: "Point to player. If Minion, they keep ability dead and poison neighbor." },
+            "No Dashii": { team: "demon", edition: "SV", firstNight: 0, otherNights: 33, ability: "Each night*, choose a player: they die. Your 2 Townsfolk neighbours are poisoned.", prompt: "Point to player. Your 2 Townsfolk neighbors are poisoned." },
+            "Vortox": { team: "demon", edition: "SV", firstNight: 0, otherNights: 34, ability: "Each night*, choose a player: they die. Townsfolk abilities yield false info. Each day, if no-one is executed, evil wins.", prompt: "Point to player. All Townsfolk get false info. If no execution, evil wins." },
+        };
+
+        let gameState = {
+            edition: "TB",
+            playerCount: 7,
+            players: [],
+            nightState: { first: {}, other: {} },
+            demonBluffs: [],
+            diceHistory: [],
+            selectedPlayer: null
+        };
+
+        function init() {
+            updateSetupRequirements();
+            addPlayerRow();
+            addPlayerRow();
+            addPlayerRow();
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'grimoire') updateGrimoireView();
+            if (tabName === 'night') updateNightOrders();
+            if (tabName === 'bluffs') updateBluffsView();
+            if (tabName === 'reminders') updateRemindersView();
+        }
+
+        function changeEdition() {
+            gameState.edition = document.querySelector('input[name="edition"]:checked').value;
+            updatePlayerRows();
+        }
+
+        function updateSetupRequirements() {
+            const count = parseInt(document.getElementById('playerCount').value);
+            gameState.playerCount = count;
+            
+            const req = PLAYER_COUNTS[count];
+            if (!req) return;
+            
+            const html = `
+                <div class="setup-grid">
+                    <div class="setup-box">
+                        <div class="number" style="color: #4ecdc4;">${req.townsfolk}</div>
+                        <div class="label">Townsfolk</div>
+                    </div>
+                    <div class="setup-box">
+                        <div class="number" style="color: #95e1d3;">${req.outsiders}</div>
+                        <div class="label">Outsiders</div>
+                    </div>
+                    <div class="setup-box">
+                        <div class="number" style="color: #ff9f43;">${req.minions}</div>
+                        <div class="label">Minions</div>
+                    </div>
+                    <div class="setup-box">
+                        <div class="number" style="color: #ee5a6f;">${req.demons}</div>
+                        <div class="label">Demons</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('setupRequirements').innerHTML = html;
+        }
+
+        function addPlayerRow() {
+            const container = document.getElementById('playerSetup');
+            const index = container.children.length;
+            
+            const row = document.createElement('div');
+            row.className = 'player-setup-row';
+            row.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px; align-items: stretch;';
+            row.innerHTML = `
+                <input type="text" placeholder="Player ${index + 1}" id="pName${index}" style="flex: 1; min-width: 0;">
+                <select id="pRole${index}" style="flex: 2; min-width: 0;">
+                    ${getCharacterOptions()}
+                </select>
+                <button class="small" onclick="savePlayer(${index})" style="background: #4ecdc4; flex-shrink: 0;">✓ Add</button>
+                <button class="small" onclick="removeRow(${index})" style="background: #e74522; flex-shrink: 0;">✗</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function getCharacterOptions() {
+            const ed = gameState.edition;
+            const chars = Object.keys(characters).filter(c => characters[c].edition === ed);
+            
+            const townsfolk = chars.filter(c => characters[c].team === 'townsfolk');
+            const outsiders = chars.filter(c => characters[c].team === 'outsider');
+            const minions = chars.filter(c => characters[c].team === 'minion');
+            const demons = chars.filter(c => characters[c].team === 'demon');
+            
+            return `
+                <option value="">Select Role...</option>
+                <optgroup label="Townsfolk">
+                    ${townsfolk.map(c => `<option value="${c}">${c}</option>`).join('')}
+                </optgroup>
+                <optgroup label="Outsiders">
+                    ${outsiders.map(c => `<option value="${c}">${c}</option>`).join('')}
+                </optgroup>
+                <optgroup label="Minions">
+                    ${minions.map(c => `<option value="${c}">${c}</option>`).join('')}
+                </optgroup>
+                <optgroup label="Demons">
+                    ${demons.map(c => `<option value="${c}">${c}</option>`).join('')}
+                </optgroup>
+            `;
+        }
+
+        function savePlayer(index) {
+            const name = document.getElementById(`pName${index}`).value.trim();
+            const role = document.getElementById(`pRole${index}`).value;
+            
+            if (!name || !role) {
+                alert('Please enter both name and role');
+                return;
+            }
+            
+            gameState.players.push({
+                name,
+                role,
+                alive: true,
+                poisoned: false,
+                drunk: false,
+                protected: false,
+                usedAbility: false,
+                notes: ''
+            });
+            
+            document.getElementById(`pName${index}`).value = '';
+            document.getElementById(`pRole${index}`).value = '';
+            
+            validateSetup();
+        }
+
+        function removeRow(index) {
+            const container = document.getElementById('playerSetup');
+            if (container.children[index]) {
+                container.children[index].remove();
+            }
+        }
+
+        function updatePlayerRows() {
+            const container = document.getElementById('playerSetup');
+            const count = container.children.length;
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                addPlayerRow();
+            }
+        }
+
+        function quickFillPlayers() {
+            const count = gameState.playerCount;
+            let req = {...PLAYER_COUNTS[count]};
+            if (!req) return;
+            
+            const ed = gameState.edition;
+            const allChars = Object.keys(characters).filter(c => characters[c].edition === ed);
+            
+            // Shuffle all character lists for randomization
+            const availableTownsfolk = shuffleArray(allChars.filter(c => characters[c].team === 'townsfolk'));
+            const availableOutsiders = shuffleArray(allChars.filter(c => characters[c].team === 'outsider'));
+            const availableMinions = shuffleArray(allChars.filter(c => characters[c].team === 'minion'));
+            const availableDemons = shuffleArray(allChars.filter(c => characters[c].team === 'demon'));
+            
+            // Get initial minions and demons
+            const minions = availableMinions.slice(0, req.minions);
+            const demons = availableDemons.slice(0, req.demons);
+            
+            // Check for outsider-modifying roles
+            let outsiderMod = 0;
+            if (minions.includes('Baron')) outsiderMod += 2;
+            if (minions.includes('Godfather')) outsiderMod += 1; // Can be -1 or +1, using +1 as default
+            if (demons.includes('Vigormortis')) outsiderMod -= 1;
+            if (demons.includes('Fang Gu')) outsiderMod += 1;
+            
+            // Adjust counts
+            req.outsiders += outsiderMod;
+            req.townsfolk -= outsiderMod;
+            
+            // Get roles based on adjusted counts
+            const townsfolk = availableTownsfolk.slice(0, Math.max(0, req.townsfolk));
+            const outsiders = availableOutsiders.slice(0, Math.max(0, req.outsiders));
+            
+            gameState.players = [];
+            
+            [...townsfolk, ...outsiders, ...minions, ...demons].forEach((role, i) => {
+                gameState.players.push({
+                    name: `Player ${i + 1}`,
+                    role,
+                    alive: true,
+                    poisoned: false,
+                    drunk: false,
+                    protected: false,
+                    usedAbility: false,
+                    notes: ''
+                });
+            });
+            
+            validateSetup();
+        }
+
+        function clearAllPlayers() {
+            if (confirm('Clear all players?')) {
+                gameState.players = [];
+                validateSetup();
+            }
+        }
+
+        function validateSetup() {
+            let req = {...PLAYER_COUNTS[gameState.playerCount]};
+            const actual = {
+                townsfolk: gameState.players.filter(p => characters[p.role].team === 'townsfolk').length,
+                outsiders: gameState.players.filter(p => characters[p.role].team === 'outsider').length,
+                minions: gameState.players.filter(p => characters[p.role].team === 'minion').length,
+                demons: gameState.players.filter(p => characters[p.role].team === 'demon').length
+            };
+            
+            const total = actual.townsfolk + actual.outsiders + actual.minions + actual.demons;
+            
+            // If no players, show info message instead of errors
+            if (total === 0) {
+                document.getElementById('setupValidation').innerHTML = '<div class="alert alert-info">No players added yet. Add players above or use "Quick Fill Players" to auto-populate.</div>';
+                return;
+            }
+            
+            // Check for outsider-modifying roles and adjust expected counts
+            let outsiderMod = 0;
+            const playerRoles = gameState.players.map(p => p.role);
+            if (playerRoles.includes('Baron')) outsiderMod += 2;
+            if (playerRoles.includes('Godfather')) {
+                outsiderMod += 1; // Godfather can be -1 or +1
+            }
+            if (playerRoles.includes('Vigormortis')) outsiderMod -= 1;
+            if (playerRoles.includes('Fang Gu')) outsiderMod += 1;
+            
+            req.outsiders += outsiderMod;
+            req.townsfolk -= outsiderMod;
+            
+            const errors = [];
+            const warnings = [];
+            
+            // Determine if this is a work-in-progress (close to target count)
+            const isWorkInProgress = total > 0 && Math.abs(total - gameState.playerCount) <= 2;
+            
+            if (total !== gameState.playerCount) {
+                const msg = `Expected ${gameState.playerCount} players, have ${total}`;
+                if (isWorkInProgress) {
+                    warnings.push(msg);
+                } else {
+                    errors.push(msg);
+                }
+            }
+            if (actual.townsfolk !== req.townsfolk) {
+                const msg = `Need ${req.townsfolk} Townsfolk, have ${actual.townsfolk}`;
+                if (isWorkInProgress) {
+                    warnings.push(msg);
+                } else {
+                    errors.push(msg);
+                }
+            }
+            if (actual.outsiders !== req.outsiders) {
+                const msg = `Need ${req.outsiders} Outsiders, have ${actual.outsiders}`;
+                if (isWorkInProgress) {
+                    warnings.push(msg);
+                } else {
+                    errors.push(msg);
+                }
+            }
+            if (actual.minions !== req.minions) {
+                const msg = `Need ${req.minions} Minions, have ${actual.minions}`;
+                if (isWorkInProgress) {
+                    warnings.push(msg);
+                } else {
+                    errors.push(msg);
+                }
+            }
+            if (actual.demons !== req.demons) {
+                const msg = `Need ${req.demons} Demons, have ${actual.demons}`;
+                if (isWorkInProgress) {
+                    warnings.push(msg);
+                } else {
+                    errors.push(msg);
+                }
+            }
+            
+            let html = '';
+            if (errors.length === 0 && warnings.length === 0) {
+                html = '<div class="alert alert-success">✓ Setup is valid! Ready to start the game.</div>';
+                html += '<div class="section"><h2>📋 Player List</h2><div class="grid-3">';
+                gameState.players.forEach((p, i) => {
+                    html += `
+                        <div class="player-card ${characters[p.role].team}">
+                            <h3>${p.name}</h3>
+                            <div class="role">${p.role}</div>
+                            <div class="ability">${characters[p.role].ability}</div>
+                            <div style="margin-top: 10px; display: flex; gap: 8px;">
+                                <button class="small" onclick="editPlayer(${i})" style="background: #4ecdc4;">Edit</button>
+                                <button class="small" onclick="removePlayer(${i})" style="background: #e74522;">Remove</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div></div>';
+            } else if (warnings.length > 0 && errors.length === 0) {
+                html = '<div class="alert alert-warning"><strong>Setup in Progress:</strong><ul style="margin: 10px 0 0 20px;">';
+                warnings.forEach(w => html += `<li>${w}</li>`);
+                html += '</ul></div>';
+                html += '<div class="section"><h2>📋 Player List</h2><div class="grid-3">';
+                gameState.players.forEach((p, i) => {
+                    html += `
+                        <div class="player-card ${characters[p.role].team}">
+                            <h3>${p.name}</h3>
+                            <div class="role">${p.role}</div>
+                            <div class="ability">${characters[p.role].ability}</div>
+                            <div style="margin-top: 10px; display: flex; gap: 8px;">
+                                <button class="small" onclick="editPlayer(${i})" style="background: #4ecdc4;">Edit</button>
+                                <button class="small" onclick="removePlayer(${i})" style="background: #e74522;">Remove</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div></div>';
+            } else {
+                html = '<div class="alert alert-error"><strong>Setup Errors:</strong><ul style="margin: 10px 0 0 20px;">';
+                errors.forEach(e => html += `<li>${e}</li>`);
+                html += '</ul></div>';
+            }
+            
+            document.getElementById('setupValidation').innerHTML = html;
+        }
+
+        function removePlayer(index) {
+            if (confirm(`Remove ${gameState.players[index].name}?`)) {
+                gameState.players.splice(index, 1);
+                validateSetup();
+            }
+        }
+
+        function editPlayer(index) {
+            const player = gameState.players[index];
+            const newName = prompt('Edit player name:', player.name);
+            if (newName && newName.trim()) {
+                player.name = newName.trim();
+                validateSetup();
+            }
+        }
+
+        function updateGrimoireView() {
+            if (gameState.players.length === 0) {
+                document.getElementById('grimoireView').innerHTML = '<p style="color: #aaa;">No players assigned yet</p>';
+                return;
+            }
+
+            const playerCount = gameState.players.length;
+            const html = gameState.players.map((p, i) => {
+                const char = characters[p.role];
+                let badges = '';
+                if (!p.alive) badges += '<span class="badge dead">DEAD</span>';
+                if (p.poisoned) badges += '<span class="badge poison">POISON</span>';
+                if (p.drunk) badges += '<span class="badge drunk">DRUNK</span>';
+                if (p.protected) badges += '<span class="badge protected">PROTECT</span>';
+                
+                return `
+                    <div class="grimoire-token ${!p.alive ? 'dead' : ''}" 
+                         draggable="true"
+                         data-index="${i}"
+                         ontouchstart="handleTouchStart(event, ${i})"
+                         ontouchmove="handleTouchMove(event)"
+                         ontouchend="handleTouchEnd(event)"
+                         ondragstart="handleDragStart(event, ${i})" 
+                         ondragover="handleDragOver(event)" 
+                         ondragleave="handleDragLeave(event)"
+                         ondrop="handleDrop(event, ${i})" 
+                         ondragend="handleDragEnd(event)"
+                         onclick="selectPlayer(${i})" 
+                         style="border-color: ${getTeamColor(char.team)}">
+                        <div class="name">${p.name}</div>
+                        <div class="role">${p.role}</div>
+                        ${badges}
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('grimoireView').innerHTML = `<div class="grimoire-circle" id="grimoireCircle">${html}</div>`;
+            requestAnimationFrame(() => {
+                positionTokensInCircle();
+                retryPositionTokens();
+            });
+        }
+
+        function positionTokensInCircle() {
+            const circle = document.getElementById('grimoireCircle');
+            if (!circle) return;
+            
+            const tokens = circle.querySelectorAll('.grimoire-token');
+            const count = tokens.length;
+            if (count === 0) return;
+            
+            // Adjust radius based on circle size
+            const circleWidth = circle.offsetWidth;
+            if (!circleWidth) return;
+            const tokenSize = tokens[0].offsetWidth;
+            const radius = (circleWidth / 2) - (tokenSize / 2) - 10; // 10px padding from edge
+            const centerX = circleWidth / 2;
+            const centerY = circle.offsetHeight / 2;
+            const angleStep = (2 * Math.PI) / count;
+            const startAngle = -Math.PI / 2; // Start at top
+            
+            tokens.forEach((token, i) => {
+                const angle = startAngle + (i * angleStep);
+                const x = centerX + radius * Math.cos(angle) - token.offsetWidth / 2;
+                const y = centerY + radius * Math.sin(angle) - token.offsetHeight / 2;
+                
+                token.style.left = `${x}px`;
+                token.style.top = `${y}px`;
+            });
+        }
+
+        function retryPositionTokens() {
+            const circle = document.getElementById('grimoireCircle');
+            if (!circle) return;
+            if (circle.offsetWidth === 0) {
+                setTimeout(() => {
+                    positionTokensInCircle();
+                }, 50);
+            }
+        }
+
+        function getTeamColor(team) {
+            const colors = {
+                townsfolk: '#4ecdc4',
+                outsider: '#95e1d3',
+                minion: '#ff9f43',
+                demon: '#ee5a6f'
+            };
+            return colors[team] || '#4ecdc4';
+        }
+
+        // Drag and drop handlers for grimoire
+        let draggedIndex = null;
+        let touchStartPos = null;
+        let isDraggingTouch = false;
+        let draggedElement = null;
+
+        function handleDragStart(event, index) {
+            draggedIndex = index;
+            event.target.classList.add('dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/html', event.target.innerHTML);
+        }
+
+        function handleDragOver(event) {
+            if (event.preventDefault) {
+                event.preventDefault();
+            }
+            event.target.closest('.grimoire-token')?.classList.add('drag-over');
+            event.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDragLeave(event) {
+            event.target.closest('.grimoire-token')?.classList.remove('drag-over');
+        }
+
+        function handleDrop(event, dropIndex) {
+            if (event.stopPropagation) {
+                event.stopPropagation();
+            }
+            event.preventDefault();
+            
+            if (draggedIndex !== null && draggedIndex !== dropIndex) {
+                reorderPlayers(draggedIndex, dropIndex);
+            }
+            
+            return false;
+        }
+
+        function handleDragEnd(event) {
+            event.target.classList.remove('dragging');
+            document.querySelectorAll('.grimoire-token').forEach(token => {
+                token.classList.remove('drag-over');
+            });
+            draggedIndex = null;
+        }
+
+        // Touch handlers for mobile
+        function handleTouchStart(event, index) {
+            if (event.target.closest('.badge')) {
+                return; // Don't drag when clicking badges
+            }
+            
+            draggedIndex = index;
+            isDraggingTouch = false;
+            draggedElement = event.target.closest('.grimoire-token');
+            touchStartPos = {
+                x: event.touches[0].clientX,
+                y: event.touches[0].clientY
+            };
+            // Don't prevent default here to allow scrolling
+        }
+
+        function handleTouchMove(event) {
+            if (draggedIndex === null || !touchStartPos) return;
+            
+            const touch = event.touches[0];
+            const deltaX = Math.abs(touch.clientX - touchStartPos.x);
+            const deltaY = Math.abs(touch.clientY - touchStartPos.y);
+            
+            // Start dragging if moved more than 15px horizontally or 20px vertically
+            // Prefer vertical scrolling over dragging
+            if (!isDraggingTouch && deltaX > 15 && deltaX > deltaY) {
+                isDraggingTouch = true;
+                draggedElement?.classList.add('dragging');
+            }
+            
+            if (isDraggingTouch) {
+                // Only prevent default when actually dragging
+                event.preventDefault();
+                
+                // Find which token is under the touch point
+                const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+                const targetToken = elementAtPoint?.closest('.grimoire-token');
+                
+                // Remove drag-over from all tokens
+                document.querySelectorAll('.grimoire-token').forEach(token => {
+                    token.classList.remove('drag-over');
+                });
+                
+                // Add drag-over to target
+                if (targetToken && targetToken !== draggedElement) {
+                    targetToken.classList.add('drag-over');
+                }
+            }
+        }
+
+        function handleTouchEnd(event) {
+            if (!isDraggingTouch) {
+                // It was a click, not a drag - allow default behavior
+                draggedIndex = null;
+                touchStartPos = null;
+                draggedElement = null;
+                return;
+            }
+            
+            // Only prevent default if it was an actual drag
+            event.preventDefault();
+            
+            if (draggedIndex !== null) {
+                const touch = event.changedTouches[0];
+                const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+                const targetToken = elementAtPoint?.closest('.grimoire-token');
+                
+                if (targetToken) {
+                    const dropIndex = parseInt(targetToken.dataset.index);
+                    if (draggedIndex !== dropIndex) {
+                        reorderPlayers(draggedIndex, dropIndex);
+                    }
+                }
+            }
+            
+            // Clean up
+            draggedElement?.classList.remove('dragging');
+            document.querySelectorAll('.grimoire-token').forEach(token => {
+                token.classList.remove('drag-over');
+            });
+            
+            draggedIndex = null;
+            touchStartPos = null;
+            isDraggingTouch = false;
+            draggedElement = null;
+        }
+
+        function reorderPlayers(fromIndex, toIndex) {
+            // Reorder the players array
+            const draggedPlayer = gameState.players[fromIndex];
+            gameState.players.splice(fromIndex, 1);
+            gameState.players.splice(toIndex, 0, draggedPlayer);
+            
+            // Update the view
+            updateGrimoireView();
+            
+            // If a player was selected, update the selection index
+            if (gameState.selectedPlayer !== null) {
+                if (gameState.selectedPlayer === fromIndex) {
+                    gameState.selectedPlayer = toIndex;
+                } else if (fromIndex < gameState.selectedPlayer && toIndex >= gameState.selectedPlayer) {
+                    gameState.selectedPlayer--;
+                } else if (fromIndex > gameState.selectedPlayer && toIndex <= gameState.selectedPlayer) {
+                    gameState.selectedPlayer++;
+                }
+                selectPlayer(gameState.selectedPlayer);
+            }
+            
+            // Also update validation view if visible
+            validateSetup();
+        }
+
+        function selectPlayer(index) {
+            gameState.selectedPlayer = index;
+            const p = gameState.players[index];
+            const char = characters[p.role];
+            
+            const html = `
+                <h3>${p.name} - ${p.role}</h3>
+                <p style="color: #aaa; margin: 10px 0;">${char.ability}</p>
+                
+                <div class="token-grid">
+                    <div class="token-item">
+                        <span>${p.alive ? '💚 Alive' : '💀 Dead'}</span>
+                        <div class="token-toggle ${!p.alive ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'alive')"></div>
+                    </div>
+                    <div class="token-item">
+                        <span>🟣 Poisoned</span>
+                        <div class="token-toggle ${p.poisoned ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'poisoned')"></div>
+                    </div>
+                    <div class="token-item">
+                        <span>🟠 Drunk</span>
+                        <div class="token-toggle ${p.drunk ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'drunk')"></div>
+                    </div>
+                    <div class="token-item">
+                        <span>🟢 Protected</span>
+                        <div class="token-toggle ${p.protected ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'protected')"></div>
+                    </div>
+                    <div class="token-item">
+                        <span>⚡ Used Ability</span>
+                        <div class="token-toggle ${p.usedAbility ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'usedAbility')"></div>
+                    </div>
+                </div>
+                
+                <textarea class="notes" placeholder="Storyteller notes for ${p.name}..." onchange="savePlayerNotes(${index}, this.value)">${p.notes}</textarea>
+            `;
+            
+            document.getElementById('playerDetailsContent').innerHTML = html;
+            document.getElementById('selectedPlayerDetails').style.display = 'block';
+        }
+
+        function togglePlayerStatus(index, status) {
+            const p = gameState.players[index];
+            if (status === 'alive') {
+                p.alive = !p.alive;
+            } else {
+                p[status] = !p[status];
+            }
+            selectPlayer(index);
+            updateGrimoireView();
+        }
+
+        function savePlayerNotes(index, notes) {
+            gameState.players[index].notes = notes;
+        }
+
+        function updateNightOrders() {
+            renderNightOrder('firstNightOrder', 'first');
+            renderNightOrder('otherNightOrder', 'other');
+        }
+
+        function renderNightOrder(elementId, phase) {
+            const order = [];
+            
+            gameState.players.forEach(p => {
+                const char = characters[p.role];
+                const nightNum = phase === 'first' ? char.firstNight : char.otherNights;
+                
+                if (nightNum > 0) {
+                    order.push({
+                        order: nightNum,
+                        player: p,
+                        char: char,
+                        roleName: p.role
+                    });
+                }
+            });
+            
+            order.sort((a, b) => a.order - b.order);
+            
+            const html = order.map((item, i) => {
+                const completed = gameState.nightState[phase][i];
+                let warning = '';
+                
+                if (item.player.poisoned || item.player.drunk) {
+                    warning = '<div class="prompt">⚠️ This player is POISONED/DRUNK - give false information or ability does not work!</div>';
+                }
+                
+                return `
+                    <div class="night-order-item ${completed ? 'completed' : ''}" onclick="toggleNightItem('${phase}', ${i})">
+                        <h4>${item.roleName}${item.player.poisoned ? '<span class="badge poison">POISON</span>' : ''}${item.player.drunk ? '<span class="badge drunk">DRUNK</span>' : ''}</h4>
+                        <p><strong>Player:</strong> ${item.player.name}</p>
+                        <p><strong>Ability:</strong> ${item.char.ability}</p>
+                        ${item.char.prompt ? `<div class="prompt">📌 ${item.char.prompt}</div>` : ''}
+                        ${warning}
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById(elementId).innerHTML = html || '<p style="color: #aaa;">No characters with night actions</p>';
+        }
+
+        function toggleNightItem(phase, index) {
+            gameState.nightState[phase][index] = !gameState.nightState[phase][index];
+            updateNightOrders();
+        }
+
+        function resetNight(phase) {
+            gameState.nightState[phase] = {};
+            updateNightOrders();
+        }
+
+        function generateBluffs() {
+            const inPlay = gameState.players.map(p => p.role);
+            const ed = gameState.edition;
+            const available = Object.keys(characters)
+                .filter(c => characters[c].edition === ed && !inPlay.includes(c) && characters[c].team === 'townsfolk');
+            
+            const bluffs = [];
+            while (bluffs.length < 3 && available.length > 0) {
+                const index = Math.floor(Math.random() * available.length);
+                bluffs.push(available[index]);
+                available.splice(index, 1);
+            }
+            
+            gameState.demonBluffs = bluffs;
+            updateBluffsView();
+        }
+
+        function updateBluffsView() {
+            if (gameState.demonBluffs.length === 0) {
+                document.getElementById('bluffsContent').innerHTML = '<p style="color: #aaa;">Click "Generate New Bluffs" to create demon bluffs</p>';
+                return;
+            }
+            
+            const html = `
+                <div class="alert alert-info">
+                    These characters are NOT in play. Give these to the Demon on the first night as possible bluffs.
+                </div>
+                <ul class="bluff-list">
+                    ${gameState.demonBluffs.map(b => `
+                        <li>
+                            <strong>${b}</strong><br>
+                            <span style="font-size: 12px; color: #aaa;">${characters[b].ability}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            
+            document.getElementById('bluffsContent').innerHTML = html;
+        }
+
+        function updateRemindersView() {
+            const html = gameState.players.map((p, i) => `
+                <div class="player-card ${characters[p.role].team}" style="margin-bottom: 15px;">
+                    <h3>${p.name} - ${p.role}</h3>
+                    
+                    <div class="token-grid" style="margin: 10px 0;">
+                        <div class="token-item">
+                            <span>🟣 Poisoned</span>
+                            <div class="token-toggle ${p.poisoned ? 'active' : ''}" onclick="togglePlayerStatus(${i}, 'poisoned'); updateRemindersView();"></div>
+                        </div>
+                        <div class="token-item">
+                            <span>🟠 Drunk</span>
+                            <div class="token-toggle ${p.drunk ? 'active' : ''}" onclick="togglePlayerStatus(${i}, 'drunk'); updateRemindersView();"></div>
+                        </div>
+                        <div class="token-item">
+                            <span>🟢 Protected</span>
+                            <div class="token-toggle ${p.protected ? 'active' : ''}" onclick="togglePlayerStatus(${i}, 'protected'); updateRemindersView();"></div>
+                        </div>
+                        <div class="token-item">
+                            <span>⚡ Used Ability</span>
+                            <div class="token-toggle ${p.usedAbility ? 'active' : ''}" onclick="togglePlayerStatus(${i}, 'usedAbility'); updateRemindersView();"></div>
+                        </div>
+                    </div>
+                    
+                    <textarea class="notes" placeholder="Notes..." onchange="savePlayerNotes(${i}, this.value)">${p.notes}</textarea>
+                </div>
+            `).join('');
+            
+            document.getElementById('remindersContent').innerHTML = html || '<p style="color: #aaa;">No players assigned</p>';
+        }
+
+        function rollDice(max) {
+            const result = Math.floor(Math.random() * max) + 1;
+            displayDiceResult(result, max);
+            gameState.diceHistory.unshift({ result, max, time: new Date().toLocaleTimeString() });
+            if (gameState.diceHistory.length > 10) gameState.diceHistory.pop();
+            updateDiceHistory();
+        }
+
+        function rollCustomDice() {
+            const max = parseInt(document.getElementById('customDice').value);
+            if (max >= 2) rollDice(max);
+        }
+
+        function displayDiceResult(result, max) {
+            let label = `d${max}`;
+            if (max === 2) label = result === 1 ? '🪙 Heads' : '🪙 Tails';
+            
+            document.getElementById('diceResult').innerHTML = `
+                <div style="font-size: 48px; color: #4ecdc4; font-weight: bold; margin-bottom: 10px;">${result}</div>
+                <div style="color: #aaa;">${label}</div>
+            `;
+        }
+
+        function updateDiceHistory() {
+            const html = gameState.diceHistory.map(h => `
+                <div style="background: #1a1a2e; padding: 8px 12px; margin-bottom: 5px; border-radius: 6px; display: flex; justify-content: space-between;">
+                    <span>${h.time} - d${h.max}</span>
+                    <span style="color: #4ecdc4; font-weight: bold;">${h.result}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('diceHistory').innerHTML = html;
+        }
+
+        window.addEventListener('resize', () => {
+            if (document.getElementById('grimoire')?.classList.contains('active')) {
+                positionTokensInCircle();
+                retryPositionTokens();
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>
