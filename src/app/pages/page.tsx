@@ -42,6 +42,13 @@ const pages: Page[] = [
     icon: '🏠',
     previewSrc: '/pages/cape-rental/app.html',
   },
+  {
+    name: 'Blood on the Clocktower Grimoire',
+    slug: 'botc',
+    description: 'Storyteller companion app for Blood on the Clocktower',
+    icon: '🩸',
+    previewSrc: '/pages/botc/app.html',
+  },
 ];
 
 export default function PagesLandingPage() {
