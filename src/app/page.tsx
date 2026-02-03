@@ -90,7 +90,7 @@ export default function Home() {
   const [headerOpacity, setHeaderOpacity] = useState(1);
   const [chatId, setChatId] = useState<string>("persistent-chat");
   // Model selection removed; use a single default model.
-  const DEFAULT_MODEL = "openai:gpt-4o-mini";
+  const DEFAULT_MODEL = "openai:gpt-5-mini";
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -482,24 +482,19 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Center: Split button (desktop only) */}
+            {/* Center: Clear chat button (desktop only) */}
             <div className="hidden md:flex">
-              <div className="w-36 border-r-0 rounded-r-none">
-                <div className="px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-800 rounded-md rounded-r-none bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400 select-none">
-                  {DEFAULT_MODEL.split(":")[1]}
-                </div>
-              </div>
               <button
                 onClick={clearChatHistory}
                 className={cn(
-                  "px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-800 rounded-md rounded-l-none border-l-0",
+                  "px-6 py-2 text-base font-semibold border border-gray-200 dark:border-gray-800 rounded-md",
                   messages.length > 0
-                    ? "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
+                    ? "text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all"
                     : "text-gray-400 dark:text-gray-600 cursor-not-allowed"
                 )}
                 disabled={messages.length === 0 || isLoading}
               >
-                Clear
+                Clear Chat
               </button>
             </div>
 
@@ -567,27 +562,22 @@ export default function Home() {
                   </a>
                 </div>
 
-                {/* Split button for model selector and clear chat */}
-                <div className="flex border-t border-gray-200 dark:border-gray-800 pt-6">
-                  <div className="flex-1 border-r-0 rounded-r-none">
-                    <div className="px-4 py-3 text-sm border border-gray-200 dark:border-gray-800 rounded-md rounded-r-none bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400 select-none w-full font-medium">
-                      {DEFAULT_MODEL.split(":")[1]}
-                    </div>
-                  </div>
+                {/* Clear chat button */}
+                <div className="border-t border-gray-200 dark:border-gray-800 pt-6">
                   <button
                     onClick={() => {
                       setShowMobileMenu(false);
                       clearChatHistory();
                     }}
                     className={cn(
-                      "px-4 py-3 text-sm border border-gray-200 dark:border-gray-800 rounded-md rounded-l-none border-l-0 font-medium",
+                      "w-full px-5 py-3 text-base font-semibold border border-gray-200 dark:border-gray-800 rounded-md",
                       messages.length > 0
-                        ? "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all"
+                        ? "text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all"
                         : "text-gray-400 dark:text-gray-600 cursor-not-allowed"
                     )}
                     disabled={messages.length === 0}
                   >
-                    Clear
+                    Clear Chat
                   </button>
                 </div>
 

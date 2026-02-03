@@ -71,8 +71,8 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const provider = 'openai';
-    // Use the correct model name for GPT-4o (just the model name, not the provider prefix)
-    const modelName = 'gpt-4o-mini';  // Changed to mini model
+    // Use the correct model name (just the model name, not the provider prefix)
+    const modelName = 'gpt-5-mini';
     console.log(`Request received using model: ${modelName}`);
 
     if (!process.env.OPENAI_API_KEY) {

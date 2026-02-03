@@ -36,7 +36,7 @@ export async function searchVectors(embedding: number[], threshold = 0.7, count 
 
 export async function isPersonalQuestion(text: string) {
   const response = await openai.chat.completions.create({
-    model: 'gpt-4-turbo-preview',
+    model: 'gpt-5-mini',
     messages: [
       {
         role: 'system',
@@ -65,7 +65,7 @@ ${relevantContent.map(c => `[${c.type} from ${c.source}]: ${c.content}`).join('\
     : `You are an AI assistant for a portfolio website. For questions not about the portfolio owner, provide helpful, general responses. For personal questions, explain that you don't have specific information about that topic.`;
 
   const response = await openai.chat.completions.create({
-    model: 'gpt-4-turbo-preview',
+    model: 'gpt-5-mini',
     messages: [
       {
         role: 'system',
