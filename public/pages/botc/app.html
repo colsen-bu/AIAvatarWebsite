@@ -350,6 +350,12 @@
             opacity: 0.4;
         }
 
+
+        .night-order-item.attention {
+            opacity: 0.45;
+            background: #1a1a2e;
+            border-left-color: #555;
+        }
         .night-order-item h4 {
             color: #fff;
             margin-bottom: 5px;
@@ -556,6 +562,8 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             user-select: none;
+            transform: scale(var(--token-scale, 1));
+            transform-origin: center;
         }
 
         @media (min-width: 500px) {
@@ -582,12 +590,12 @@
 
         .grimoire-token.dragging {
             opacity: 0.4;
-            transform: scale(0.9);
+            transform: scale(calc(var(--token-scale, 1) * 0.9));
             z-index: 1000;
         }
 
         .grimoire-token.drag-over {
-            transform: scale(1.15);
+            transform: scale(calc(var(--token-scale, 1) * 1.15));
             box-shadow: 0 0 20px rgba(78, 205, 196, 0.8);
             z-index: 999;
         }
@@ -652,6 +660,19 @@
                 padding: 2px 6px;
             }
 
+            .mobile-grimoire-actions {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin: 10px 0 5px;
+            }
+
+
+        @media (min-width: 768px) {
+            .mobile-grimoire-actions {
+                display: none;
+            }
+        }
             .alert {
                 font-size: 12px;
                 padding: 10px 12px;
@@ -694,7 +715,6 @@
             <button class="tab" onclick="switchTab('grimoire')">📖 Grimoire</button>
             <button class="tab" onclick="switchTab('night')">🌙 Night Order</button>
             <button class="tab" onclick="switchTab('bluffs')">🎭 Demon Bluffs</button>
-            <button class="tab" onclick="switchTab('reminders')">📝 Reminders</button>
             <button class="tab" onclick="switchTab('tools')">🎲 Tools</button>
         </div>
 
@@ -745,7 +765,11 @@
         <div id="grimoire" class="tab-content">
             <div class="section">
                 <h2>📖 The Grimoire</h2>
-                <p style="color: #aaa; margin-bottom: 10px;">Drag to arrange seating order. Click players to manage their status.</p>
+                <p style="color: #aaa; margin-bottom: 10px;">Drag to arrange seating order. Tap a player then use the arrows to nudge left/right.</p>
+                <div class="mobile-grimoire-actions">
+                    <button class="secondary small" onclick="moveSelectedPlayer(-1)">⬅️ Move Left</button>
+                    <button class="secondary small" onclick="moveSelectedPlayer(1)">➡️ Move Right</button>
+                </div>
                 <div class="grimoire-view" id="grimoireView"></div>
             </div>
 
@@ -779,14 +803,6 @@
                 <button onclick="generateBluffs()" class="secondary">🔄 Generate New Bluffs</button>
                 
                 <div id="bluffsContent" style="margin-top: 20px;"></div>
-            </div>
-        </div>
-
-        <!-- Reminders Tab -->
-        <div id="reminders" class="tab-content">
-            <div class="section">
-                <h2>📝 Reminder Tokens & Notes</h2>
-                <div id="remindersContent"></div>
             </div>
         </div>
 
@@ -974,7 +990,6 @@
             if (tabName === 'grimoire') updateGrimoireView();
             if (tabName === 'night') updateNightOrders();
             if (tabName === 'bluffs') updateBluffsView();
-            if (tabName === 'reminders') updateRemindersView();
         }
 
         function changeEdition() {
@@ -1278,6 +1293,9 @@
             }
             
             document.getElementById('setupValidation').innerHTML = html;
+            updateGrimoireView();
+            updateNightOrders();
+            updateRemindersView();
         }
 
         function removePlayer(index) {
@@ -1339,6 +1357,16 @@
             });
         }
 
+        function moveSelectedPlayer(direction) {
+            const count = gameState.players.length;
+            if (count < 2) return;
+            if (gameState.selectedPlayer === null) return;
+
+            const fromIndex = gameState.selectedPlayer;
+            const toIndex = (fromIndex + direction + count) % count;
+            reorderPlayers(fromIndex, toIndex);
+        }
+
         function positionTokensInCircle() {
             const circle = document.getElementById('grimoireCircle');
             if (!circle) return;
@@ -1351,17 +1379,26 @@
             const circleWidth = circle.offsetWidth;
             if (!circleWidth) return;
             const tokenSize = tokens[0].offsetWidth;
-            const radius = (circleWidth / 2) - (tokenSize / 2) - 10; // 10px padding from edge
+            const padding = 10;
+            const radius = (circleWidth / 2) - (tokenSize / 2) - padding; // padding from edge
+            if (radius <= 0) return;
+
             const centerX = circleWidth / 2;
             const centerY = circle.offsetHeight / 2;
+            const gap = Math.max(6, Math.round(tokenSize * 0.1));
+            const circumference = 2 * Math.PI * radius;
+            const needed = count * (tokenSize + gap);
+            const scale = Math.min(1, Math.max(0.6, circumference / needed));
+
             const angleStep = (2 * Math.PI) / count;
             const startAngle = -Math.PI / 2; // Start at top
-            
+
             tokens.forEach((token, i) => {
+                token.style.setProperty('--token-scale', scale.toFixed(3));
                 const angle = startAngle + (i * angleStep);
                 const x = centerX + radius * Math.cos(angle) - token.offsetWidth / 2;
                 const y = centerY + radius * Math.sin(angle) - token.offsetHeight / 2;
-                
+
                 token.style.left = `${x}px`;
                 token.style.top = `${y}px`;
             });
@@ -1594,6 +1631,7 @@
             }
             selectPlayer(index);
             updateGrimoireView();
+            updateNightOrders();
         }
 
         function savePlayerNotes(index, notes) {
@@ -1605,10 +1643,108 @@
             renderNightOrder('otherNightOrder', 'other');
         }
 
+        function isEvilPlayer(player) {
+            const team = characters[player.role]?.team;
+            return team === 'minion' || team === 'demon';
+        }
+
+        function getEmpathCount(playerIndex) {
+            const count = gameState.players.length;
+            if (count === 0) return 0;
+            const leftIndex = (playerIndex - 1 + count) % count;
+            const rightIndex = (playerIndex + 1) % count;
+            let evilCount = 0;
+            const left = gameState.players[leftIndex];
+            const right = gameState.players[rightIndex];
+            if (left?.alive && isEvilPlayer(left)) evilCount += 1;
+            if (right?.alive && isEvilPlayer(right)) evilCount += 1;
+            return evilCount;
+        }
+
+        function getChefCount() {
+            const count = gameState.players.length;
+            if (count < 2) return 0;
+            let evilPairs = 0;
+            for (let i = 0; i < count; i++) {
+                const current = gameState.players[i];
+                const next = gameState.players[(i + 1) % count];
+                if (isEvilPlayer(current) && isEvilPlayer(next)) evilPairs += 1;
+            }
+            return evilPairs;
+        }
+
+        function getRolePairInfo(roleName, teamLabel, playerIndex) {
+            const teamPlayers = gameState.players.filter(p => characters[p.role]?.team === teamLabel);
+            if (teamPlayers.length === 0) {
+                return `<div class="prompt">ℹ️ No ${teamLabel} in play.</div>`;
+            }
+
+            let truthPlayer = teamPlayers.find(p => p.role !== roleName) || teamPlayers[0];
+            const decoy = gameState.players.find(p => p !== truthPlayer && p !== gameState.players[playerIndex]);
+
+            if (!decoy) {
+                return `<div class="prompt">ℹ️ Not enough players to show a pair for ${roleName}.</div>`;
+            }
+
+            return `
+                <div class="prompt">🔎 Show role: <strong>${truthPlayer.role}</strong></div>
+                <div class="prompt">👉 Point to: <strong>${truthPlayer.name}</strong> or <strong>${decoy.name}</strong></div>
+            `;
+        }
+
+        function getTargetList(prompt, playerIndex) {
+            if (!prompt) return '';
+            const lower = prompt.toLowerCase();
+            const needsTargets = /choose|point to|pick/.test(lower);
+            if (!needsTargets) return '';
+
+            let count = 1;
+            if (/choose\s+2|choose\s+two|point to\s+2|point to\s+two/.test(lower)) count = 2;
+            if (/choose\s+3|choose\s+three|point to\s+3|point to\s+three/.test(lower)) count = 3;
+
+            const aliveOnly = /alive/.test(lower);
+            const excludeSelf = /not\s+yourself|not\s+self/.test(lower);
+
+            let candidates = aliveOnly ? gameState.players.filter(p => p.alive) : [...gameState.players];
+            if (excludeSelf) {
+                const self = gameState.players[playerIndex];
+                candidates = candidates.filter(p => p !== self);
+            }
+
+            if (candidates.length === 0) {
+                return `<div class="prompt">🎯 Targets: none available</div>`;
+            }
+
+            const names = candidates.map(p => p.name).join(', ');
+            const suffix = count > 1 ? ` (choose ${count})` : '';
+            return `<div class="prompt">🎯 Targets: ${names}${suffix}</div>`;
+        }
+
+        function buildNightInfo(item) {
+            const roleName = item.roleName;
+            if (roleName === 'Washerwoman') {
+                return getRolePairInfo('Washerwoman', 'townsfolk', item.playerIndex);
+            }
+            if (roleName === 'Investigator') {
+                return getRolePairInfo('Investigator', 'minion', item.playerIndex);
+            }
+            if (roleName === 'Librarian') {
+                return getRolePairInfo('Librarian', 'outsider', item.playerIndex);
+            }
+            if (roleName === 'Empath') {
+                return `<div class="prompt">🔍 Empath count (alive evil neighbors): <strong>${getEmpathCount(item.playerIndex)}</strong></div>`;
+            }
+            if (roleName === 'Chef') {
+                return `<div class="prompt">🍳 Chef count (adjacent evil pairs): <strong>${getChefCount()}</strong></div>`;
+            }
+
+            return getTargetList(item.char.prompt, item.playerIndex);
+        }
+
         function renderNightOrder(elementId, phase) {
             const order = [];
             
-            gameState.players.forEach(p => {
+            gameState.players.forEach((p, idx) => {
                 const char = characters[p.role];
                 const nightNum = phase === 'first' ? char.firstNight : char.otherNights;
                 
@@ -1617,7 +1753,8 @@
                         order: nightNum,
                         player: p,
                         char: char,
-                        roleName: p.role
+                        roleName: p.role,
+                        playerIndex: idx
                     });
                 }
             });
@@ -1625,20 +1762,32 @@
             order.sort((a, b) => a.order - b.order);
             
             const html = order.map((item, i) => {
-                const completed = gameState.nightState[phase][i];
+                const key = `${item.player.name}::${item.roleName}`;
+                const encodedKey = encodeURIComponent(key);
+                const completed = Boolean(gameState.nightState[phase][key]);
+                const attentionReasons = [];
+                if (!item.player.alive) attentionReasons.push('dead');
+                if (item.player.poisoned) attentionReasons.push('poisoned');
+                if (item.player.drunk) attentionReasons.push('drunk');
+                const needsAttention = attentionReasons.length > 0;
                 let warning = '';
-                
                 if (item.player.poisoned || item.player.drunk) {
                     warning = '<div class="prompt">⚠️ This player is POISONED/DRUNK - give false information or ability does not work!</div>';
                 }
+                const attentionPrompt = needsAttention
+                    ? `<div class="prompt">⚠️ Attention: ${attentionReasons.join(', ')}</div>`
+                    : '';
+                const nightInfo = buildNightInfo(item);
                 
                 return `
-                    <div class="night-order-item ${completed ? 'completed' : ''}" onclick="toggleNightItem('${phase}', ${i})">
+                    <div class="night-order-item ${completed ? 'completed' : ''} ${needsAttention ? 'attention' : ''}" onclick="toggleNightItem('${phase}', '${encodedKey}')">
                         <h4>${item.roleName}${item.player.poisoned ? '<span class="badge poison">POISON</span>' : ''}${item.player.drunk ? '<span class="badge drunk">DRUNK</span>' : ''}</h4>
                         <p><strong>Player:</strong> ${item.player.name}</p>
                         <p><strong>Ability:</strong> ${item.char.ability}</p>
                         ${item.char.prompt ? `<div class="prompt">📌 ${item.char.prompt}</div>` : ''}
                         ${warning}
+                        ${attentionPrompt}
+                        ${nightInfo}
                     </div>
                 `;
             }).join('');
@@ -1646,8 +1795,9 @@
             document.getElementById(elementId).innerHTML = html || '<p style="color: #aaa;">No characters with night actions</p>';
         }
 
-        function toggleNightItem(phase, index) {
-            gameState.nightState[phase][index] = !gameState.nightState[phase][index];
+        function toggleNightItem(phase, encodedKey) {
+            const key = decodeURIComponent(encodedKey);
+            gameState.nightState[phase][key] = !gameState.nightState[phase][key];
             updateNightOrders();
         }
 
