@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blood on the Clocktower - Storyteller Grimoire</title>
     <style>
+        :root {
+            --bg: #050505;
+            --panel: #0d0d0d;
+            --panel-2: #121212;
+            --line: #2a2a2a;
+            --text: #f7f7f7;
+            --muted: #a8a8a8;
+            --accent: #d81f2d;
+            --accent-soft: #7a131b;
+            --white-glow: rgba(255, 255, 255, 0.16);
+            --danger: #cc2d39;
+            --warning: #bd7731;
+            --success: #8bcf9e;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -17,106 +32,157 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e0e0e0;
+            font-family: "JetBrains Mono", "IBM Plex Sans", "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #101010 0%, var(--bg) 52%, #000 100%);
+            color: var(--text);
             margin: 0;
+            position: relative;
+            letter-spacing: 0.01em;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(to bottom, rgba(178, 15, 31, 0.32), rgba(178, 15, 31, 0) 85px),
+                linear-gradient(to bottom, rgba(178, 15, 31, 0.24), rgba(178, 15, 31, 0) 120px),
+                linear-gradient(to bottom, rgba(178, 15, 31, 0.28), rgba(178, 15, 31, 0) 90px),
+                linear-gradient(to bottom, rgba(178, 15, 31, 0.2), rgba(178, 15, 31, 0) 130px),
+                linear-gradient(to bottom, rgba(178, 15, 31, 0.26), rgba(178, 15, 31, 0) 105px);
+            background-size: 7px 150px, 11px 210px, 9px 170px, 6px 230px, 10px 190px;
+            background-position: 6% -190px, 21% -130px, 52% -240px, 73% -150px, 90% -220px;
+            background-repeat: repeat-y;
+            opacity: 0.68;
+            animation: bloodDripFast 9s linear infinite;
+            z-index: 0;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(to bottom, rgba(178, 15, 31, 0.2), rgba(178, 15, 31, 0) 95px),
+                linear-gradient(to bottom, rgba(178, 15, 31, 0.17), rgba(178, 15, 31, 0) 140px),
+                linear-gradient(to bottom, rgba(178, 15, 31, 0.19), rgba(178, 15, 31, 0) 115px),
+                linear-gradient(to bottom, rgba(178, 15, 31, 0.16), rgba(178, 15, 31, 0) 125px);
+            background-size: 6px 170px, 8px 250px, 5px 180px, 7px 220px;
+            background-position: 14% -140px, 37% -260px, 64% -200px, 85% -170px;
+            background-repeat: repeat-y;
+            opacity: 0.48;
+            animation: bloodDripAlt 6.8s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes bloodDripFast {
+            0% {
+                background-position: 6% -190px, 21% -130px, 52% -240px, 73% -150px, 90% -220px;
+            }
+            100% {
+                background-position: 10% 360px, 18% 430px, 56% 330px, 70% 500px, 94% 390px;
+            }
+        }
+
+        @keyframes bloodDripAlt {
+            0% {
+                background-position: 14% -140px, 37% -260px, 64% -200px, 85% -170px;
+            }
+            100% {
+                background-position: 11% 420px, 40% 350px, 60% 490px, 88% 380px;
+            }
         }
 
         .scroll-container {
+            position: relative;
+            z-index: 1;
             height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            padding: 10px;
+            padding: 8px;
         }
 
         @media (min-width: 768px) {
             .scroll-container {
-                padding: 20px;
+                padding: 14px;
             }
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1480px;
             margin: 0 auto;
             overflow: visible;
         }
 
         h1 {
             text-align: center;
-            color: #ff6b6b;
-            margin-bottom: 10px;
-            font-size: 1.8em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #ffffff;
+            margin-bottom: 4px;
+            font-size: 1.3rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-shadow: 0 0 14px var(--white-glow);
+            font-weight: 700;
         }
 
         @media (min-width: 768px) {
             h1 {
-                font-size: 2.5em;
+                font-size: 1.85rem;
             }
         }
 
         .subtitle {
             text-align: center;
-            color: #aaa;
-            margin-bottom: 20px;
-            font-size: 12px;
-        }
-
-        @media (min-width: 768px) {
-            .subtitle {
-                margin-bottom: 30px;
-                font-size: 14px;
-            }
+            color: var(--muted);
+            margin-bottom: 10px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
         }
 
         .tabs {
             display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #ff6b6b;
+            gap: 8px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--line);
             flex-wrap: wrap;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-        }
-
-        @media (min-width: 768px) {
-            .tabs {
-                gap: 10px;
-                margin-bottom: 20px;
-            }
+            padding-bottom: 4px;
         }
 
         .tab {
-            padding: 10px 12px;
-            background: #2a2a3e;
-            border: none;
-            color: #e0e0e0;
+            padding: 10px 14px;
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--muted);
             cursor: pointer;
             font-size: 12px;
-            border-radius: 8px 8px 0 0;
-            transition: all 0.3s;
+            border-radius: 8px;
+            transition: border-color 0.25s, color 0.25s, background 0.25s;
             white-space: nowrap;
             min-height: 44px;
             display: flex;
             align-items: center;
-        }
-
-        @media (min-width: 768px) {
-            .tab {
-                padding: 12px 20px;
-                font-size: 14px;
-            }
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
         }
 
         .tab:hover {
-            background: #3a3a4e;
+            transform: none;
+            color: var(--text);
+            border-color: #555;
+            background: rgba(255, 255, 255, 0.02);
+            box-shadow: none;
         }
 
         .tab.active {
-            background: #ff6b6b;
-            color: white;
+            border-color: var(--accent);
+            color: #fff;
+            background: linear-gradient(180deg, rgba(216, 31, 45, 0.22), rgba(216, 31, 45, 0.1));
         }
 
         .tab-content {
@@ -128,106 +194,103 @@
         }
 
         .section {
-            background: #2a2a3e;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border: 1px solid var(--line);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(2px);
         }
 
         @media (min-width: 768px) {
             .section {
-                padding: 25px;
-                border-radius: 12px;
-                margin-bottom: 20px;
+                padding: 24px;
+                margin-bottom: 22px;
             }
         }
 
         .section h2 {
-            color: #ff6b6b;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: #fff;
+            margin-bottom: 14px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 700;
         }
 
         .section h3 {
-            color: #4ecdc4;
-            margin: 15px 0 10px 0;
-            font-size: 1.1em;
+            color: #fff;
+            margin: 14px 0 8px;
+            font-size: 0.92rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
         }
 
         button {
-            padding: 12px 16px;
-            background: #ff6b6b;
-            border: none;
-            color: white;
-            border-radius: 6px;
+            padding: 10px 14px;
+            background: #fff;
+            border: 1px solid #fff;
+            color: #0a0a0a;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 13px;
-            transition: background 0.3s;
-            min-height: 44px;
+            font-size: 12px;
+            transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
+            min-height: 42px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
         }
 
-        @media (min-width: 768px) {
-            button {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-        }
-
-        button:hover {
-            background: #ff5252;
+        button:not(.tab):hover {
+            transform: translateY(-1px);
+            filter: brightness(1.04);
+            box-shadow: 0 0 14px var(--white-glow);
         }
 
         button.secondary {
-            background: #4ecdc4;
+            background: transparent;
+            border-color: var(--line);
+            color: #fff;
         }
 
         button.secondary:hover {
-            background: #45b8b0;
+            border-color: #666;
         }
 
         button.small {
-            padding: 8px 12px;
+            padding: 6px 10px;
             font-size: 11px;
-            min-height: 38px;
-        }
-
-        @media (min-width: 768px) {
-            button.small {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
+            min-height: 36px;
         }
 
         input, select, textarea {
-            padding: 12px;
-            background: #1a1a2e;
-            border: 1px solid #444;
-            color: #e0e0e0;
-            border-radius: 6px;
-            font-size: 16px;
+            padding: 10px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            color: var(--text);
+            border-radius: 8px;
+            font-size: 14px;
             font-family: inherit;
-            min-height: 44px;
+            min-height: 42px;
         }
 
-        @media (min-width: 768px) {
-            input, select, textarea {
-                padding: 10px;
-                font-size: 14px;
-            }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
         }
 
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
+            gap: 14px;
         }
 
         @media (min-width: 768px) {
             .grid-2 {
                 grid-template-columns: 1fr 1fr;
-                gap: 20px;
+                gap: 18px;
             }
         }
 
@@ -239,142 +302,131 @@
 
         @media (min-width: 500px) {
             .grid-3 {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 15px;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             }
         }
 
         .alert {
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 14px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            border: 1px solid var(--line);
+            background: var(--panel);
         }
 
         .alert-info {
-            background: #3498db22;
-            border-left: 4px solid #3498db;
-            color: #3498db;
+            color: #d3d3d3;
+            border-left: 3px solid #6d6d6d;
         }
 
         .alert-warning {
-            background: #f39c1222;
-            border-left: 4px solid #f39c12;
-            color: #f39c12;
+            color: #f3d3b3;
+            border-left: 3px solid var(--warning);
         }
 
         .alert-error {
-            background: #e7452222;
-            border-left: 4px solid #e74522;
-            color: #ff6b6b;
+            color: #ffb8bd;
+            border-left: 3px solid var(--danger);
         }
 
         .alert-success {
-            background: #27ae6022;
-            border-left: 4px solid #27ae60;
-            color: #4ecdc4;
+            color: #dff5e6;
+            border-left: 3px solid var(--success);
         }
 
         .player-card {
-            background: #1a1a2e;
+            background: var(--panel-2);
             padding: 12px;
-            border-radius: 8px;
-            border-left: 4px solid #4ecdc4;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            border-left: 3px solid #fff;
             position: relative;
         }
 
-        @media (min-width: 768px) {
-            .player-card {
-                padding: 15px;
-            }
-        }
-
-        .player-card.townsfolk { border-left-color: #4ecdc4; }
-        .player-card.outsider { border-left-color: #95e1d3; }
-        .player-card.minion { border-left-color: #ff9f43; }
-        .player-card.demon { border-left-color: #ee5a6f; }
+        .player-card.townsfolk { border-left-color: #b9f0e7; }
+        .player-card.outsider { border-left-color: #e7f8f4; }
+        .player-card.minion { border-left-color: #ffd3b0; }
+        .player-card.demon { border-left-color: #ff9ca5; }
 
         .player-card h3 {
-            margin: 0 0 8px 0;
+            margin: 0 0 6px;
             color: #fff;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .player-card .role {
-            font-weight: bold;
-            color: #4ecdc4;
-            margin-bottom: 5px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
         }
 
         .player-card .ability {
             font-size: 12px;
-            color: #aaa;
-            font-style: italic;
+            color: var(--muted);
             margin: 8px 0;
             line-height: 1.4;
         }
 
         .badge {
             display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-left: 6px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 5px;
+            border: 1px solid transparent;
         }
 
-        .badge.poison { background: #9b59b6; color: white; }
-        .badge.drunk { background: #e67e22; color: white; }
-        .badge.dead { background: #555; color: white; }
-        .badge.protected { background: #27ae60; color: white; }
+        .badge.poison { border-color: #b88de4; color: #d9c3f8; background: rgba(138, 88, 181, 0.2); }
+        .badge.drunk { border-color: #c69763; color: #f3d6b5; background: rgba(160, 103, 47, 0.18); }
+        .badge.dead { border-color: #777; color: #d2d2d2; background: rgba(120, 120, 120, 0.15); }
+        .badge.protected { border-color: #7bbf92; color: #d4f0dc; background: rgba(88, 160, 110, 0.18); }
 
         .night-order-item {
-            background: #1a1a2e;
+            background: var(--panel-2);
             padding: 12px;
             margin-bottom: 8px;
-            border-radius: 8px;
-            border-left: 4px solid #4ecdc4;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            border-left: 3px solid #fff;
             cursor: pointer;
-            transition: opacity 0.3s;
-            min-height: 44px;
-        }
-
-        @media (min-width: 768px) {
-            .night-order-item {
-                padding: 15px;
-                margin-bottom: 10px;
-            }
+            transition: opacity 0.2s ease;
         }
 
         .night-order-item.completed {
-            opacity: 0.4;
+            opacity: 0.45;
         }
-
 
         .night-order-item.attention {
-            opacity: 0.45;
-            background: #1a1a2e;
-            border-left-color: #555;
+            border-left-color: var(--accent);
         }
+
         .night-order-item h4 {
             color: #fff;
-            margin-bottom: 5px;
-            font-size: 14px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .night-order-item p {
-            font-size: 13px;
-            color: #ccc;
+            font-size: 12px;
+            color: #c9c9c9;
             margin: 3px 0;
         }
 
         .night-order-item .prompt {
-            background: #ff6b6b22;
+            background: rgba(216, 31, 45, 0.14);
+            border: 1px solid rgba(216, 31, 45, 0.3);
             padding: 8px;
             margin-top: 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #ff9f43;
+            border-radius: 7px;
+            font-size: 11px;
+            color: #f8c7cc;
         }
 
         .token-grid {
@@ -386,44 +438,36 @@
 
         @media (min-width: 500px) {
             .token-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
                 gap: 10px;
             }
         }
 
         .token-item {
-            background: #1a1a2e;
-            padding: 12px;
-            border-radius: 6px;
+            background: var(--panel);
+            padding: 10px 12px;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
-            min-height: 44px;
+            font-size: 12px;
+            border: 1px solid var(--line);
+            min-height: 42px;
         }
 
         .token-toggle {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #4ecdc4;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #9a9a9a;
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.2s;
             flex-shrink: 0;
         }
 
-        @media (min-width: 768px) {
-            .token-item {
-                padding: 8px 12px;
-            }
-            .token-toggle {
-                width: 18px;
-                height: 18px;
-            }
-        }
-
         .token-toggle.active {
-            background: #4ecdc4;
+            border-color: #fff;
+            background: #fff;
         }
 
         .bluff-list {
@@ -432,88 +476,67 @@
         }
 
         .bluff-list li {
-            background: #1a1a2e;
-            padding: 10px 15px;
+            background: var(--panel-2);
+            padding: 10px 12px;
             margin-bottom: 8px;
-            border-radius: 6px;
-            border-left: 3px solid #ee5a6f;
-            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--accent);
+            font-size: 13px;
         }
 
         .setup-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            margin: 15px 0;
+            margin: 14px 0;
         }
 
         @media (min-width: 768px) {
             .setup-grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 15px;
-                margin: 20px 0;
+                gap: 12px;
             }
         }
 
         .setup-box {
-            background: #1a1a2e;
-            padding: 15px 10px;
-            border-radius: 8px;
+            background: var(--panel-2);
+            padding: 12px 8px;
+            border-radius: 10px;
             text-align: center;
-        }
-
-        @media (min-width: 768px) {
-            .setup-box {
-                padding: 20px;
-            }
+            border: 1px solid var(--line);
         }
 
         .setup-box .number {
-            font-size: 28px;
-            font-weight: bold;
-            color: #4ecdc4;
-            margin-bottom: 5px;
-        }
-
-        @media (min-width: 768px) {
-            .setup-box .number {
-                font-size: 32px;
-            }
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.18);
         }
 
         .setup-box .label {
             font-size: 10px;
-            color: #aaa;
+            color: var(--muted);
             text-transform: uppercase;
-        }
-
-        @media (min-width: 768px) {
-            .setup-box .label {
-                font-size: 12px;
-            }
+            letter-spacing: 0.08em;
         }
 
         .grimoire-view {
             position: relative;
             width: 100%;
-            min-height: 300px;
-            margin-top: 20px;
+            min-height: 320px;
+            margin-top: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: visible;
-            padding: 20px 0;
-        }
-
-        @media (min-width: 500px) {
-            .grimoire-view {
-                min-height: 400px;
-            }
+            padding: 18px 0;
         }
 
         @media (min-width: 768px) {
             .grimoire-view {
-                min-height: 500px;
+                min-height: 520px;
             }
         }
 
@@ -533,20 +556,13 @@
 
         @media (min-width: 768px) {
             .grimoire-circle {
-                width: 500px;
-                height: 500px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .grimoire-circle {
-                width: 600px;
-                height: 600px;
+                width: 520px;
+                height: 520px;
             }
         }
 
         .grimoire-token {
-            background: #1a1a2e;
+            background: #0b0b0b;
             border-radius: 50%;
             width: 60px;
             height: 60px;
@@ -557,7 +573,7 @@
             font-size: 8px;
             text-align: center;
             padding: 4px;
-            border: 3px solid #4ecdc4;
+            border: 2px solid #fff;
             position: absolute;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -590,19 +606,19 @@
 
         .grimoire-token.dragging {
             opacity: 0.4;
-            transform: scale(calc(var(--token-scale, 1) * 0.9));
+            transform: scale(calc(var(--token-scale, 1) * 0.92));
             z-index: 1000;
         }
 
         .grimoire-token.drag-over {
-            transform: scale(calc(var(--token-scale, 1) * 1.15));
-            box-shadow: 0 0 20px rgba(78, 205, 196, 0.8);
+            transform: scale(calc(var(--token-scale, 1) * 1.13));
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.28);
             z-index: 999;
         }
 
         .grimoire-token .name {
-            font-weight: bold;
-            margin-bottom: 3px;
+            font-weight: 700;
+            margin-bottom: 2px;
             word-break: break-word;
             max-width: 100%;
             overflow: hidden;
@@ -610,8 +626,8 @@
         }
 
         .grimoire-token .role {
-            font-size: 9px;
-            color: #4ecdc4;
+            font-size: 8px;
+            color: #d7d7d7;
         }
 
         .grimoire-token .badge {
@@ -622,24 +638,61 @@
             padding: 1px 4px;
         }
 
-        @media (min-width: 768px) {
-            .grimoire-token .role {
-                font-size: 9px;
-            }
-            .grimoire-token .badge {
-                font-size: 8px;
-                padding: 2px 5px;
-            }
-        }
-
         textarea.notes {
             width: 100%;
-            min-height: 80px;
+            min-height: 84px;
             margin-top: 10px;
             resize: vertical;
         }
 
-        /* Mobile-specific adjustments */
+        .lobby-card {
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .lobby-meta {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        .lobby-player-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: #0a0a0a;
+        }
+
+        @media (min-width: 768px) {
+            .lobby-player-row {
+                grid-template-columns: 1.2fr 1fr auto;
+                align-items: center;
+            }
+        }
+
+        .lobby-links-list {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .lobby-link-item {
+            background: #0a0a0a;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 13px;
+            word-break: break-word;
+        }
+
         @media (max-width: 767px) {
             .player-setup-row {
                 flex-direction: column !important;
@@ -647,17 +700,9 @@
             }
 
             .player-setup-row input,
-            .player-setup-row select {
-                width: 100% !important;
-            }
-
+            .player-setup-row select,
             .player-setup-row button {
-                width: 100%;
-            }
-
-            .badge {
-                font-size: 9px;
-                padding: 2px 6px;
+                width: 100% !important;
             }
 
             .mobile-grimoire-actions {
@@ -666,37 +711,14 @@
                 flex-wrap: wrap;
                 margin: 10px 0 5px;
             }
-
+        }
 
         @media (min-width: 768px) {
             .mobile-grimoire-actions {
                 display: none;
             }
         }
-            .alert {
-                font-size: 12px;
-                padding: 10px 12px;
-            }
 
-            .grimoire-view {
-                gap: 8px;
-            }
-
-            .night-order-item h4 {
-                font-size: 13px;
-            }
-
-            .night-order-item p {
-                font-size: 11px;
-            }
-
-            .night-order-item .prompt {
-                font-size: 11px;
-                padding: 6px;
-            }
-        }
-
-        /* Prevent zoom on input focus on iOS */
         @supports (-webkit-touch-callout: none) {
             input, select, textarea {
                 font-size: 16px !important;
@@ -707,21 +729,26 @@
 <body>
     <div class="scroll-container">
         <div class="container">
-        <h1>🕐 Blood on the Clocktower</h1>
+        <h1>Blood on the Clocktower</h1>
         <p class="subtitle">Storyteller's Grimoire</p>
 
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('setup')">⚙️ Setup</button>
-            <button class="tab" onclick="switchTab('grimoire')">📖 Grimoire</button>
-            <button class="tab" onclick="switchTab('night')">🌙 Night Order</button>
-            <button class="tab" onclick="switchTab('bluffs')">🎭 Demon Bluffs</button>
-            <button class="tab" onclick="switchTab('tools')">🎲 Tools</button>
+            <button class="tab active" onclick="switchTab('setup')">Setup</button>
+            <button class="tab" onclick="switchTab('grimoire')">Grimoire</button>
+            <button class="tab" onclick="switchTab('night')">Night Order</button>
+            <button class="tab" onclick="switchTab('bluffs')">Demon Bluffs</button>
+            <button class="tab" onclick="switchTab('tools')">Tools</button>
         </div>
 
         <!-- Setup Tab -->
         <div id="setup" class="tab-content active">
             <div class="section">
-                <h2>📋 Game Setup</h2>
+                <h2>Player Lobby</h2>
+                <div id="lobbySection"></div>
+            </div>
+
+            <div class="section">
+                <h2>Game Setup</h2>
                 
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; margin-bottom: 10px; font-weight: bold;">Select Edition:</label>
@@ -751,7 +778,7 @@
             </div>
 
             <div class="section">
-                <h2>👥 Assign Roles</h2>
+                <h2>Assign Roles</h2>
                 <div id="playerSetup"></div>
                 <button onclick="addPlayerRow()" style="margin-top: 10px;">+ Add Player</button>
                 <button class="secondary" onclick="validateSetup()" style="margin-left: 10px;">✓ Validate Setup</button>
@@ -764,11 +791,11 @@
         <!-- Grimoire Tab -->
         <div id="grimoire" class="tab-content">
             <div class="section">
-                <h2>📖 The Grimoire</h2>
+                <h2>The Grimoire</h2>
                 <p style="color: #aaa; margin-bottom: 10px;">Drag to arrange seating order. Tap a player then use the arrows to nudge left/right.</p>
                 <div class="mobile-grimoire-actions">
-                    <button class="secondary small" onclick="moveSelectedPlayer(-1)">⬅️ Move Left</button>
-                    <button class="secondary small" onclick="moveSelectedPlayer(1)">➡️ Move Right</button>
+                    <button class="secondary small" onclick="moveSelectedPlayer(-1)">Move Left</button>
+                    <button class="secondary small" onclick="moveSelectedPlayer(1)">Move Right</button>
                 </div>
                 <div class="grimoire-view" id="grimoireView"></div>
             </div>
@@ -782,13 +809,13 @@
         <!-- Night Order Tab -->
         <div id="night" class="tab-content">
             <div class="section">
-                <h2>🌙 First Night</h2>
+                <h2>First Night</h2>
                 <button onclick="resetNight('first')" class="secondary small">Reset</button>
                 <div id="firstNightOrder" style="margin-top: 15px;"></div>
             </div>
 
             <div class="section">
-                <h2>🌙 Other Nights</h2>
+                <h2>Other Nights</h2>
                 <button onclick="resetNight('other')" class="secondary small">Reset</button>
                 <div id="otherNightOrder" style="margin-top: 15px;"></div>
             </div>
@@ -797,10 +824,10 @@
         <!-- Bluffs Tab -->
         <div id="bluffs" class="tab-content">
             <div class="section">
-                <h2>🎭 Demon Bluffs</h2>
+                <h2>Demon Bluffs</h2>
                 <p style="color: #aaa; margin-bottom: 15px;">The Demon receives 3 character bluffs that are NOT in play</p>
                 
-                <button onclick="generateBluffs()" class="secondary">🔄 Generate New Bluffs</button>
+                <button onclick="generateBluffs()" class="secondary">Generate New Bluffs</button>
                 
                 <div id="bluffsContent" style="margin-top: 20px;"></div>
             </div>
@@ -809,7 +836,7 @@
         <!-- Tools Tab -->
         <div id="tools" class="tab-content">
             <div class="section">
-                <h2>🎲 Dice Roller</h2>
+                <h2>Dice Roller</h2>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
                     <button class="secondary" onclick="rollDice(2)">Coin Flip (D2)</button>
                     <button class="secondary" onclick="rollDice(6)">D6</button>
@@ -825,22 +852,22 @@
             </div>
 
             <div class="section">
-                <h2>📚 Quick Reference</h2>
+                <h2>Quick Reference</h2>
                 <div class="grid-2">
                     <div>
-                        <h3>🟣 Poisoned</h3>
+                        <h3>Poisoned</h3>
                         <p style="font-size: 13px; color: #ccc;">Ability doesn't work. Gets false info. Player doesn't know.</p>
                     </div>
                     <div>
-                        <h3>🟠 Drunk</h3>
+                        <h3>Drunk</h3>
                         <p style="font-size: 13px; color: #ccc;">Same as poisoned. The Drunk thinks they're a Townsfolk.</p>
                     </div>
                     <div>
-                        <h3>🟢 Protected</h3>
+                        <h3>Protected</h3>
                         <p style="font-size: 13px; color: #ccc;">Cannot die tonight from Demon attack.</p>
                     </div>
                     <div>
-                        <h3>⚡ Used Ability</h3>
+                        <h3>Used Ability</h3>
                         <p style="font-size: 13px; color: #ccc;">Track once-per-game abilities.</p>
                     </div>
                 </div>
@@ -964,11 +991,40 @@
             selectedPlayer: null
         };
 
+        let lobbyState = {
+            mode: 'storyteller',
+            lobbyCode: '',
+            hostKey: '',
+            playerId: '',
+            players: [],
+            publishedLinks: []
+        };
+
+        let lobbyPollTimer = null;
+
         function init() {
+            hydrateLobbyStateFromQuery();
             updateSetupRequirements();
             addPlayerRow();
             addPlayerRow();
             addPlayerRow();
+            renderLobbySection();
+            startLobbyPolling();
+        }
+
+        function hydrateLobbyStateFromQuery() {
+            const params = new URLSearchParams(window.location.search);
+            lobbyState.lobbyCode = (params.get('lobby') || '').trim().toUpperCase();
+            lobbyState.hostKey = (params.get('hostKey') || '').trim();
+            lobbyState.playerId = (params.get('player') || '').trim();
+
+            if (lobbyState.playerId && lobbyState.lobbyCode) {
+                lobbyState.mode = 'player';
+            } else if (lobbyState.lobbyCode && !lobbyState.hostKey) {
+                lobbyState.mode = 'join';
+            } else {
+                lobbyState.mode = 'storyteller';
+            }
         }
 
         function shuffleArray(array) {
@@ -995,6 +1051,7 @@
         function changeEdition() {
             gameState.edition = document.querySelector('input[name="edition"]:checked').value;
             updatePlayerRows();
+            renderLobbySection();
         }
 
         function updateSetupRequirements() {
@@ -1252,7 +1309,7 @@
             let html = '';
             if (errors.length === 0 && warnings.length === 0) {
                 html = '<div class="alert alert-success">✓ Setup is valid! Ready to start the game.</div>';
-                html += '<div class="section"><h2>📋 Player List</h2><div class="grid-3">';
+                html += '<div class="section"><h2>Player List</h2><div class="grid-3">';
                 gameState.players.forEach((p, i) => {
                     html += `
                         <div class="player-card ${characters[p.role].team}">
@@ -1271,7 +1328,7 @@
                 html = '<div class="alert alert-warning"><strong>Setup in Progress:</strong><ul style="margin: 10px 0 0 20px;">';
                 warnings.forEach(w => html += `<li>${w}</li>`);
                 html += '</ul></div>';
-                html += '<div class="section"><h2>📋 Player List</h2><div class="grid-3">';
+                html += '<div class="section"><h2>Player List</h2><div class="grid-3">';
                 gameState.players.forEach((p, i) => {
                     html += `
                         <div class="player-card ${characters[p.role].team}">
@@ -1594,23 +1651,23 @@
                 
                 <div class="token-grid">
                     <div class="token-item">
-                        <span>${p.alive ? '💚 Alive' : '💀 Dead'}</span>
+                        <span>${p.alive ? 'Alive' : 'Dead'}</span>
                         <div class="token-toggle ${!p.alive ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'alive')"></div>
                     </div>
                     <div class="token-item">
-                        <span>🟣 Poisoned</span>
+                        <span>Poisoned</span>
                         <div class="token-toggle ${p.poisoned ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'poisoned')"></div>
                     </div>
                     <div class="token-item">
-                        <span>🟠 Drunk</span>
+                        <span>Drunk</span>
                         <div class="token-toggle ${p.drunk ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'drunk')"></div>
                     </div>
                     <div class="token-item">
-                        <span>🟢 Protected</span>
+                        <span>Protected</span>
                         <div class="token-toggle ${p.protected ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'protected')"></div>
                     </div>
                     <div class="token-item">
-                        <span>⚡ Used Ability</span>
+                        <span>Used Ability</span>
                         <div class="token-toggle ${p.usedAbility ? 'active' : ''}" onclick="togglePlayerStatus(${index}, 'usedAbility')"></div>
                     </div>
                 </div>
@@ -1676,19 +1733,19 @@
         function getRolePairInfo(roleName, teamLabel, playerIndex) {
             const teamPlayers = gameState.players.filter(p => characters[p.role]?.team === teamLabel);
             if (teamPlayers.length === 0) {
-                return `<div class="prompt">ℹ️ No ${teamLabel} in play.</div>`;
+                return `<div class="prompt">Info: No ${teamLabel} in play.</div>`;
             }
 
             let truthPlayer = teamPlayers.find(p => p.role !== roleName) || teamPlayers[0];
             const decoy = gameState.players.find(p => p !== truthPlayer && p !== gameState.players[playerIndex]);
 
             if (!decoy) {
-                return `<div class="prompt">ℹ️ Not enough players to show a pair for ${roleName}.</div>`;
+                return `<div class="prompt">Info: Not enough players to show a pair for ${roleName}.</div>`;
             }
 
             return `
-                <div class="prompt">🔎 Show role: <strong>${truthPlayer.role}</strong></div>
-                <div class="prompt">👉 Point to: <strong>${truthPlayer.name}</strong> or <strong>${decoy.name}</strong></div>
+                <div class="prompt">Show role: <strong>${truthPlayer.role}</strong></div>
+                <div class="prompt">Point to: <strong>${truthPlayer.name}</strong> or <strong>${decoy.name}</strong></div>
             `;
         }
 
@@ -1712,12 +1769,12 @@
             }
 
             if (candidates.length === 0) {
-                return `<div class="prompt">🎯 Targets: none available</div>`;
+                return `<div class="prompt">Targets: none available</div>`;
             }
 
             const names = candidates.map(p => p.name).join(', ');
             const suffix = count > 1 ? ` (choose ${count})` : '';
-            return `<div class="prompt">🎯 Targets: ${names}${suffix}</div>`;
+            return `<div class="prompt">Targets: ${names}${suffix}</div>`;
         }
 
         function buildNightInfo(item) {
@@ -1732,10 +1789,10 @@
                 return getRolePairInfo('Librarian', 'outsider', item.playerIndex);
             }
             if (roleName === 'Empath') {
-                return `<div class="prompt">🔍 Empath count (alive evil neighbors): <strong>${getEmpathCount(item.playerIndex)}</strong></div>`;
+                return `<div class="prompt">Empath count (alive evil neighbors): <strong>${getEmpathCount(item.playerIndex)}</strong></div>`;
             }
             if (roleName === 'Chef') {
-                return `<div class="prompt">🍳 Chef count (adjacent evil pairs): <strong>${getChefCount()}</strong></div>`;
+                return `<div class="prompt">Chef count (adjacent evil pairs): <strong>${getChefCount()}</strong></div>`;
             }
 
             return getTargetList(item.char.prompt, item.playerIndex);
@@ -1772,10 +1829,10 @@
                 const needsAttention = attentionReasons.length > 0;
                 let warning = '';
                 if (item.player.poisoned || item.player.drunk) {
-                    warning = '<div class="prompt">⚠️ This player is POISONED/DRUNK - give false information or ability does not work!</div>';
+                    warning = '<div class="prompt">Warning: This player is POISONED/DRUNK. Give false info or the ability does not work.</div>';
                 }
                 const attentionPrompt = needsAttention
-                    ? `<div class="prompt">⚠️ Attention: ${attentionReasons.join(', ')}</div>`
+                    ? `<div class="prompt">Attention: ${attentionReasons.join(', ')}</div>`
                     : '';
                 const nightInfo = buildNightInfo(item);
                 
@@ -1784,7 +1841,7 @@
                         <h4>${item.roleName}${item.player.poisoned ? '<span class="badge poison">POISON</span>' : ''}${item.player.drunk ? '<span class="badge drunk">DRUNK</span>' : ''}</h4>
                         <p><strong>Player:</strong> ${item.player.name}</p>
                         <p><strong>Ability:</strong> ${item.char.ability}</p>
-                        ${item.char.prompt ? `<div class="prompt">📌 ${item.char.prompt}</div>` : ''}
+                        ${item.char.prompt ? `<div class="prompt">Prompt: ${item.char.prompt}</div>` : ''}
                         ${warning}
                         ${attentionPrompt}
                         ${nightInfo}
@@ -1853,19 +1910,19 @@
                     
                     <div class="token-grid" style="margin: 10px 0;">
                         <div class="token-item">
-                            <span>🟣 Poisoned</span>
+                            <span>Poisoned</span>
                             <div class="token-toggle ${p.poisoned ? 'active' : ''}" onclick="togglePlayerStatus(${i}, 'poisoned'); updateRemindersView();"></div>
                         </div>
                         <div class="token-item">
-                            <span>🟠 Drunk</span>
+                            <span>Drunk</span>
                             <div class="token-toggle ${p.drunk ? 'active' : ''}" onclick="togglePlayerStatus(${i}, 'drunk'); updateRemindersView();"></div>
                         </div>
                         <div class="token-item">
-                            <span>🟢 Protected</span>
+                            <span>Protected</span>
                             <div class="token-toggle ${p.protected ? 'active' : ''}" onclick="togglePlayerStatus(${i}, 'protected'); updateRemindersView();"></div>
                         </div>
                         <div class="token-item">
-                            <span>⚡ Used Ability</span>
+                            <span>Used Ability</span>
                             <div class="token-toggle ${p.usedAbility ? 'active' : ''}" onclick="togglePlayerStatus(${i}, 'usedAbility'); updateRemindersView();"></div>
                         </div>
                     </div>
@@ -1892,7 +1949,7 @@
 
         function displayDiceResult(result, max) {
             let label = `d${max}`;
-            if (max === 2) label = result === 1 ? '🪙 Heads' : '🪙 Tails';
+            if (max === 2) label = result === 1 ? 'Heads' : 'Tails';
             
             document.getElementById('diceResult').innerHTML = `
                 <div style="font-size: 48px; color: #4ecdc4; font-weight: bold; margin-bottom: 10px;">${result}</div>
@@ -1909,6 +1966,418 @@
             `).join('');
             
             document.getElementById('diceHistory').innerHTML = html;
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function getAppBaseUrl() {
+            return `${window.location.origin}/pages/botc/app.html`;
+        }
+
+        function getJoinUrl() {
+            return `${getAppBaseUrl()}?lobby=${encodeURIComponent(lobbyState.lobbyCode)}`;
+        }
+
+        function buildRoleOptions(selectedRole) {
+            const chars = Object.keys(characters).filter(c => characters[c].edition === gameState.edition);
+            const groups = {
+                townsfolk: chars.filter(c => characters[c].team === 'townsfolk'),
+                outsider: chars.filter(c => characters[c].team === 'outsider'),
+                minion: chars.filter(c => characters[c].team === 'minion'),
+                demon: chars.filter(c => characters[c].team === 'demon')
+            };
+
+            const renderGroup = (label, items) => `
+                <optgroup label="${label}">
+                    ${items.map(role => `<option value="${escapeHtml(role)}" ${selectedRole === role ? 'selected' : ''}>${escapeHtml(role)}</option>`).join('')}
+                </optgroup>
+            `;
+
+            return `
+                <option value="">Select Role...</option>
+                ${renderGroup('Townsfolk', groups.townsfolk)}
+                ${renderGroup('Outsiders', groups.outsider)}
+                ${renderGroup('Minions', groups.minion)}
+                ${renderGroup('Demons', groups.demon)}
+            `;
+        }
+
+        async function apiJson(url, options = {}) {
+            const response = await fetch(url, options);
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                const message = data?.error || 'Request failed';
+                throw new Error(message);
+            }
+            return data;
+        }
+
+        function syncQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+
+            if (lobbyState.lobbyCode) {
+                params.set('lobby', lobbyState.lobbyCode);
+            } else {
+                params.delete('lobby');
+            }
+
+            if (lobbyState.hostKey && lobbyState.mode === 'storyteller') {
+                params.set('hostKey', lobbyState.hostKey);
+            } else {
+                params.delete('hostKey');
+            }
+
+            if (lobbyState.playerId && lobbyState.mode === 'player') {
+                params.set('player', lobbyState.playerId);
+            } else {
+                params.delete('player');
+            }
+
+            const nextQuery = params.toString();
+            const nextUrl = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ''}`;
+            window.history.replaceState({}, '', nextUrl);
+        }
+
+        async function createLobby() {
+            try {
+                const data = await apiJson('/api/botc/lobbies', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ edition: gameState.edition })
+                });
+
+                lobbyState.mode = 'storyteller';
+                lobbyState.lobbyCode = data.lobbyCode;
+                lobbyState.hostKey = data.hostKey;
+                lobbyState.playerId = '';
+                lobbyState.players = [];
+                lobbyState.publishedLinks = [];
+
+                syncQueryParams();
+                await refreshLobbyForHost();
+                startLobbyPolling();
+            } catch (error) {
+                alert(error.message || 'Failed to create lobby');
+            }
+        }
+
+        async function refreshLobbyForHost() {
+            if (!lobbyState.lobbyCode || !lobbyState.hostKey) {
+                renderLobbySection();
+                return;
+            }
+
+            try {
+                const data = await apiJson(`/api/botc/lobbies/${encodeURIComponent(lobbyState.lobbyCode)}`, {
+                    headers: { 'x-host-key': lobbyState.hostKey }
+                });
+                lobbyState.players = Array.isArray(data.players) ? data.players : [];
+                renderLobbySection();
+            } catch (error) {
+                renderLobbySection(`<div class="alert alert-error">${escapeHtml(error.message || 'Failed to refresh lobby')}</div>`);
+            }
+        }
+
+        async function refreshLobbyForPlayer() {
+            if (!lobbyState.lobbyCode || !lobbyState.playerId) {
+                return;
+            }
+
+            try {
+                const data = await apiJson(`/api/botc/lobbies/${encodeURIComponent(lobbyState.lobbyCode)}?playerId=${encodeURIComponent(lobbyState.playerId)}`);
+                renderPlayerLobbyView(data.player);
+            } catch (error) {
+                renderLobbySection(`<div class="alert alert-error">${escapeHtml(error.message || 'Unable to load player status')}</div>`);
+            }
+        }
+
+        async function joinLobby() {
+            const nameInput = document.getElementById('lobbyJoinName');
+            if (!nameInput) return;
+
+            const name = nameInput.value.trim();
+            if (!name) {
+                alert('Please enter your name first.');
+                return;
+            }
+
+            if (!lobbyState.lobbyCode) {
+                alert('Missing lobby code.');
+                return;
+            }
+
+            try {
+                const data = await apiJson(`/api/botc/lobbies/${encodeURIComponent(lobbyState.lobbyCode)}/join`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                });
+
+                lobbyState.mode = 'player';
+                lobbyState.playerId = data.player.id;
+                lobbyState.hostKey = '';
+                syncQueryParams();
+                startLobbyPolling();
+                await refreshLobbyForPlayer();
+            } catch (error) {
+                renderLobbySection(`<div class="alert alert-error">${escapeHtml(error.message || 'Could not join lobby')}</div>`);
+            }
+        }
+
+        async function assignLobbyRole(playerId) {
+            const roleSelect = document.getElementById(`lobbyRole_${playerId}`);
+            if (!roleSelect) return;
+            const role = roleSelect.value;
+            if (!role) {
+                alert('Choose a role first.');
+                return;
+            }
+
+            try {
+                await apiJson(`/api/botc/lobbies/${encodeURIComponent(lobbyState.lobbyCode)}/assign`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-host-key': lobbyState.hostKey
+                    },
+                    body: JSON.stringify({ playerId, role })
+                });
+                await refreshLobbyForHost();
+            } catch (error) {
+                alert(error.message || 'Failed to assign role');
+            }
+        }
+
+        async function publishRoleLinks() {
+            if (!lobbyState.lobbyCode || !lobbyState.hostKey) return;
+
+            try {
+                const data = await apiJson(`/api/botc/lobbies/${encodeURIComponent(lobbyState.lobbyCode)}/publish`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-host-key': lobbyState.hostKey
+                    },
+                    body: JSON.stringify({ appBaseUrl: getAppBaseUrl() })
+                });
+
+                lobbyState.publishedLinks = Array.isArray(data.links) ? data.links : [];
+                renderLobbySection(`<div class="alert alert-success">Released role links for ${data.releasedCount} player(s).</div>`);
+                await refreshLobbyForHost();
+            } catch (error) {
+                renderLobbySection(`<div class="alert alert-error">${escapeHtml(error.message || 'Failed to release links')}</div>`);
+            }
+        }
+
+        function copyText(value) {
+            navigator.clipboard.writeText(value).then(() => {
+                alert('Copied to clipboard');
+            }).catch(() => {
+                alert('Could not copy automatically. Please copy manually.');
+            });
+        }
+
+        async function sharePlayerLink(index) {
+            const item = lobbyState.publishedLinks[index];
+            if (!item) return;
+
+            const text = `${item.name}: ${item.personalLink}`;
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'Your BOTC character link',
+                        text,
+                        url: item.personalLink
+                    });
+                    return;
+                } catch (error) {
+                    // User canceled share, fallback to clipboard below.
+                }
+            }
+
+            copyText(item.personalLink);
+        }
+
+        function importLobbyPlayersToSetup() {
+            const assigned = lobbyState.players.filter(player => player.role);
+            if (assigned.length === 0) {
+                alert('Assign at least one role first.');
+                return;
+            }
+
+            gameState.players = assigned.map(player => ({
+                name: player.name,
+                role: player.role,
+                alive: true,
+                poisoned: false,
+                drunk: false,
+                protected: false,
+                usedAbility: false,
+                notes: ''
+            }));
+
+            validateSetup();
+        }
+
+        function renderPlayerLobbyView(player) {
+            if (!player) {
+                renderLobbySection('<div class="alert alert-error">Player not found in lobby.</div>');
+                return;
+            }
+
+            const hasRole = Boolean(player.roleReleased && player.role);
+            const roleAbility = hasRole && characters[player.role] ? characters[player.role].ability : '';
+
+            const html = `
+                <div class="lobby-card">
+                    <h3 style="margin-bottom: 8px; color: #4ecdc4;">Hi ${escapeHtml(player.name)}</h3>
+                    <p class="lobby-meta">Lobby: <strong>${escapeHtml(lobbyState.lobbyCode)}</strong></p>
+                    ${hasRole ? `
+                        <div class="alert alert-success" style="margin-top: 12px;">
+                            <strong>Your role:</strong> ${escapeHtml(player.role)}
+                        </div>
+                        ${roleAbility ? `<p style="color: #ccc; margin: 10px 0;">${escapeHtml(roleAbility)}</p>` : ''}
+                        <a href="${escapeHtml(player.wikiUrl)}" target="_blank" rel="noopener noreferrer">
+                            <button class="secondary">Open Role Wiki</button>
+                        </a>
+                    ` : `
+                        <div class="alert alert-info" style="margin-top: 12px;">
+                            Waiting for the Storyteller to assign and release your role...
+                        </div>
+                    `}
+                </div>
+            `;
+
+            renderLobbySection(html);
+        }
+
+        function renderStorytellerLobby(extraHtml = '') {
+            if (!lobbyState.lobbyCode || !lobbyState.hostKey) {
+                return `
+                    ${extraHtml}
+                    <div class="lobby-card">
+                        <p style="margin-bottom: 12px; color: #ccc;">Create a lobby, share the join link, and let players enter their names from mobile.</p>
+                        <button onclick="createLobby()">Create Lobby</button>
+                    </div>
+                `;
+            }
+
+            const playersHtml = lobbyState.players.length === 0
+                ? '<p style="color: #aaa;">No players have joined yet.</p>'
+                : lobbyState.players.map(player => `
+                    <div class="lobby-player-row">
+                        <div>
+                            <strong>${escapeHtml(player.name)}</strong>
+                            <div class="lobby-meta">${player.roleReleased ? 'Role link released' : 'Waiting for role link release'}</div>
+                        </div>
+                        <select id="lobbyRole_${player.id}">
+                            ${buildRoleOptions(player.role || '')}
+                        </select>
+                        <button class="small secondary" onclick="assignLobbyRole('${player.id}')">Assign</button>
+                    </div>
+                `).join('');
+
+            const linksHtml = lobbyState.publishedLinks.length === 0
+                ? ''
+                : `
+                    <div class="lobby-links-list">
+                        ${lobbyState.publishedLinks.map((item, index) => `
+                            <div class="lobby-link-item">
+                                <div><strong>${escapeHtml(item.name)}</strong> (${escapeHtml(item.role || 'No role')})</div>
+                                <div style="margin: 6px 0;">${escapeHtml(item.personalLink)}</div>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button class="small" onclick="copyText(decodeURIComponent('${encodeURIComponent(item.personalLink)}'))">Copy Link</button>
+                                    <button class="small secondary" onclick="sharePlayerLink(${index})">Share</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+            return `
+                ${extraHtml}
+                <div class="lobby-card">
+                    <div><strong>Lobby Code:</strong> ${escapeHtml(lobbyState.lobbyCode)}</div>
+                    <div class="lobby-meta" style="margin-top: 8px;">Join Link:</div>
+                    <div style="font-size: 13px; word-break: break-word; margin: 6px 0;">${escapeHtml(getJoinUrl())}</div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="small" onclick="copyText(decodeURIComponent('${encodeURIComponent(getJoinUrl())}'))">Copy Join Link</button>
+                        <button class="small secondary" onclick="refreshLobbyForHost()">Refresh Players</button>
+                    </div>
+                </div>
+
+                <div class="lobby-card">
+                    <h3 style="margin-bottom: 10px; color: #4ecdc4;">Joined Players</h3>
+                    ${playersHtml}
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+                        <button onclick="publishRoleLinks()">Release Role Links</button>
+                        <button class="secondary" onclick="importLobbyPlayersToSetup()">Import Into Grimoire</button>
+                    </div>
+                </div>
+                ${linksHtml}
+            `;
+        }
+
+        function renderJoinLobby(extraHtml = '') {
+            return `
+                ${extraHtml}
+                <div class="lobby-card">
+                    <div><strong>Lobby Code:</strong> ${escapeHtml(lobbyState.lobbyCode)}</div>
+                    <p class="lobby-meta" style="margin-bottom: 10px;">Enter your name to join this game.</p>
+                    <input id="lobbyJoinName" type="text" placeholder="Your name" style="width: 100%; margin-bottom: 10px;" />
+                    <button onclick="joinLobby()">Join Lobby</button>
+                </div>
+            `;
+        }
+
+        function renderLobbySection(extraHtml = '') {
+            const container = document.getElementById('lobbySection');
+            if (!container) return;
+
+            if (lobbyState.mode === 'player') {
+                container.innerHTML = extraHtml || '<div class="alert alert-info">Loading your role status...</div>';
+                return;
+            }
+
+            if (lobbyState.mode === 'join') {
+                container.innerHTML = renderJoinLobby(extraHtml);
+                return;
+            }
+
+            container.innerHTML = renderStorytellerLobby(extraHtml);
+        }
+
+        function stopLobbyPolling() {
+            if (lobbyPollTimer) {
+                clearInterval(lobbyPollTimer);
+                lobbyPollTimer = null;
+            }
+        }
+
+        function startLobbyPolling() {
+            stopLobbyPolling();
+
+            if (lobbyState.mode === 'player') {
+                refreshLobbyForPlayer();
+                lobbyPollTimer = setInterval(() => {
+                    refreshLobbyForPlayer();
+                }, 4000);
+                return;
+            }
+
+            if (lobbyState.mode === 'storyteller' && lobbyState.lobbyCode && lobbyState.hostKey) {
+                refreshLobbyForHost();
+                lobbyPollTimer = setInterval(() => {
+                    refreshLobbyForHost();
+                }, 4000);
+            }
         }
 
         window.addEventListener('resize', () => {
