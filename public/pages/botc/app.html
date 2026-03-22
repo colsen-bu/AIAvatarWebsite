@@ -693,6 +693,13 @@
             word-break: break-word;
         }
 
+        .assign-btn.assigned {
+            border-color: #59bb74;
+            background: rgba(89, 187, 116, 0.2);
+            color: #c7ffd6;
+            box-shadow: 0 0 12px rgba(89, 187, 116, 0.55);
+        }
+
         @media (max-width: 767px) {
             .player-setup-row {
                 flex-direction: column !important;
@@ -997,7 +1004,9 @@
             hostKey: '',
             playerId: '',
             players: [],
-            publishedLinks: []
+            publishedLinks: [],
+            roleDrafts: {},
+            lastHostSnapshot: ''
         };
 
         let lobbyPollTimer = null;
@@ -1978,7 +1987,7 @@
         }
 
         function getAppBaseUrl() {
-            return `${window.location.origin}/pages/botc/app.html`;
+            return `${window.location.origin}/player`;
         }
 
         function getJoinUrl() {
@@ -2059,18 +2068,22 @@
                 lobbyState.playerId = '';
                 lobbyState.players = [];
                 lobbyState.publishedLinks = [];
+                lobbyState.roleDrafts = {};
+                lobbyState.lastHostSnapshot = '';
 
                 syncQueryParams();
-                await refreshLobbyForHost();
+                await refreshLobbyForHost(true);
                 startLobbyPolling();
             } catch (error) {
                 alert(error.message || 'Failed to create lobby');
             }
         }
 
-        async function refreshLobbyForHost() {
+        async function refreshLobbyForHost(forceRender = false) {
             if (!lobbyState.lobbyCode || !lobbyState.hostKey) {
-                renderLobbySection();
+                if (forceRender) {
+                    renderLobbySection();
+                }
                 return;
             }
 
@@ -2078,11 +2091,38 @@
                 const data = await apiJson(`/api/botc/lobbies/${encodeURIComponent(lobbyState.lobbyCode)}`, {
                     headers: { 'x-host-key': lobbyState.hostKey }
                 });
-                lobbyState.players = Array.isArray(data.players) ? data.players : [];
+                const incomingPlayers = Array.isArray(data.players) ? data.players : [];
+                const snapshot = JSON.stringify(
+                    incomingPlayers.map((player) => ({
+                        id: player.id,
+                        name: player.name,
+                        role: player.role || '',
+                        roleReleased: Boolean(player.roleReleased)
+                    }))
+                );
+
+                if (!forceRender && snapshot === lobbyState.lastHostSnapshot) {
+                    return;
+                }
+
+                lobbyState.players = incomingPlayers;
+                lobbyState.lastHostSnapshot = snapshot;
+
+                const activeIds = new Set(incomingPlayers.map((player) => player.id));
+                Object.keys(lobbyState.roleDrafts).forEach((playerId) => {
+                    if (!activeIds.has(playerId)) {
+                        delete lobbyState.roleDrafts[playerId];
+                    }
+                });
+
                 renderLobbySection();
             } catch (error) {
                 renderLobbySection(`<div class="alert alert-error">${escapeHtml(error.message || 'Failed to refresh lobby')}</div>`);
             }
+        }
+
+        function setRoleDraft(playerId, role) {
+            lobbyState.roleDrafts[playerId] = role;
         }
 
         async function refreshLobbyForPlayer() {
@@ -2134,7 +2174,8 @@
         async function assignLobbyRole(playerId) {
             const roleSelect = document.getElementById(`lobbyRole_${playerId}`);
             if (!roleSelect) return;
-            const role = roleSelect.value;
+            const draftRole = lobbyState.roleDrafts[playerId];
+            const role = (typeof draftRole === 'string' ? draftRole : roleSelect.value).trim();
             if (!role) {
                 alert('Choose a role first.');
                 return;
@@ -2149,7 +2190,8 @@
                     },
                     body: JSON.stringify({ playerId, role })
                 });
-                await refreshLobbyForHost();
+                delete lobbyState.roleDrafts[playerId];
+                await refreshLobbyForHost(true);
             } catch (error) {
                 alert(error.message || 'Failed to assign role');
             }
@@ -2170,7 +2212,7 @@
 
                 lobbyState.publishedLinks = Array.isArray(data.links) ? data.links : [];
                 renderLobbySection(`<div class="alert alert-success">Released role links for ${data.releasedCount} player(s).</div>`);
-                await refreshLobbyForHost();
+                await refreshLobbyForHost(true);
             } catch (error) {
                 renderLobbySection(`<div class="alert alert-error">${escapeHtml(error.message || 'Failed to release links')}</div>`);
             }
@@ -2277,29 +2319,12 @@
                             <strong>${escapeHtml(player.name)}</strong>
                             <div class="lobby-meta">${player.roleReleased ? 'Role link released' : 'Waiting for role link release'}</div>
                         </div>
-                        <select id="lobbyRole_${player.id}">
-                            ${buildRoleOptions(player.role || '')}
+                        <select id="lobbyRole_${player.id}" onchange="setRoleDraft('${player.id}', this.value)">
+                            ${buildRoleOptions(Object.prototype.hasOwnProperty.call(lobbyState.roleDrafts, player.id) ? lobbyState.roleDrafts[player.id] : (player.role || ''))}
                         </select>
-                        <button class="small secondary" onclick="assignLobbyRole('${player.id}')">Assign</button>
+                        <button class="small secondary assign-btn ${player.role ? 'assigned' : ''}" onclick="assignLobbyRole('${player.id}')">Assign</button>
                     </div>
                 `).join('');
-
-            const linksHtml = lobbyState.publishedLinks.length === 0
-                ? ''
-                : `
-                    <div class="lobby-links-list">
-                        ${lobbyState.publishedLinks.map((item, index) => `
-                            <div class="lobby-link-item">
-                                <div><strong>${escapeHtml(item.name)}</strong> (${escapeHtml(item.role || 'No role')})</div>
-                                <div style="margin: 6px 0;">${escapeHtml(item.personalLink)}</div>
-                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                    <button class="small" onclick="copyText(decodeURIComponent('${encodeURIComponent(item.personalLink)}'))">Copy Link</button>
-                                    <button class="small secondary" onclick="sharePlayerLink(${index})">Share</button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
 
             return `
                 ${extraHtml}
@@ -2309,7 +2334,7 @@
                     <div style="font-size: 13px; word-break: break-word; margin: 6px 0;">${escapeHtml(getJoinUrl())}</div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <button class="small" onclick="copyText(decodeURIComponent('${encodeURIComponent(getJoinUrl())}'))">Copy Join Link</button>
-                        <button class="small secondary" onclick="refreshLobbyForHost()">Refresh Players</button>
+                        <button class="small secondary" onclick="refreshLobbyForHost(true)">Refresh Players</button>
                     </div>
                 </div>
 
@@ -2321,7 +2346,6 @@
                         <button class="secondary" onclick="importLobbyPlayersToSetup()">Import Into Grimoire</button>
                     </div>
                 </div>
-                ${linksHtml}
             `;
         }
 
