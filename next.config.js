@@ -2,14 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-  eslint: {
-    // Disable ESLint during builds for now
-    ignoreDuringBuilds: true,
-  },
-  // Exclude chromadb from webpack bundling in the browser
+  // Turbopack is the default in Next.js 16; empty config silences the webpack/turbopack mismatch warning
+  turbopack: {},
+  // Kept for --webpack mode: exclude chromadb from client-side bundling
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      // Don't bundle chromadb on client side
       config.resolve.alias = {
         ...config.resolve.alias,
         'chromadb': false,

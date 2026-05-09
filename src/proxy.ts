@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 const PAGES_PASSWORD = process.env.PAGES_PASSWORD || '';
 const COOKIE_NAME = 'pages_auth';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Only protect /pages routes (but not /pages/login)

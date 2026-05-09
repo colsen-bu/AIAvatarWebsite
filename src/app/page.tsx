@@ -1,16 +1,40 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import type { FormEvent, ComponentPropsWithoutRef, ReactElement } from "react";
 import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
+import type { UIMessage, TextUIPart } from "ai";
 import { LoadingDots } from "@/components/LoadingDots";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/ThemeToggle";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { FormEvent } from "react";
-import type { ComponentPropsWithoutRef } from "react";
-import type { Message } from "ai";
 import { useEffect as useMetaEffect } from "react";
+
+function getMessageText(message: UIMessage): string {
+  return message.parts
+    .filter((p): p is TextUIPart => p.type === 'text')
+    .map(p => p.text)
+    .join('');
+}
+
+function loadStoredMessages(): UIMessage[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw: any[] = JSON.parse(localStorage.getItem('chatMessages') || '[]');
+    return raw.map((msg): UIMessage => {
+      if (msg.parts) return msg as UIMessage;
+      return {
+        id: msg.id ?? String(Date.now() + Math.random()),
+        role: msg.role as UIMessage['role'],
+        parts: [{ type: 'text' as const, text: msg.content ?? '' }],
+      };
+    });
+  } catch {
+    return [];
+  }
+}
 
 // Since this is a client component, we'll set metadata via useEffect
 function usePageMetadata() {
@@ -127,7 +151,7 @@ export default function Home() {
     return letters;
   }, []);
 
-  const [dnaLetters, setDnaLetters] = useState<JSX.Element[]>([]);
+  const [dnaLetters, setDnaLetters] = useState<ReactElement[]>([]);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize DNA background
@@ -155,63 +179,48 @@ export default function Home() {
     };
   }, [generateDNABackground]);
 
+  const [input, setInput] = useState('');
+  const storedMessages = useMemo(loadStoredMessages, []);
+
   const {
     messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    setInput,
-  setMessages,
-    append,
+    status,
+    setMessages,
+    sendMessage,
     stop,
-    reload,
   } = useChat({
-    api: "/api/chat",
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+      body: { model: DEFAULT_MODEL, isAuthenticated: false },
+    }),
     onError: (err: Error) => {
-      // Set a more user-friendly error message
       let errorMessage = err.message;
-
-      // Check for common error patterns and provide more helpful messages
       if (errorMessage.includes("API key")) {
         errorMessage = "API key error. Please check the server configuration.";
-      } else if (
-        errorMessage.includes("rate limit") ||
-        errorMessage.includes("quota")
-      ) {
+      } else if (errorMessage.includes("rate limit") || errorMessage.includes("quota")) {
         errorMessage = "Rate limit exceeded. Please try again in a moment.";
-      } else if (
-        errorMessage.includes("not available") ||
-        errorMessage.includes("invalid model")
-      ) {
-        errorMessage = `The selected model is currently unavailable. Please try a different model.`;
+      } else if (errorMessage.includes("not available") || errorMessage.includes("invalid model")) {
+        errorMessage = "The selected model is currently unavailable. Please try a different model.";
       } else if (errorMessage.includes("Authentication required")) {
-        errorMessage = `This model requires you to log in. Please log in to use premium models.`;
+        errorMessage = "This model requires you to log in. Please log in to use premium models.";
       } else if (errorMessage === "An error occurred.") {
-        // Generic error from AI SDK - provide more context
-        errorMessage = `Error communicating with the selected model. Please try a different model or try again later.`;
+        errorMessage = "Error communicating with the selected model. Please try a different model or try again later.";
       }
-
       setError(errorMessage);
       console.error("Chat error:", err);
     },
     id: chatId,
-    initialMessages:
-      typeof window !== "undefined"
-        ? JSON.parse(localStorage.getItem("chatMessages") || "[]")
-        : [],
-    onFinish: (message: Message) => {
+    messages: storedMessages,
+    onFinish: ({ messages: allMessages }) => {
       if (typeof window !== "undefined") {
-        const updatedMessages = [...messages, message];
-        localStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
+        localStorage.setItem("chatMessages", JSON.stringify(allMessages));
       }
-    },
-    body: {
-      model: DEFAULT_MODEL,
-      isAuthenticated: false,
     },
     experimental_throttle: 50,
   });
+
+  const isLoading = status === 'submitted' || status === 'streaming';
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
 
   // Memoize DNA background to prevent unnecessary regeneration
   const memoizedDNALetters = useMemo(() => dnaLetters, [dnaLetters]);
@@ -262,18 +271,7 @@ export default function Home() {
     rotateSuggestions();
 
     try {
-      await append(
-        {
-          content: suggestion,
-          role: "user",
-        } as Message,
-        {
-          body: {
-            model: DEFAULT_MODEL,
-            isAuthenticated: false,
-          },
-        }
-      );
+      await sendMessage({ text: suggestion });
     } catch (err) {
       console.error("Failed to send suggestion:", err);
       setError(
@@ -285,22 +283,14 @@ export default function Home() {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Prevent submission if already loading
-    if (isLoading) return;
+    if (isLoading || !input.trim()) return;
 
-    // Clear any previous errors
     setError(null);
-
-    // Only proceed if there's actual input text
-    if (!input.trim()) return;
+    const text = input;
+    setInput('');
 
     try {
-      await handleSubmit(e, {
-        body: {
-          model: DEFAULT_MODEL,
-          isAuthenticated: false,
-        },
-      });
+      await sendMessage({ text });
     } catch (err) {
       console.error("Failed to send message:", err);
       setError(err instanceof Error ? err.message : "Failed to send message");
@@ -651,7 +641,7 @@ export default function Home() {
 
             {/* Messages container */}
             <div className="space-y-6">
-              {messages.map((message: Message, i: number) => (
+              {messages.map((message: UIMessage, i: number) => (
                 <div
                   key={i}
                   className={cn(
@@ -753,7 +743,7 @@ export default function Home() {
                         },
                       }}
                     >
-                      {message.content}
+                      {getMessageText(message)}
                     </ReactMarkdown>
                     {message.id && canceledMessageIds.has(message.id) && (
                       <div className="text-xs italic text-gray-500 dark:text-gray-400 mt-1">

@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import { createOpenAI } from '@ai-sdk/openai';
-import { streamText } from 'ai';
+import { streamText, convertToModelMessages } from 'ai';
+import type { UIMessage } from 'ai';
 import { getChromaClient, COLLECTION_NAME } from '@/lib/chroma';
 
 // Rate limiting configuration
@@ -68,10 +69,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const { messages } = await req.json();
+    const { messages }: { messages: UIMessage[] } = await req.json();
 
-    const provider = 'openai';
-    // Use the correct model name (just the model name, not the provider prefix)
     const modelName = 'gpt-5-mini';
     console.log(`Request received using model: ${modelName}`);
 
@@ -92,11 +91,15 @@ export async function POST(req: Request) {
     });
     
     const lastMessage = messages[messages.length - 1];
+    const lastMessageText = lastMessage.parts
+      .filter(p => p.type === 'text')
+      .map(p => (p as { type: 'text'; text: string }).text)
+      .join('');
 
     // Get embeddings for the last message
     const embedding = await openaiClient.embeddings.create({
       model: 'text-embedding-3-small',
-      input: lastMessage.content,
+      input: lastMessageText,
     });
 
     // Search for relevant content in the vector store
@@ -157,20 +160,19 @@ Context about you:
 ${hasContext ? relevantContent : '(No specific context found in knowledge base for this query - answer based on your general knowledge and expertise.)'}`
     };
 
-    // Add system message to the beginning of the messages array
-    const augmentedMessages = [systemMessage, ...messages];  // Create OpenAI provider to obtain a LanguageModelV1 instance
-  const openaiProvider = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const openaiProvider = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     try {
       const result = streamText({
         model: openaiProvider(modelName),
-        messages: augmentedMessages,
+        system: systemMessage.content,
+        messages: await convertToModelMessages(messages),
         temperature: 0.5,
-        maxTokens: 800,
+        maxOutputTokens: 800,
       });
 
       console.log('Stream created successfully, returning response');
-      return result.toDataStreamResponse();
+      return result.toUIMessageStreamResponse();
     } catch (openaiError: any) {
       console.error('Error creating OpenAI stream:', openaiError);
       
