@@ -25,7 +25,7 @@ export default function ContactPage() {
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 
-        'Contact Christopher Olsen (Chris Olsen) - Cell & Biochemical Assay Scientist. Send a message or schedule a meeting to discuss biotech projects, collaborations, or opportunities.'
+        'Contact Christopher Olsen (Chris Olsen) - Cell & Biochemical Assay Scientist. Send a message to discuss biotech projects, collaborations, or opportunities.'
       );
     }
   }, []);
@@ -102,11 +102,11 @@ export default function ContactPage() {
         <div className="mb-12">
           <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Contact</h1>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Let's connect! Send me a message or schedule a meeting to discuss opportunities, collaborations, or just to say hello.
+            Let's connect! Send me a message to discuss opportunities, collaborations, or just to say hello.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="max-w-2xl">
           {/* Contact Form */}
           <div>
             <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Send a Message</h2>
@@ -215,37 +215,6 @@ export default function ContactPage() {
             </form>
           </div>
 
-          {/* Calendly Embed */}
-          <div>
-            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Schedule a Meeting</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Prefer to talk in person? Schedule a 30-minute meeting to discuss your project or opportunity.
-            </p>
-            
-            {/* Calendly Inline Widget */}
-            <div className="calendly-inline-widget h-[600px] w-full rounded-lg border border-gray-300 dark:border-gray-700 overflow-hidden">
-              <iframe
-                src="https://calendly.com/colsen-mcvcllmhgb/30min"
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                title="Schedule a meeting with Christopher Olsen"
-                className="rounded-lg"
-              />
-            </div>
-            
-            {/* Fallback link */}
-            <div className="mt-4 text-center">
-              <a
-                href="https://calendly.com/colsen-mcvcllmhgb/30min"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 transition-colors text-sm"
-              >
-                Open in new window →
-              </a>
-            </div>
-          </div>
         </div>
 
         {/* Additional Contact Information */}

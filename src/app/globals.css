@@ -41,16 +41,15 @@
   --ring: #333333;
 }
 
-/* Theme transition optimization */
+/* Theme transition optimization: skip color transitions during the swap so the
+   flip is a single instant repaint. */
 .theme-transitioning *,
 .theme-transitioning *::before,
 .theme-transitioning *::after {
   transition: none !important;
-  animation-duration: 0s !important;
-  animation-delay: 0s !important;
 }
 
-/* DNA Background Pattern */
+/* DNA Background Pattern - a single <canvas> layer, drawn in DnaBackground.tsx */
 .dna-background {
   position: fixed;
   top: 0;
@@ -59,58 +58,5 @@
   height: 100vh;
   pointer-events: none;
   z-index: 15;
-  overflow: hidden;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  color: rgba(0, 0, 0, 0.08);
   user-select: none;
-}
-
-.dark .dna-background {
-  color: rgba(255, 255, 255, 0.15);
-}
-
-.dna-letter {
-  position: absolute;
-  animation: twinkle 2s infinite ease-in-out;
-  animation-fill-mode: both;
-  opacity: 0.8;
-  font-weight: normal;
-  will-change: opacity;
-  transform: translate3d(0, 0, 0); /* Force GPU acceleration */
-  backface-visibility: hidden; /* Optimize rendering */
-}
-
-.dna-letter:nth-child(2n) {
-  animation-delay: -2s;
-}
-
-.dna-letter:nth-child(3n) {
-  animation-delay: -4s;
-}
-
-.dna-letter:nth-child(4n) {
-  animation-delay: -6s;
-}
-
-.dna-letter:nth-child(5n) {
-  animation-delay: -1s;
-}
-
-.dna-letter:nth-child(6n) {
-  animation-delay: -3s;
-}
-
-.dna-letter:nth-child(7n) {
-  animation-delay: -5s;
-}
-
-@keyframes twinkle {
-  0%, 100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
 }

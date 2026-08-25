@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import type { FormEvent, ComponentPropsWithoutRef, ReactElement } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import type { FormEvent, ComponentPropsWithoutRef } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import type { UIMessage, TextUIPart } from "ai";
 import { LoadingDots } from "@/components/LoadingDots";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/ThemeToggle";
+import DnaBackground from "@/components/DnaBackground";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useEffect as useMetaEffect } from "react";
@@ -120,65 +121,6 @@ export default function Home() {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   // Confirmation modal removed; no ref needed
 
-  // Generate DNA background pattern (optimized for performance)
-  const generateDNABackground = useCallback(() => {
-    if (typeof window === 'undefined') return [];
-    
-    const dnaLetters = ['A', 'T', 'G', 'C'];
-    const letters = [];
-    // Balanced density - more than sparse but less than original
-    const cols = Math.ceil(window.innerWidth / 25);
-    const rows = Math.ceil(window.innerHeight / 28);
-    
-    for (let i = 0; i < cols * rows; i++) {
-      const letter = dnaLetters[Math.floor(Math.random() * dnaLetters.length)];
-      const x = (i % cols) * 25;
-      const y = Math.floor(i / cols) * 28;
-      letters.push(
-        <span
-          key={i}
-          className="dna-letter"
-          style={{
-            left: `${x}px`,
-            top: `${y}px`,
-            animationDelay: `${Math.random() * 2}s`
-          }}
-        >
-          {letter}
-        </span>
-      );
-    }
-    return letters;
-  }, []);
-
-  const [dnaLetters, setDnaLetters] = useState<ReactElement[]>([]);
-  const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Initialize DNA background
-  useEffect(() => {
-    const updateDNABackground = () => {
-      setDnaLetters(generateDNABackground());
-    };
-    
-    updateDNABackground();
-    
-    const handleResize = () => {
-      // Debounce resize to avoid excessive DNA regeneration
-      if (resizeTimeoutRef.current) {
-        clearTimeout(resizeTimeoutRef.current);
-      }
-      resizeTimeoutRef.current = setTimeout(updateDNABackground, 300);
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      if (resizeTimeoutRef.current) {
-        clearTimeout(resizeTimeoutRef.current);
-      }
-    };
-  }, [generateDNABackground]);
-
   const [input, setInput] = useState('');
   const storedMessages = useMemo(loadStoredMessages, []);
 
@@ -221,9 +163,6 @@ export default function Home() {
 
   const isLoading = status === 'submitted' || status === 'streaming';
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
-
-  // Memoize DNA background to prevent unnecessary regeneration
-  const memoizedDNALetters = useMemo(() => dnaLetters, [dnaLetters]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && messages.length > 0) {
@@ -395,10 +334,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* DNA Background Pattern */}
-      <div className="dna-background">
-        {memoizedDNALetters}
-      </div>
+      {/* DNA Background Pattern (single canvas layer) */}
+      <DnaBackground />
 
       {/* Attribution Link - Desktop only */}
       <div className="fixed top-2 left-4 z-50 hidden md:block">

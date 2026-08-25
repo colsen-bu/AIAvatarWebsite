@@ -69,17 +69,13 @@ export default function ThemeProvider({
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     
-    // Temporarily disable transitions for instant theme change
-    document.documentElement.classList.add('theme-transitioning');
-    
-    // Update DOM immediately for instant visual feedback
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    
-    // Re-enable transitions after a brief delay
+    // Suppress transitions so the swap lands in a single repaint, then restore
+    // them on the next frame.
+    const root = document.documentElement;
+    root.classList.add('theme-transitioning');
+    root.classList.toggle('dark', newTheme === 'dark');
     requestAnimationFrame(() => {
-      setTimeout(() => {
-        document.documentElement.classList.remove('theme-transitioning');
-      }, 50);
+      root.classList.remove('theme-transitioning');
     });
     
     // Update state

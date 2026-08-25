@@ -92,6 +92,19 @@
   ],
   "fullTimeWork": [
     {
+      "company": "Merck",
+      "position": "Contract Scientist",
+      "startDate": "2026-02",
+      "endDate": "Present",
+      "location": "Boston, MA",
+      "summary": "Supporting preclinical immunology programs with routine assay support, assay development, and automation workflows.",
+      "highlights": [
+        "Led refactoring of the group-wide Confluence space, applying content management practices to make documentation AI-ready",
+        "Expanded the liquid handler user base through LLM integrations (PyLabRobot and custom Python packages for Lynx)",
+        "Spearheaded lab cleanout and infrastructure upgrades, setting the stage for over $100M of future capex at the Boston site"
+      ]
+    },
+    {
       "company": "Blueprint Medicines",
       "position": "Contract Research Associate Scientist, Biology",
       "startDate": "2024-08",

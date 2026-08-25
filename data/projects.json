@@ -40,26 +40,5 @@
     ],
     "github_url": "",
     "live_url": "https://www.plate.mcvcllmhgb.com"
-  },
-  {
-    "id": "3",
-    "name": "Timeline App",
-    "slug": "timeline-app",
-    "description": "A Next.js web application hosted on Vercel for visualizing and interacting with scientific project timelines and milestones. Useful for tracking research progress, deadlines, and key events.",
-    "technologies": [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Tailwind CSS",
-      "Vercel"
-    ],
-    "features": [
-      "Interactive visualization of project timelines",
-      "Highlight milestones and deadlines",
-      "Track research progress",
-      "Customizable timeline views"
-    ],
-    "github_url": "",
-    "live_url": "https://timeline.mcvcllmhgb.com"
   }
 ]
