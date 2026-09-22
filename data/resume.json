@@ -13,10 +13,6 @@
       {
         "network": "GitHub",
         "url": "https://github.com/colsen-bu"
-      },
-      {
-        "network": "RTD Portfolio",
-        "url": "https://colsen.mcvcllmhgb.com"
       }
     ]
   },
@@ -101,7 +97,7 @@
       "highlights": [
         "Led refactoring of the group-wide Confluence space, applying content management practices to make documentation AI-ready",
         "Expanded the liquid handler user base through LLM integrations (PyLabRobot and custom Python packages for Lynx)",
-        "Spearheaded lab cleanout and infrastructure upgrades, setting the stage for over $100M of future capex at the Boston site"
+        "Delivered routine assay support with 2-day turnaround across 5000+ compounds across 3 pre-clinical programs"
       ]
     },
     {
@@ -166,10 +162,11 @@
       "startDate": "2021-01",
       "endDate": "Present",
       "location": "Cambridge, MA",
-      "summary": "Built open-source and custom biotech data tools for scientists, including dose-response analysis, assay plate design, and project timeline visualization.",
+      "summary": "Built open-source and custom biotech data tools for scientists, including dose-response analysis, assay plate design, acoustic dispensing run planning, and project timeline visualization.",
       "highlights": [
         "Dose Response Analysis Tool",
         "Assay Plate Layout Tool",
+        "Echo Planner — agent-assisted design, QC and pick-list export for Beckman Echo acoustic dosing runs",
         "Timeline App"
       ]
     }

@@ -406,6 +406,12 @@ export default function Home() {
                 >
                   contact
                 </a>
+                <a
+                  href="/feedback"
+                  className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
+                >
+                  feedback
+                </a>
               </div>
             </div>
 
@@ -487,6 +493,13 @@ export default function Home() {
                   >
                     contact
                   </a>
+                  <a
+                    href="/feedback"
+                    className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors text-lg font-medium py-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    feedback
+                  </a>
                 </div>
 
                 {/* Clear chat button */}
@@ -553,7 +566,7 @@ export default function Home() {
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300">
               I'm a full-stack scientist
               <br />
-              specializing in Biotech, Web Dev, and Therapeutics Research.
+              specializing in Biotech, AI Development and Deployment, and Therapeutics Research.
             </p>
             <div className="sr-only">
               <p>Christopher Olsen, also known as Chris Olsen, is a Cell & Biochemical Assay Scientist with over 6 years of experience in assay development, Python programming, bench automation, and primary cell culture. Alumni of Boston University, specializing in therapeutics research and biotech innovation.</p>

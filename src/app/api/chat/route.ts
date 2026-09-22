@@ -71,7 +71,7 @@ export async function POST(req: Request) {
 
     const { messages }: { messages: UIMessage[] } = await req.json();
 
-    const modelName = 'gpt-5-mini';
+    const modelName = 'gpt-5.6-luna';
     console.log(`Request received using model: ${modelName}`);
 
     if (!process.env.OPENAI_API_KEY) {
@@ -169,6 +169,8 @@ ${hasContext ? relevantContent : '(No specific context found in knowledge base f
         messages: await convertToModelMessages(messages),
         temperature: 0.5,
         maxOutputTokens: 800,
+        // Skip hidden reasoning so text starts streaming immediately
+        providerOptions: { openai: { reasoningEffort: 'none' } },
       });
 
       console.log('Stream created successfully, returning response');

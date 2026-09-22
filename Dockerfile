@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # Use the official Node.js 20 image as base
 FROM node:20-alpine AS base
 
@@ -9,7 +10,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -22,10 +23,9 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Install all dependencies including dev dependencies for build
-RUN npm ci
-
-RUN npm run build
+# node_modules comes from the deps stage; the cache mount keeps Next's
+# incremental build cache between deploys
+RUN --mount=type=cache,target=/app/.next/cache npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -72,7 +72,7 @@ ENV HOSTNAME="0.0.0.0"
 # Healthcheck for Next.js app on port 3001 hitting explicit /api/health endpoint
 # Using curl (-f fail on HTTP errors, -s silent, -S show errors)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-  CMD curl -fsS http://localhost:3001/api/health > /dev/null || exit 1
+  CMD curl -fsS http://127.0.0.1:3001/api/health > /dev/null || exit 1
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output

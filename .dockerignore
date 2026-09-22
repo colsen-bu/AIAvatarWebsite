@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.woodpecker.yml
+docker-compose.yml
+Dockerfile
+tsconfig.tsbuildinfo
+photos
+*.md
+.env*

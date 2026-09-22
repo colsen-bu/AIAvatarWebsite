@@ -1,17 +1,27 @@
 steps:
+  # The Docker build in `deploy` already runs `next build`, so on main this
+  # step would just build the app a second time. Only run it where there is
+  # no deploy: PRs and pushes to other branches.
   test:
     image: node:20-alpine
     commands:
       - npm ci
       - npm run build
     when:
-      - event: [push, pull_request]
+      - event: pull_request
+      - event: push
+        branch:
+          exclude: ${CI_REPO_DEFAULT_BRANCH}
 
   deploy:
     image: docker:24-cli
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
+      # Matches the name compose already derives from the repo dir, so the
+      # existing containers and chroma volume are reused
+      COMPOSE_PROJECT_NAME: aiavatarwebsite
+      DOCKER_BUILDKIT: "1"
       OPENAI_API_KEY:
         from_secret: openai_api_key
       RESEND_API_KEY:
@@ -23,30 +33,23 @@ steps:
       PAGES_PASSWORD:
         from_secret: pages_password
     commands:
-      - pwd
-      - ls -la
-      - cat docker-compose.yml
-      - export OPENAI_API_KEY=$OPENAI_API_KEY
-      - export RESEND_API_KEY=$RESEND_API_KEY
-      - export FROM_EMAIL=$FROM_EMAIL
-      - export CONTACT_EMAIL=$CONTACT_EMAIL
-      - export PAGES_PASSWORD=$PAGES_PASSWORD
-      - docker compose down || echo "No running containers"
+      # No `down` first: `up --build` swaps the container in place and leaves
+      # chromadb running
       - docker compose up -d --build
-      - docker image prune -f
+      - docker image prune -f --filter "dangling=true"
       - echo "Waiting for services to start..."
       - sleep 10
       - echo "Running content ingestion..."
       - docker exec colsenai-website npm run ingest-content
     when:
-      - event: push
-      - branch: main
+      - event: [push, manual]
+        branch: ${CI_REPO_DEFAULT_BRANCH}
 
   notify:
     image: alpine:latest
     commands:
       - echo "✅ ColsenAI Website deployed successfully!"
     when:
-      - event: push
-      - branch: main
-      - status: [success]
+      - event: [push, manual]
+        branch: ${CI_REPO_DEFAULT_BRANCH}
+        status: [success]

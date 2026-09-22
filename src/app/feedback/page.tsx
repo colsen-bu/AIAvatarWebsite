@@ -126,7 +126,7 @@ export default function FeedbackPage() {
             Feedback Form
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Thank you for taking the time to share your thoughts. Your feedback helps me grow and improve. All responses are confidential.
+            Thank you for taking the time to share your thoughts.
           </p>
         </div>
 
@@ -352,7 +352,7 @@ export default function FeedbackPage() {
           </button>
 
           <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-            Your feedback is confidential and will only be used for my personal development.
+            Thank you for your feedback on your work experience with me!
           </p>
         </form>
       </div>

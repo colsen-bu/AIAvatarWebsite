@@ -40,5 +40,28 @@
     ],
     "github_url": "",
     "live_url": "https://www.plate.mcvcllmhgb.com"
+  },
+  {
+    "id": "3",
+    "name": "Echo Planner",
+    "slug": "echo-planner",
+    "description": "A browser tool for planning, checking and exporting Beckman Echo acoustic dosing runs. You design the plate map, dose regimen, DMSO limits and randomization; a local LLM agent fills in only the compounds and their source wells from a LIMS export, so compound data never leaves your machine. The planner then handles the physical work: source well selection, intermediate dilution plates, droplet rounding, depletion checks and one Echo pick list per run stage.",
+    "technologies": [
+      "Python",
+      "NiceGUI",
+      "Pydantic",
+      "Typer",
+      "JSON Schema",
+      "Docker"
+    ],
+    "features": [
+      "Interactive 96/384/1536-well plate map editor with controls, edge exclusion and undo/redo",
+      "Exports a JSON Schema spec skeleton and agent prompt for a local LLM to fill compounds",
+      "Plans intermediate DMSO dilution tiers, droplet rounding, backfill and dead-volume depletion",
+      "Randomized layouts with edge mitigation, cross-plate decorrelation and diagnostics",
+      "Generates Echo pick lists per run stage plus a manual-additions bench checklist"
+    ],
+    "github_url": "",
+    "live_url": "https://mcvcllmhgb.com/"
   }
 ]
